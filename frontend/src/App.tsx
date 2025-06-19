@@ -1,23 +1,19 @@
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
-import Dashboard from "./pages/Dashboard.tsx";
+import Dashboard from "./pages/DashboardPage.tsx";
 import "./App.css";
 
 function App() {
   return (
     <Router>
-      <Route path="/">
-        <LoginPage />
-      </Route>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
 
-      <Route path="/register">
-        <RegisterPage />
-      </Route>
+        <Route path="/register" element={<RegisterPage />} />
 
-      <Route path="/dashboard">
-        <Dashboard />
-      </Route>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
     </Router>
   );
 }
