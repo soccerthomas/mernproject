@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TierListLogo from '../images/TierListLogo.png';
 
 function Login() {
   console.log("login test");
@@ -13,64 +14,85 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
-          Login
-        </h1>
-        <form onSubmit={loginSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Username
-            </label>
-            <input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter your username"
-              required
-            />
+    <>
+      <header className="bg-white">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8 border-2" aria-label="Global">
+          <div className="flex lg:flex-1">
+            <a href="#" className="-m-1.5 p-1.5">
+              <span className="sr-only">Tier Builder</span>
+              <img className="h-8 w-auto" src={TierListLogo} alt="" />
+            </a>
           </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              placeholder="Enter your password"
-              required
-            />
+          <div className="hidden lg:flex lg:gap-x-12">
+            <a href="#" className="text-sm/6 font-semibold text-gray-900 hover:text-blue-800">Create Tier List</a>
+            <a href="#" className="text-sm/6 font-semibold text-gray-900 hover:text-blue-800">Your Tier Lists</a>
+            <a href="#" className="text-sm/6 font-semibold text-gray-900 hover:text-blue-800">Explore</a>
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Enter
-          </button>
-        </form>
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{" "}
-          <a
-            href="/register"
-            className="text-blue-500 hover:text-blue-600 font-medium"
-          >
-            Sign up
-          </a>
-        </p>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
+            <a href="./register" className="text-sm/6 font-semibold text-gray-900 hover:text-blue-800">Create Account<span aria-hidden="true"></span></a>
+            <a href="./login" className="text-sm/6 font-semibold text-gray-900 hover:text-blue-800">Log in <span aria-hidden="true">&rarr;</span></a>
+          </div>
+        </nav>
+      </header>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
+            Login
+          </h1>
+          <form onSubmit={loginSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter your username"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Enter
+            </button>
+          </form>
+          <p className="mt-6 text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <a
+              href="/register"
+              className="text-blue-500 hover:text-blue-600 font-medium"
+            >
+              Sign up
+            </a>
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

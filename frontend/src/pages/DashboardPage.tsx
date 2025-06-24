@@ -1,4 +1,5 @@
 import TierListLogo from '../images/TierListLogo.png';
+
 function Dashboard() {
   return (
     <header className="bg-white">
