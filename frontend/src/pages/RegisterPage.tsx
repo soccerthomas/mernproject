@@ -116,7 +116,7 @@ function Register() {
         </form>
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
-          <a href="/" className="text-blue-500 hover:text-blue-600 font-medium">
+          <a href="/login" className="text-blue-500 hover:text-blue-600 font-medium">
             Sign in
           </a>
         </p>
