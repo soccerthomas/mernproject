@@ -6,13 +6,13 @@ function Dashboard() {
       <header className="p-4">
         <nav className="mx-auto flex items-center justify-between p-2 lg:px-8 rounded-lg bg-gray-600">
           <div className="flex lg:flex-1">
-            <a href="#" className="-m-1.5 p-1.5">
+            <a href="./" className="-m-1.5 p-1.5">
               <span className="sr-only">Tier Builder</span>
               <img className="h-8 w-auto" src={TierListLogo} alt="" />
             </a>
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
-            <a href="#" className="text-sm/6 font-semibold text-white hover:text-blue-200">Create Tier List</a>
+            <a href="./createTierList" className="text-sm/6 font-semibold text-white hover:text-blue-200">Create Tier List</a>
             <a href="#" className="text-sm/6 font-semibold text-white hover:text-blue-200">Your Tier Lists</a>
             <a href="#" className="text-sm/6 font-semibold text-white hover:text-blue-200">Explore</a>
           </div>
@@ -27,7 +27,7 @@ function Dashboard() {
           <h1 className="text-5xl font-semibold text-white sm:text-7xl">Create A Tier List</h1>
           <p className="mt-4 text-xl font-medium text-pretty text-gray-400 sm:text-2xl">The Possibilities Are Endless</p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a href="#" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get Started</a>
+            <a href="./createTierList" className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Get Started</a>
             <a href="#" className="text-sm/6 font-semibold text-white">Explore <span aria-hidden="true">&rarr;</span></a>
           </div>
         </div>
