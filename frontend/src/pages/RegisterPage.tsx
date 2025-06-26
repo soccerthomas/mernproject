@@ -25,7 +25,7 @@ function Register() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a
-              href="#"
+              href="./createTierList"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Create Tier List

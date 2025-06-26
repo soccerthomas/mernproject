@@ -1,7 +1,13 @@
+import { useState } from 'react';
 import TierListLogo from '../images/TierListLogo.png';
 
 function CreateTierList()
 {
+    const [isModalOpen, modalOpen] = useState(false);
+
+    const openModal = () => { modalOpen(true); }
+    const closeModal = () => { modalOpen(false); }
+
     return (
         <div className="bg-gray-800">
             <header className="p-4">
@@ -48,9 +54,53 @@ function CreateTierList()
                 <div className="flex flex-col justify-center gap-y-[20px]">
                     <div className="text-2xl text-white ml-4">Items:</div>
                     <div className="border-4 pb-[80px] w-[100%] rounded-2xl border-white flex justify-end">
-                        <button className="bg-white rounded-xl pt-3 pb-3 pl-4 pr-4 mr-4 mt-4">+</button>
+                        <button className="bg-white rounded-xl pt-3 pb-3 pl-4 pr-4 mr-4 mt-4" onClick = {openModal}>+</button>
                     </div>
                 </div>
+                {isModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
+                        <div className="bg-gray-600 w-[500px] h-[700px] relative flex flex-col justify-between pl-6 rounded-xl gap-4 pb-8 pr-8">
+                            <button className="bg-white pt-2 pb-2 pl-4 pr-4 mr-4 mt-4 rounded-xl absolute top-2 right-2" onClick = {closeModal}>x</button>
+                            <div className="text-3xl text-white mt-[50px] self-center">New Card</div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option1</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option2</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option3</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option4</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option5</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option6</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option7</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="text-white">option8</div>
+                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
+                            </div>
+                            <div className="flex gap-6 justify-center">
+                                <button className="bg-red-500 rounded-xl text-white pl-4 pr-4 pt-1 pb-1" onClick={closeModal}>Cancel</button>
+                                <button className="bg-green-500 rounded-xl text-white pl-4 pr-4 pt-1 pb-1">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
