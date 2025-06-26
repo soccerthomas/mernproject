@@ -23,8 +23,34 @@ function CreateTierList()
                     </div>
                 </nav>
             </header>
-            <div className = "p-[100%]">
-                
+            <div className="flex justify-center text-5xl text-white mt-[40px]">Your Tier List</div>
+            <div className = "mx-auto flex flex-col pt-[60px] p-[100px] gap-y-[50px]">
+                <div className="flex items-center gap-x-[30px]">    
+                    <div className="text-white p-8 rounded-2xl bg-red-500">S</div>
+                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-red-500"></div>
+                </div>
+                <div className="flex items-center gap-x-[30px]">    
+                    <div className="text-white p-8 rounded-2xl bg-orange-500">A</div>
+                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-orange-500"></div>
+                </div>
+                <div className="flex items-center gap-x-[30px]">    
+                    <div className="text-white p-8 rounded-2xl bg-yellow-500">B</div>
+                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-yellow-500"></div>
+                </div>
+                <div className="flex items-center gap-x-[30px]">    
+                    <div className="text-white p-8 rounded-2xl bg-green-500">C</div>
+                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-green-500"></div>
+                </div>
+                <div className="flex items-center gap-x-[30px]">    
+                    <div className="text-white p-8 rounded-2xl bg-blue-500">D</div>
+                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-blue-500"></div>
+                </div>
+                <div className="flex flex-col justify-center gap-y-[20px]">
+                    <div className="text-2xl text-white ml-4">Items:</div>
+                    <div className="border-4 pb-[80px] w-[100%] rounded-2xl border-white flex justify-end">
+                        <button className="bg-white rounded-xl pt-3 pb-3 pl-4 pr-4 mr-4 mt-4">+</button>
+                    </div>
+                </div>
             </div>
         </div>
     );
