@@ -16,7 +16,7 @@ router.post('/login', async (req, res) => {
 
             if(validPwd){
 
-                payload = {
+                const payload = {
                     id: user._id,
                     username: user.username
                 };
