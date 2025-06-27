@@ -16,6 +16,15 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
 
   Future<void> _login() async {
+    // === Added input validation for empty fields ===
+    if (_loginController.text.trim().isEmpty || _passwordController.text.isEmpty) {
+      setState(() {
+        _errorMessage = 'Login name and password cannot be empty.';
+      });
+      return;
+    }
+
+    // === Original login logic (commented out) ===
     // setState(() {
     //   _isLoading = true;
     //   _errorMessage = '';
@@ -33,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
     //   if (response.statusCode == 200) {
     //     final data = jsonDecode(response.body);
-        
+
     //     if (data['error'] == null || data['error'].isEmpty) {
     //       // Login successful, navigate to second page
     //       if (mounted) {
