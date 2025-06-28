@@ -54,7 +54,7 @@ router.delete('/:id', jwtAuth, async (req, res) => {
         res.json({message: 'Tier list deleted successfully'});
 
     } catch(error){
-        return res.json({success: false, message: error.message});
+        return res.status(500).json({success: false, message: error.message});
     }
 });
 
