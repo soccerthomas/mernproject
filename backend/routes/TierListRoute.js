@@ -88,7 +88,7 @@ router.post('/:id', jwtAuth, async (req, res) => {
 router.put('/:id', jwtAuth, async (req, res) => {
 
     try{
-        let tierList = await TierList.find(req.params.id);
+        let tierList = await TierList.findById(req.params.id);
 
         if(!tierList){
             return res.status(404).json({success: false, message: 'Tier list not found'});
