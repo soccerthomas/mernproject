@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB)
 
 //Routes
 app.use('/api/tierlist', TierListRoute);
-app.use('api/auth', AuthorizationRoute);
+app.use('/api/auth', AuthorizationRoute);
 
 app.listen(PORT, () => {
     console.log(`Server Running on Port: ${PORT}`);
