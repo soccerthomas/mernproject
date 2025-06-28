@@ -2,12 +2,15 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import TierListRoute from './routes/TierListRoute.js'
-import AuthorizationRoute from './routesAuthorizationRoute.js';
+import AuthorizationRoute from './routes/AuthorizationRoute.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT;
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(process.env.MONGODB)
     .then(()=>console.log('MongoDB Connected'))

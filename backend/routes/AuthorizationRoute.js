@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
                 };
                 
                 //users get a jwt upon login which will be used for protected routes
-                jwt.sign(payload, process.env.JWT_SECRET, {expiresIn: '1d'}, 
+                jwt.sign(payload, process.env.JWT, {expiresIn: '1d'}, 
                     (error, token) => {
                         if(error) throw error;
                         res.json({

@@ -36,8 +36,8 @@ const tierListSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    creator:{
-        type: Schema.Types.ObjectId,
+    user:{
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },

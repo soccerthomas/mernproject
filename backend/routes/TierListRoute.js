@@ -112,3 +112,5 @@ router.put('/:id', jwtAuth, async (req, res) => {
         return res.status(500).json({success: false, message: error.message});
     }
 });
+
+export default router;
