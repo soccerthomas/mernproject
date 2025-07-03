@@ -7,6 +7,9 @@ function CreateTierList()
     const [showInfoModal, setShowInfoModal] = useState(true);
     const [tierListTitle, setTierListTitle] = useState('');
     const [tierListDescription, setTierListDescription] = useState('');
+    const [itemTitle, setItemTitle] = useState('');
+    const [itemImage, setItemImage] = useState('');
+    const [itemDescription, setItemDescription] = useState('');
 
     const openModal = () => { modalOpen(true); }
     const closeModal = () => { modalOpen(false); }
@@ -64,7 +67,7 @@ function CreateTierList()
                 {showInfoModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-2xl text-white mb-4 text-center">Create Tier List</h2>
+                            <h2 className="text-2xl text-white mb-4 text-center">Create Item</h2>
                             <div className="flex flex-col gap-4">
                                 <div>
                                 <label className="text-white text-sm mb-1 block">Title</label>
@@ -106,45 +109,56 @@ function CreateTierList()
                     </div>
                 )}
                 {isModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
-                        <div className="bg-gray-600 w-[500px] h-[700px] relative flex flex-col justify-between pl-6 rounded-xl gap-4 pb-8 pr-8">
-                            <button className="bg-white pt-2 pb-2 pl-4 pr-4 mr-4 mt-4 rounded-xl absolute top-2 right-2" onClick = {closeModal}>x</button>
-                            <div className="text-3xl text-white mt-[50px] self-center">New Card</div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option1</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option2</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option3</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option4</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option5</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option6</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option7</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="text-white">option8</div>
-                                <input type="text" className = "text-black font-bold p-1 rounded-lg w-[100%]" />
-                            </div>
-                            <div className="flex gap-6 justify-center">
-                                <button className="bg-red-500 rounded-xl text-white pl-4 pr-4 pt-1 pb-1" onClick={closeModal}>Cancel</button>
-                                <button className="bg-green-500 rounded-xl text-white pl-4 pr-4 pt-1 pb-1">Save</button>
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
+                            <h2 className="text-2xl text-white mb-4 text-center">Create Tier List</h2>
+                            <div className="flex flex-col gap-4">
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Name</label>
+                                <input
+                                    type="text"
+                                    value={itemTitle}
+                                    onChange={(e) => setItemTitle(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter title"
+                                    required
+                                />
+                                </div>
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Item</label>
+                                <input
+                                    type="text"
+                                    value={itemImage}
+                                    onChange={(e) => setItemImage(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter title"
+                                    required
+                                />
+                                </div>
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Description</label>
+                                <textarea
+                                    value={itemDescription}
+                                    onChange={(e) => setItemDescription(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter description"
+                                    required
+                                />
+                                </div>
+                                <div className="flex justify-end gap-2 mt-4">
+                                <button
+                                    onClick={closeModal}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => setShowInfoModal(false)}
+                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                >
+                                    Save
+                                </button>
+                                </div>
                             </div>
                         </div>
                     </div>
