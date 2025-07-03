@@ -4,6 +4,9 @@ import TierListLogo from '../images/TierListLogo.png';
 function CreateTierList()
 {
     const [isModalOpen, modalOpen] = useState(false);
+    const [showInfoModal, setShowInfoModal] = useState(true);
+    const [tierListTitle, setTierListTitle] = useState('');
+    const [tierListDescription, setTierListDescription] = useState('');
 
     const openModal = () => { modalOpen(true); }
     const closeModal = () => { modalOpen(false); }
@@ -29,8 +32,9 @@ function CreateTierList()
                     </div>
                 </nav>
             </header>
-            <div className="flex justify-center text-5xl text-white mt-[40px]">Your Tier List</div>
-            <div className = "mx-auto flex flex-col pt-[60px] p-[100px] gap-y-[50px]">
+            <div className="flex justify-center text-5xl text-white mt-[40px]">{tierListTitle}</div>
+            <div className="flex justify-center text-xl text-white mt-[20px]">{tierListDescription}</div>
+            <div className = "mx-auto flex flex-col pt-[50px] p-[100px] gap-y-[50px]">
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-red-500">S</div>
                     <div className="border-4 py-[40px] w-[100%] rounded-2xl border-red-500"></div>
@@ -57,6 +61,50 @@ function CreateTierList()
                         <button className="bg-white rounded-xl pt-3 pb-3 pl-4 pr-4 mr-4 mt-4" onClick = {openModal}>+</button>
                     </div>
                 </div>
+                {showInfoModal && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
+                            <h2 className="text-2xl text-white mb-4 text-center">Create Tier List</h2>
+                            <div className="flex flex-col gap-4">
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Title</label>
+                                <input
+                                    type="text"
+                                    value={tierListTitle}
+                                    onChange={(e) => setTierListTitle(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter title"
+                                    required
+                                />
+                                </div>
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Description</label>
+                                <textarea
+                                    value={tierListDescription}
+                                    onChange={(e) => setTierListDescription(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter description"
+                                    required
+                                />
+                                </div>
+                                <div className="flex justify-end gap-2 mt-4">
+                                <button
+                                    onClick={() => setShowInfoModal(false)}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={() => setShowInfoModal(false)}
+                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                >
+                                    Save
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {isModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center">
                         <div className="bg-gray-600 w-[500px] h-[700px] relative flex flex-col justify-between pl-6 rounded-xl gap-4 pb-8 pr-8">
