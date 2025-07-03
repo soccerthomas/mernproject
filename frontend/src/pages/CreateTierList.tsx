@@ -108,7 +108,7 @@ function CreateTierList()
                 {showInfoModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-2xl text-white mb-4 text-center">Create Item</h2>
+                            <h2 className="text-2xl text-white mb-4 text-center">Create Tier List</h2>
                             <div className="flex flex-col gap-4">
                                 <div>
                                 <label className="text-white text-sm mb-1 block">Title</label>
@@ -152,7 +152,7 @@ function CreateTierList()
                 {isModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-2xl text-white mb-4 text-center">Create Tier List</h2>
+                            <h2 className="text-2xl text-white mb-4 text-center">Create Item</h2>
                             <div className="flex flex-col gap-4">
                                 <div>
                                 <label className="text-white text-sm mb-1 block">Name</label>
