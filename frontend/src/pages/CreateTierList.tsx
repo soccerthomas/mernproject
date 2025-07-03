@@ -14,8 +14,25 @@ function CreateTierList()
     const openModal = () => { modalOpen(true); }
     const closeModal = () => { modalOpen(false); }
 
+    const [items, setItems] = useState<{title: string, image?: string; description?:string}[]>([]);
+    const handleItems = () => {
+        const newItem = {
+            title: itemTitle,
+            image: itemImage,
+            description: itemDescription,
+        };
+
+        setItems([...items, newItem]);
+
+        // Clear inputs
+        setItemTitle('');
+        setItemImage('');
+        setItemDescription('');
+
+    closeModal();
+    }
     return (
-        <div className="bg-gray-800">
+        <div className="bg-gray-800 h-auto">
             <header className="p-4">
                 <nav className="mx-auto flex items-center justify-between p-2 lg:px-8 rounded-lg bg-gray-600">
                     <div className="flex lg:flex-1">
@@ -37,7 +54,7 @@ function CreateTierList()
             </header>
             <div className="flex justify-center text-5xl text-white mt-[40px]">{tierListTitle}</div>
             <div className="flex justify-center text-xl text-white mt-[20px]">{tierListDescription}</div>
-            <div className = "mx-auto flex flex-col pt-[50px] p-[100px] gap-y-[50px]">
+            <div className = "mx-auto h-auto flex flex-col pt-[50px] p-[100px] gap-y-[50px]">
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-red-500">S</div>
                     <div className="border-4 py-[40px] w-[100%] rounded-2xl border-red-500"></div>
@@ -60,8 +77,32 @@ function CreateTierList()
                 </div>
                 <div className="flex flex-col justify-center gap-y-[20px]">
                     <div className="text-2xl text-white ml-4">Items:</div>
-                    <div className="border-4 pb-[80px] w-[100%] rounded-2xl border-white flex justify-end">
-                        <button className="bg-white rounded-xl pt-3 pb-3 pl-4 pr-4 mr-4 mt-4" onClick = {openModal}>+</button>
+                    <div className="w-[100%] h-auto rounded-2xl bg-gray-400 flex flex-wrap gap-4 p-4 relative">
+                        {items.length === 0 && (
+                            <div className="text-white">No items created yet</div>
+                        )}
+
+                        {items.map((item, idx) => (
+                            <div
+                            key={idx}
+                            className="bg-gray-700 text-white rounded-lg p-4 min-w-[150px]"
+                            >
+                            <div className="font-semibold">{item.title}</div>
+                            {item.image && (
+                                <img
+                                src={item.image}
+                                className="mt-2 max-h-20 w-auto object-contain"
+                                />
+                            )}
+                            {item.description && (
+                                <div className="mt-1 text-sm opacity-70">{item.description}</div>
+                            )}
+                            </div>
+                        ))}
+
+                        <button className="bg-gray-700 text-white rounded-xl ml-[20px] pl-3 pr-3 pt-2 pb-2 absolute top-[10px] right-[10px]" onClick={openModal}>
+                            +
+                        </button>
                     </div>
                 </div>
                 {showInfoModal && (
@@ -153,7 +194,7 @@ function CreateTierList()
                                     Cancel
                                 </button>
                                 <button
-                                    onClick={() => setShowInfoModal(false)}
+                                    onClick={handleItems}
                                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                                 >
                                     Save
