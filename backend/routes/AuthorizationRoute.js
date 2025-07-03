@@ -11,9 +11,6 @@ router.post('/login', async (req, res) => {
 
         const user = await User.findOne({username});
 
-        //delete this later
-        console.log('Value of process.env.JWT inside /login route:', process.env.JWT);
-
         if(user){
             const validPwd = await bcrypt.compare(password, user.password);
 

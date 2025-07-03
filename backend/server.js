@@ -6,11 +6,6 @@ import AuthorizationRoute from './routes/AuthorizationRoute.js';
 
 dotenv.config();
 
-//delete this later
-console.log('--- Debugging Info ---');
-console.log('PORT from .env:', process.env.PORT);
-console.log('JWT from .env:', process.env.JWT);
-
 const app = express();
 const PORT = process.env.PORT;
 
