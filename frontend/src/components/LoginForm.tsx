@@ -44,7 +44,7 @@ function LoginForm({
         if (data.success && data.token) {
           localStorage.setItem("userJWT", data.token);
           localStorage.setItem("userData", JSON.stringify(data.user));
-          navigate("");
+          navigate("/dashboard");
         } else {
           setError("Login Failed, Check you credentials");
         }
