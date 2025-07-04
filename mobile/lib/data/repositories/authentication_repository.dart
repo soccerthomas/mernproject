@@ -7,8 +7,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
 class LogInFailure implements Exception {
-  const LogInFailure([this.message = 'An unknown exception occurred.']);
   final String message;
+  const LogInFailure([this.message = 'An unknown exception occurred.']);
 }
 
 class AuthenticationRepository {
