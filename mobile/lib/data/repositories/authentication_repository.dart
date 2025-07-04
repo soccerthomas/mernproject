@@ -37,12 +37,9 @@ class AuthenticationRepository {
     required String password,
   }) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/auth/login'), 
+      Uri.parse('$_baseUrl/api/auth/login'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'login': username,
-        'password': password,
-      })
+      body: jsonEncode({'username': username, 'password': password}),
     );
 
     if (response.statusCode == 200) {
