@@ -11,6 +11,11 @@ class LogInFailure implements Exception {
   const LogInFailure([this.message = 'An unknown exception occurred.']);
 }
 
+class RegisterFailure implements Exception {
+  final String message;
+  const RegisterFailure([this.message = 'An unknown exception occured.']);
+}
+
 class AuthenticationRepository {
   final _controller = StreamController<AuthenticationStatus>();
   final _secureStorage = const FlutterSecureStorage();
@@ -62,6 +67,36 @@ class AuthenticationRepository {
   void logOut() async {
     await _secureStorage.delete(key: 'auth_token');
     _controller.add(AuthenticationStatus.unauthenticated);
+  }
+
+  Future<void> register({
+    required String username,
+    required String email,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'username': username,
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final token = body['token'] as String?;
+
+      if (token == null) {
+        throw const RegisterFailure('Server response did not contain a token.');
+      }
+
+      await _secureStorage.write(key: 'auth_token', value: token);
+      _controller.add(AuthenticationStatus.authenticated);
+    } else {
+      throw const RegisterFailure();
+    }
   }
 
   void dispose() => _controller.close();
