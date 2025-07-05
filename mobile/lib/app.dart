@@ -1,10 +1,10 @@
-import 'package:mobile/data/repositories/authentication_repository.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/business_logic/blocs/authentication_bloc.dart';
-import 'package:mobile/presentation/pages/home_page.dart';
-import 'package:mobile/presentation/pages/login_page.dart';
-import 'package:mobile/presentation/pages/splash_page.dart';
+import 'package:mobile/authentication/authentication.dart';
+import 'package:mobile/home/home.dart';
+import 'package:mobile/login/login.dart';
+import 'package:mobile/splash/splash.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

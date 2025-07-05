@@ -1,9 +1,9 @@
-import 'package:mobile/data/repositories/authentication_repository.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:mobile/data/models/username.dart';
-import 'package:mobile/data/models/password.dart';
-import 'package:mobile/data/models/email.dart';
+import 'package:mobile/models/username.dart';
+import 'package:mobile/models/password.dart';
+import 'package:mobile/register/models/email.dart';
 import 'package:formz/formz.dart';
 
 part 'register_event.dart';
