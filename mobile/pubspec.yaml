@@ -32,6 +32,10 @@ dependencies:
     sdk: flutter
   authentication_repository:
     path: packages/authentication_repository
+  tier_lists_repository:
+    path: packages/tier_lists_repository
+  local_storage_tier_lists_api:
+    path: packages/local_storage_tier_lists_api
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -42,6 +46,7 @@ dependencies:
   bloc: ^9.0.0
   flutter_bloc: ^9.1.1
   formz: ^0.8.0
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

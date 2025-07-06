@@ -1,0 +1,15 @@
+name: tier_lists_repository
+description: A repository that handles tier list related requests.
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+
+dependencies:
+  tier_lists_api:
+    path: ../tier_lists_api
+
+dev_dependencies:
+  mocktail: ^1.0.0
+  test: ^1.21.4

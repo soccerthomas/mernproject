@@ -5,15 +5,25 @@ import 'package:mobile/authentication/authentication.dart';
 import 'package:mobile/home/home.dart';
 import 'package:mobile/login/login.dart';
 import 'package:mobile/splash/splash.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
 
 class App extends StatelessWidget {
-  const App({super.key});
+  final AuthenticationRepository authenticationRepository;
+  final TierListsRepository tierListsRepository;
+
+  const App({
+    super.key,
+    required this.authenticationRepository,
+    required this.tierListsRepository,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (_) => AuthenticationRepository(),
-      dispose: (repository) => repository.dispose(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider.value(value: authenticationRepository),
+        RepositoryProvider.value(value: tierListsRepository),
+      ],
       child: BlocProvider(
         lazy: false,
         create: (context) =>
