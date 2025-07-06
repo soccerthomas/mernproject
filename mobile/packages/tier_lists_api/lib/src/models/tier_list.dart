@@ -10,7 +10,7 @@ part 'tier_list.g.dart';
 
 @immutable
 @JsonSerializable()
-class TierList {
+class TierList extends Equatable {
   final String id;
   final String title;
   final String description;
@@ -48,5 +48,6 @@ class TierList {
 
   JsonMap toJson() => _$TierListToJson(this);
 
+  @override
   List<Object> get props => [id, title, description, tiers, tags, stagingArea];
 }
