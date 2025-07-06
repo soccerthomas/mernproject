@@ -86,4 +86,26 @@ router.post('/register', async (req, res) => {
     }
 });
 
+router.post('/tokenVerify', async (req, res) => {
+    try{
+        const {token} = req.body;
+
+        if(!token){
+            return res.status(400).json({isValid: false, message: 'No token provided'})
+        }
+
+        jwt.verify(token, process.env.JWT, (error, decoded) => {
+            if(error){
+                return res.status(200).json({isValid: false, message: error.message});
+            }
+            
+            res.status(200).json({isValid: true, message: 'Valid Token', decodedPayload: decoded});
+        });
+
+    }catch(error){
+        return res.status(500).json({success: false, message: error.message});
+    }
+});
+
 export default router;
+
