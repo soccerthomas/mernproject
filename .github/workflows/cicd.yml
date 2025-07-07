@@ -26,7 +26,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           sshpass -p "${SSH_KEY}" ssh -o StrictHostKeyChecking=no ${SSH_USERNAME}@${SSH_HOST} << 'EOF'
-            cd /var/www/html
+            cd /var/www/orbitcontacrs.xyz/html
             git pull origin main
             npm install
             npm run build
