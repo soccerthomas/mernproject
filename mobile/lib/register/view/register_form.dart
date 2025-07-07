@@ -1,41 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobile/login/bloc/login_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:mobile/login_register.dart/bloc/login_register_bloc.dart';
 import 'package:mobile/login_register.dart/widgets/password_input.dart';
 import 'package:mobile/login_register.dart/widgets/username_input.dart';
-import 'package:mobile/register/view/register_page.dart';
+import 'package:mobile/register/bloc/register_bloc.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({super.key});
+class RegisterForm extends StatelessWidget {
+  const RegisterForm({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<LoginBloc, LoginRegisterState>(
+    return BlocListener<RegisterBloc, LoginRegisterState>(
       listener: (context, state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage ?? 'Authentication Failure'),
-              ),
+              SnackBar(content: Text(state.errorMessage ?? 'Unknown Error')),
             );
         }
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: [
             _usernameInput(),
             const Padding(padding: EdgeInsets.all(12)),
             _passwordInput(),
             const Padding(padding: EdgeInsets.all(12)),
-            _LoginButton(),
-            const Padding(padding: EdgeInsets.all(12)),
-            _registerButton(context)
+            _RegisterButton(),
           ],
         ),
       ),
@@ -43,50 +37,43 @@ class LoginForm extends StatelessWidget {
   }
 }
 
-Widget _usernameInput() => BlocBuilder<LoginBloc, LoginRegisterState>(
+Widget _usernameInput() => BlocBuilder<RegisterBloc, LoginRegisterState>(
   buildWhen: (previous, current) => previous.username != current.username,
   builder: (context, state) => UsernameInput(
-    keyText: 'loginForm_usernameInput_textField',
+    keyText: 'registerForm_usernameInput_textField',
     onChanged: (username) =>
-        context.read<LoginBloc>().add(LoginRegisterUsernameChanged(username)),
+        context.read<RegisterBloc>().add(LoginRegisterUsernameChanged(username)),
     errorText: state.username.displayError == null ? null : 'invalid username',
   ),
 );
 
-Widget _passwordInput() => BlocBuilder<LoginBloc, LoginRegisterState>(
+Widget _passwordInput() => BlocBuilder<RegisterBloc, LoginRegisterState>(
   buildWhen: (previous, current) => previous.password != current.password,
   builder: (context, state) => PasswordInput(
     onChanged: (password) =>
-        context.read<LoginBloc>().add(LoginRegisterPasswordChanged(password)),
-    keyText: 'loginForm_passwordInput_textField',
+        context.read<RegisterBloc>().add(LoginRegisterPasswordChanged(password)),
+    keyText: 'registerForm_passwordInput_textField',
     errorText: state.password.displayError == null ? null : 'invalid password',
   ),
 );
 
-class _LoginButton extends StatelessWidget {
+class _RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isInProgressOrSuccess = context.select(
-      (LoginBloc bloc) => bloc.state.status.isInProgressOrSuccess,
+      (RegisterBloc bloc) => bloc.state.status.isInProgressOrSuccess,
     );
 
     if (isInProgressOrSuccess) return const CircularProgressIndicator();
 
-    final isValid = context.select((LoginBloc bloc) => bloc.state.isValid);
+    final isValid = context.select((RegisterBloc bloc) => bloc.state.isValid);
 
     return ElevatedButton(
-      key: const Key('loginForm_continue_raisedButton'),
+      key: const Key('registerForm_continue_raisedButton'),
       onPressed: isValid
-          ? () => context.read<LoginBloc>().add(const LoginRegisterSubmitted())
+          ? () => context.read<RegisterBloc>().add(const LoginRegisterSubmitted())
           : null,
-      child: const Text('Login'),
+      child: const Text('Register'),
     );
   }
 }
-
-Widget _registerButton(BuildContext context) => TextButton(
-  onPressed: () {
-    Navigator.of(context).push(RegisterPage.route());
-  }, 
-  child: const Text('Create an account')
-);

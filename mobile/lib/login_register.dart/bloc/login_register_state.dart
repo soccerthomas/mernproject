@@ -1,6 +1,6 @@
-part of 'register_bloc.dart';
+part of 'login_register_bloc.dart';
 
-final class RegisterState extends Equatable {
+final class LoginRegisterState extends Equatable {
   final FormzSubmissionStatus status;
   final Username username;
   final Email email;
@@ -9,7 +9,7 @@ final class RegisterState extends Equatable {
   final bool isValid;
   final String? errorMessage;
 
-  const RegisterState({
+  const LoginRegisterState({
     this.status = FormzSubmissionStatus.initial,
     this.username = const Username.pure(),
     this.email = const Email.pure(),
@@ -19,7 +19,7 @@ final class RegisterState extends Equatable {
     this.errorMessage,
   });
 
-  RegisterState copyWith({
+  LoginRegisterState copyWith({
     FormzSubmissionStatus? status,
     Username? username,
     Email? email,
@@ -28,7 +28,7 @@ final class RegisterState extends Equatable {
     bool? isValid,
     String? errorMessage,
   }) {
-    return RegisterState(
+    return LoginRegisterState(
       status: status ?? this.status,
       username: username ?? this.username,
       email: email ?? this.email,

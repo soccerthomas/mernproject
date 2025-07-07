@@ -1,28 +1,20 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:mobile/models/username.dart';
-import 'package:mobile/models/password.dart';
+import 'package:mobile/login_register.dart/bloc/login_register_bloc.dart';
+import 'package:mobile/login_register.dart/models/username.dart';
+import 'package:mobile/login_register.dart/models/password.dart';
 import 'package:formz/formz.dart';
 
-part 'login_event.dart';
-part 'login_state.dart';
-
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthenticationRepository _authenticationRepository;
-  
-  LoginBloc({
-    required AuthenticationRepository authenticationRepository,
-  }) : _authenticationRepository = authenticationRepository,
-       super(const LoginState()) {
-    on<LoginUsernameChanged>(_onUsernameChanged);
-    on<LoginPasswordChanged>(_onPasswordChanged);
-    on<LoginSubmitted>(_onSubmitted);
+class LoginBloc extends LoginRegisterBloc {
+  LoginBloc({required super.authenticationRepository}) {
+    on<LoginRegisterUsernameChanged>(_onUsernameChanged);
+    on<LoginRegisterPasswordChanged>(_onPasswordChanged);
+    on<LoginRegisterSubmitted>(_onSubmitted);
   }
 
   void _onUsernameChanged(
-    LoginUsernameChanged event,
-    Emitter<LoginState> emit,
+    LoginRegisterUsernameChanged event,
+    Emitter<LoginRegisterState> emit,
   ) {
     final username = Username.dirty(event.username);
     emit(
@@ -34,8 +26,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   void _onPasswordChanged(
-    LoginPasswordChanged event,
-    Emitter<LoginState> emit,
+    LoginRegisterPasswordChanged event,
+    Emitter<LoginRegisterState> emit,
   ) {
     final password = Password.dirty(event.password);
     emit(
@@ -47,22 +39,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Future<void> _onSubmitted(
-    LoginSubmitted event,
-    Emitter<LoginState> emit,
+    LoginRegisterSubmitted event,
+    Emitter<LoginRegisterState> emit,
   ) async {
     if (state.isValid) {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       try {
-        await _authenticationRepository.logIn(
+        await authenticationRepository.logIn(
           username: state.username.value,
           password: state.password.value,
         );
         emit(state.copyWith(status: FormzSubmissionStatus.success));
       } on LogInFailure catch (e) {
-        emit(state.copyWith(
-          status: FormzSubmissionStatus.failure, 
-          errorMessage: e.message
-        ));
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            errorMessage: e.message,
+          ),
+        );
       } catch (_) {
         emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/view/tier_list_editor_page.dart';
 import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
 import 'package:mobile/tier_lists_overview/widgets/tier_list_list_tile.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
@@ -100,7 +100,7 @@ class TierListsOverviewView extends StatelessWidget {
                       );
                     },
                     onTap: () {
-                      // Navigator.of(context).push(EditTierListPage.route(tierList));
+                      Navigator.of(context).push(TierListEditorPage.route(tierList));
                     }
                   );
                 },
