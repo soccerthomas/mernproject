@@ -27,8 +27,22 @@ class AuthenticationRepository {
       if (userToken == null) {
         yield AuthenticationStatus.unauthenticated;
       } else {
-        // TODO: verify if the JWT is valid once verification endpoint is created
-        yield AuthenticationStatus.authenticated;
+        final response = await http.post(
+          Uri.parse('$_baseUrl/api/auth/tokenVerify'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'token': userToken}),
+        );
+
+        if (response.statusCode == 200) {
+          final body = jsonDecode(response.body);
+          final isValid = body['isValid'] as bool;
+          yield isValid
+              ? AuthenticationStatus.authenticated
+              : AuthenticationStatus.unauthenticated;
+        } else {
+          print('tokenVerify endpoint status code is not 200');
+          yield AuthenticationStatus.unauthenticated;
+        }
       }
     } catch (e) {
       print(e);
