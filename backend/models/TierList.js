@@ -1,26 +1,44 @@
 import mongoose from 'mongoose';
 
-const itemSchema = new mongoose.Schema({
-    name:{
+// Tag schema for reusable tag structure
+const tagSchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true,
+        trim: true
     },
-    image:{
+    color: {
         type: String,
-        required: false
-    },
-    description:{
-        type: String,
-        required: false,
+        default: "#3B82F6" // Default blue color
     }
 });
 
-const categorySchema = new mongoose.Schema({
-    name:{
+const itemSchema = new mongoose.Schema({
+    name: {
         type: String,
         required: true,
     },
-    color:{
+    image: {
+        type: String,
+        required: false
+    },
+    description: {
+        type: String,
+        required: false,
+    },
+    // Per-item tags - references to global tags
+    tags: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Tag'
+    }]
+});
+
+const categorySchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true,
+    },
+    color: {
         type: String,
         default: "#FFFFFF"
     },
@@ -28,25 +46,30 @@ const categorySchema = new mongoose.Schema({
 });
 
 const tierListSchema = new mongoose.Schema({
-    title:{
+    title: {
         type: String,
         required: true
     },
-    description:{
+    description: {
         type: String,
         required: false
     },
-    user:{
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
     },
     categories: [categorySchema],
-    unassignedItems: [itemSchema]
+    unassignedItems: [itemSchema],
+    // Global tags for this tier list
+    globalTags: [tagSchema]
 }, {
     timestamps: true
 });
 
+// Create a separate Tag model for global tag management
+const Tag = mongoose.model('Tag', tagSchema);
 const TierList = mongoose.model('TierList', tierListSchema);
 
 export default TierList;
+export { Tag };
