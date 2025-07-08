@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import TierListLogo from '../images/TierListLogo.png';
+import DeleteSymbol from '../images/DeleteSymbol.png';
+import EditSymbol from '../images/EditSymbol.png';
 
 interface ItemStructure 
 {
@@ -349,14 +351,14 @@ function CreateTierList()
                                         setCurrentEdit(sTierCard);
                                         handleEditOpen(sTierCard);
                                     }
-                                }>E</button>
+                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
                                 onClick={() => 
                                     {
                                         setDeleteItem(sTierCard);
                                         setDeleteCardModalOpen(true);
                                     }
-                                }>D</button>
+                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <div className="font-semibold">{sTierCard.title}</div>
                                 {sTierCard.image && (
                                     <img
@@ -391,14 +393,14 @@ function CreateTierList()
                                         setCurrentEdit(aTierCard);
                                         handleEditOpen(aTierCard);
                                     }
-                                }>E</button>
+                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
                                 onClick={() => 
                                     {
                                         setDeleteItem(aTierCard);
                                         setDeleteCardModalOpen(true);
                                     }
-                                }>D</button>
+                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <div className="font-semibold">{aTierCard.title}</div>
                                 {aTierCard.image && (
                                     <img
@@ -433,14 +435,14 @@ function CreateTierList()
                                         setCurrentEdit(bTierCard);
                                         handleEditOpen(bTierCard);
                                     }
-                                }>E</button>
+                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
                                 onClick={() => 
                                     {
                                         setDeleteItem(bTierCard);
                                         setDeleteCardModalOpen(true);
                                     }
-                                }>D</button>
+                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <div className="font-semibold">{bTierCard.title}</div>
                                 {bTierCard.image && (
                                     <img
@@ -475,14 +477,14 @@ function CreateTierList()
                                         setCurrentEdit(cTierCard);
                                         handleEditOpen(cTierCard);
                                     }
-                                }>E</button>
+                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
                                 onClick={() => 
                                     {
                                         setDeleteItem(cTierCard);
                                         setDeleteCardModalOpen(true);
                                     }
-                                }>D</button>
+                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <div className="font-semibold">{cTierCard.title}</div>
                                 {cTierCard.image && (
                                     <img
@@ -517,14 +519,14 @@ function CreateTierList()
                                         setCurrentEdit(dTierCard);
                                         handleEditOpen(dTierCard);
                                     }
-                                }>E</button>
+                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
                                 onClick={() => 
                                     {
                                         setDeleteItem(dTierCard);
                                         setDeleteCardModalOpen(true);
                                     }
-                                }>D</button>
+                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <div className="font-semibold">{dTierCard.title}</div>
                                 {dTierCard.image && (
                                     <img
@@ -563,14 +565,14 @@ function CreateTierList()
                                         setCurrentEdit(item);
                                         handleEditOpen(item);
                                     }
-                                }>E</button>
+                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
                                 onClick={() => 
                                     {
                                         setDeleteItem(item);
                                         setDeleteCardModalOpen(true);
                                     }
-                                }>D</button>
+                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
                                 <div className="font-semibold">{item.title}</div>
                                 {item.image && (
                                     <img
