@@ -1,9 +1,19 @@
 import { useState } from 'react';
 import TierListLogo from '../images/TierListLogo.png';
 
+interface ItemStructure 
+{
+    id:number;
+    title:string;
+    image:string;
+    description:string;
+}
+
 function CreateTierList()
 {
-    const [isModalOpen, modalOpen] = useState(false);
+    const [isNewCardModalOpen, newCardModalOpen] = useState(false);
+    const [isEditCardModalOpen, setEditCardModalOpen] = useState(false);
+    const [isDeleteCardModalOpen, setDeleteCardModalOpen] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(true);
     const [tierListTitle, setTierListTitle] = useState('');
     const [tierListDescription, setTierListDescription] = useState('');
@@ -11,15 +21,162 @@ function CreateTierList()
     const [itemImage, setItemImage] = useState('');
     const [itemDescription, setItemDescription] = useState('');
 
-    const openModal = () => { modalOpen(true); }
-    const closeModal = () => { modalOpen(false); }
+    const openNewCardModal = () => { newCardModalOpen(true); }
+    const closeNewCardModal = () => { newCardModalOpen(false); }
 
-    const [items, setItems] = useState<{id: number, title: string, image: string; description:string}[]>([]);
-    const [sTierCards, setSTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
-    const [aTierCards, setATierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
-    const [bTierCards, setBTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
-    const [cTierCards, setCTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
-    const [dTierCards, setDTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+    const closeEditCardModal = () => { setEditCardModalOpen(false); }
+
+    const closeDeleteCardModal = () => { setDeleteCardModalOpen(false); }
+
+    const [items, setItems] = useState<ItemStructure[]>([]);
+    const [sTierCards, setSTierCards] = useState<ItemStructure[]>([]);
+    const [aTierCards, setATierCards] = useState<ItemStructure[]>([]);
+    const [bTierCards, setBTierCards] = useState<ItemStructure[]>([]);
+    const [cTierCards, setCTierCards] = useState<ItemStructure[]>([]);
+    const [dTierCards, setDTierCards] = useState<ItemStructure[]>([]);
+
+    const [currentEdit, setCurrentEdit] = useState<ItemStructure>();
+    const [deleteItem, setDeleteItem] = useState<ItemStructure>();
+    
+    function handleEditOpen(item: ItemStructure)
+    {
+        setEditCardModalOpen(true);
+
+        setItemTitle(item.title);
+        setItemImage(item.image);
+        setItemDescription(item.description);
+    }
+    function handleEditSave()
+    {
+        if(currentEdit)
+        {
+            setItems(items.map(item =>
+                {
+                if(item.id == currentEdit.id)
+                    {
+                        return {
+                            ...item,
+                            title: itemTitle,
+                            image: itemImage,
+                            description: itemDescription
+                        };
+                    }
+                    else
+                    {
+                        return item;
+                    }
+                }   
+            ));
+            setSTierCards(sTierCards.map(item =>
+                {
+                if(item.id == currentEdit.id)
+                    {
+                        return {
+                            ...item,
+                            title: itemTitle,
+                            image: itemImage,
+                            description: itemDescription
+                        };
+                    }
+                    else
+                    {
+                        return item;
+                    }
+                }   
+            ));
+            setATierCards(aTierCards.map(item =>
+                {
+                if(item.id == currentEdit.id)
+                    {
+                        return {
+                            ...item,
+                            title: itemTitle,
+                            image: itemImage,
+                            description: itemDescription
+                        };
+                    }
+                    else
+                    {
+                        return item;
+                    }
+                }   
+            ));
+            setBTierCards(bTierCards.map(item =>
+                {
+                if(item.id == currentEdit.id)
+                    {
+                        return {
+                            ...item,
+                            title: itemTitle,
+                            image: itemImage,
+                            description: itemDescription
+                        };
+                    }
+                    else
+                    {
+                        return item;
+                    }
+                }   
+            ));
+            setCTierCards(cTierCards.map(item =>
+                {
+                if(item.id == currentEdit.id)
+                    {
+                        return {
+                            ...item,
+                            title: itemTitle,
+                            image: itemImage,
+                            description: itemDescription
+                        };
+                    }
+                    else
+                    {
+                        return item;
+                    }
+                }   
+            ));
+            setDTierCards(dTierCards.map(item =>
+                {
+                if(item.id == currentEdit.id)
+                    {
+                        return {
+                            ...item,
+                            title: itemTitle,
+                            image: itemImage,
+                            description: itemDescription
+                        };
+                    }
+                    else
+                    {
+                        return item;
+                    }
+                }   
+            ));
+            
+            setItemTitle('');
+            setItemImage('');
+            setItemDescription('');
+
+            setCurrentEdit(undefined);
+        }
+        
+        setEditCardModalOpen(false);
+    }
+
+    function handleDelete()
+    {
+        if(deleteItem)
+        {
+            setItems(items.filter(item => item.id != deleteItem.id));
+            setSTierCards(sTierCards.filter(item => item.id != deleteItem.id));
+            setATierCards(aTierCards.filter(item => item.id != deleteItem.id));
+            setBTierCards(bTierCards.filter(item => item.id != deleteItem.id));
+            setCTierCards(cTierCards.filter(item => item.id != deleteItem.id));
+            setDTierCards(dTierCards.filter(item => item.id != deleteItem.id));
+        }
+        
+        setDeleteCardModalOpen(false);
+    }
 
     function handleOnDrag(e: React.DragEvent, item: object)
     {
@@ -40,7 +197,7 @@ function CreateTierList()
 
         setItems([...items, card]);
 
-        setSTierCards(dTierCards.filter(item => item.id != card.id));
+        setSTierCards(sTierCards.filter(item => item.id != card.id));
         setATierCards(aTierCards.filter(item => item.id != card.id));
         setBTierCards(bTierCards.filter(item => item.id != card.id));
         setCTierCards(cTierCards.filter(item => item.id != card.id));
@@ -147,7 +304,7 @@ function CreateTierList()
         setItemImage('');
         setItemDescription('');
 
-    closeModal();
+    closeNewCardModal();
     }
     return (
         <div className="bg-gray-800 h-auto">
@@ -184,8 +341,22 @@ function CreateTierList()
                                     onDragStart={(e) => handleOnDrag(e, sTierCard)}   
                                 >
                                 <div
-                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
                                 >
+                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setCurrentEdit(sTierCard);
+                                        handleEditOpen(sTierCard);
+                                    }
+                                }>E</button>
+                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setDeleteItem(sTierCard);
+                                        setDeleteCardModalOpen(true);
+                                    }
+                                }>D</button>
                                 <div className="font-semibold">{sTierCard.title}</div>
                                 {sTierCard.image && (
                                     <img
@@ -212,8 +383,22 @@ function CreateTierList()
                                     onDragStart={(e) => handleOnDrag(e, aTierCard)}   
                                 >
                                 <div
-                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
                                 >
+                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setCurrentEdit(aTierCard);
+                                        handleEditOpen(aTierCard);
+                                    }
+                                }>E</button>
+                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setDeleteItem(aTierCard);
+                                        setDeleteCardModalOpen(true);
+                                    }
+                                }>D</button>
                                 <div className="font-semibold">{aTierCard.title}</div>
                                 {aTierCard.image && (
                                     <img
@@ -240,8 +425,22 @@ function CreateTierList()
                                     onDragStart={(e) => handleOnDrag(e, bTierCard)}   
                                 >
                                 <div
-                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
                                 >
+                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setCurrentEdit(bTierCard);
+                                        handleEditOpen(bTierCard);
+                                    }
+                                }>E</button>
+                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setDeleteItem(bTierCard);
+                                        setDeleteCardModalOpen(true);
+                                    }
+                                }>D</button>
                                 <div className="font-semibold">{bTierCard.title}</div>
                                 {bTierCard.image && (
                                     <img
@@ -268,8 +467,22 @@ function CreateTierList()
                                     onDragStart={(e) => handleOnDrag(e, cTierCard)}   
                                 >
                                 <div
-                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
                                 >
+                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setCurrentEdit(cTierCard);
+                                        handleEditOpen(cTierCard);
+                                    }
+                                }>E</button>
+                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setDeleteItem(cTierCard);
+                                        setDeleteCardModalOpen(true);
+                                    }
+                                }>D</button>
                                 <div className="font-semibold">{cTierCard.title}</div>
                                 {cTierCard.image && (
                                     <img
@@ -296,8 +509,22 @@ function CreateTierList()
                                     onDragStart={(e) => handleOnDrag(e, dTierCard)}   
                                 >
                                 <div
-                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
                                 >
+                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setCurrentEdit(dTierCard);
+                                        handleEditOpen(dTierCard);
+                                    }
+                                }>E</button>
+                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setDeleteItem(dTierCard);
+                                        setDeleteCardModalOpen(true);
+                                    }
+                                }>D</button>
                                 <div className="font-semibold">{dTierCard.title}</div>
                                 {dTierCard.image && (
                                     <img
@@ -328,9 +555,22 @@ function CreateTierList()
                                 onDragStart={(e) => handleOnDrag(e, item)}    
                             >
                                 <div
-                                
-                                className="bg-gray-700 text-white rounded-lg p-4 min-w-[150px]"
+                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
                                 >
+                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setCurrentEdit(item);
+                                        handleEditOpen(item);
+                                    }
+                                }>E</button>
+                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
+                                onClick={() => 
+                                    {
+                                        setDeleteItem(item);
+                                        setDeleteCardModalOpen(true);
+                                    }
+                                }>D</button>
                                 <div className="font-semibold">{item.title}</div>
                                 {item.image && (
                                     <img
@@ -345,7 +585,7 @@ function CreateTierList()
                             </div>
                         ))}
 
-                        <button className="bg-gray-700 text-white rounded-xl ml-[20px] pl-3 pr-3 pt-2 pb-2 absolute top-[10px] right-[10px]" onClick={openModal}>
+                        <button className="bg-gray-700 text-white rounded-xl ml-[20px] pl-3 pr-3 pt-2 pb-2 absolute top-[10px] right-[10px]" onClick={openNewCardModal}>
                             +
                         </button>
                     </div>
@@ -394,7 +634,7 @@ function CreateTierList()
                         </div>
                     </div>
                 )}
-                {isModalOpen && (
+                {isNewCardModalOpen && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
                             <h2 className="text-2xl text-white mb-4 text-center">Create Item</h2>
@@ -411,13 +651,13 @@ function CreateTierList()
                                 />
                                 </div>
                                 <div>
-                                <label className="text-white text-sm mb-1 block">Item</label>
+                                <label className="text-white text-sm mb-1 block">Image</label>
                                 <input
                                     type="text"
                                     value={itemImage}
                                     onChange={(e) => setItemImage(e.target.value)}
                                     className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter title"
+                                    placeholder="Enter image URL"
                                     required
                                 />
                                 </div>
@@ -433,7 +673,7 @@ function CreateTierList()
                                 </div>
                                 <div className="flex justify-end gap-2 mt-4">
                                 <button
-                                    onClick={closeModal}
+                                    onClick={closeNewCardModal}
                                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                 >
                                     Cancel
@@ -443,6 +683,89 @@ function CreateTierList()
                                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                                 >
                                     Save
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {isEditCardModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
+                            <h2 className="text-2xl text-white mb-4 text-center">Edit Item</h2>
+                            <div className="flex flex-col gap-4">
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Name</label>
+                                <input
+                                    type="text"
+                                    value={itemTitle}
+                                    onChange={(e) => setItemTitle(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter title"
+                                    required
+                                />
+                                </div>
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Image</label>
+                                <input
+                                    type="text"
+                                    value={itemImage}
+                                    onChange={(e) => setItemImage(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter image URL"
+                                    required
+                                />
+                                </div>
+                                <div>
+                                <label className="text-white text-sm mb-1 block">Description</label>
+                                <textarea
+                                    value={itemDescription}
+                                    onChange={(e) => setItemDescription(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter description"
+                                    required
+                                />
+                                </div>
+                                <div className="flex justify-end gap-2 mt-4">
+                                <button
+                                    onClick={closeEditCardModal}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleEditSave}
+                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                >
+                                    Update
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {isDeleteCardModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
+                            <h2 className="text-xl text-white mb-4 text-center">Are you sure you want to delete this item?</h2>
+                            <div className="flex flex-col gap-4">
+                                <div className="flex justify-center gap-2 mt-4">
+                                <button
+                                    onClick={ ()  => 
+                                        {
+                                            setDeleteItem(undefined);
+                                            closeDeleteCardModal();
+                                        }
+                                    }
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleDelete}
+                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                >
+                                    Confirm
                                 </button>
                                 </div>
                             </div>
