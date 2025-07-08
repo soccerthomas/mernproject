@@ -392,6 +392,14 @@ function CreateTierList()
 
         closeNewCardModal();
     }
+
+    const cleanup = () => {
+        setItemTitle('');
+        setItemImage('');
+        setItemDescription('');
+
+        closeNewCardModal();
+    }
     
     return (
         <div className="bg-gray-800 h-auto">
@@ -776,7 +784,7 @@ function CreateTierList()
                                         >Tag +</button>
                                     <div className="flex gap-4">
                                         <button
-                                            onClick={closeNewCardModal}
+                                            onClick={cleanup}
                                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                         >
                                             Cancel
