@@ -13,19 +13,19 @@ function Homepage() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a
-              href="./createTierList"
+              href="./login"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Create Tier List
             </a>
             <a
-              href="#"
+              href="./login"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Your Tier Lists
             </a>
             <a
-              href="#"
+              href="/"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Explore
@@ -72,12 +72,11 @@ function Homepage() {
         <div className="w-[95%] border-t border-gray-300 mx-auto"></div>
         <div className="text-center">
           <h1 className="pt-8 font-semibold text-white lg:text-2xl sm:text-xl">
-            About Tier List Maker
+            Tier Master
           </h1>
           <p className="mt-4 text-md font-medium text-pretty text-gray-400 sm:text-md">
-            Create and share easily accessible tier lists of all of your
-            favorite subjects. You can create tier lists for movies, TV shows,
-            videos games, etc
+            Create and share tier lists for all the things you love. From
+            movies, TV shows, video games and more.
           </p>
         </div>
       </div>
