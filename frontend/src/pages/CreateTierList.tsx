@@ -3,12 +3,17 @@ import TierListLogo from '../images/TierListLogo.png';
 import DeleteSymbol from '../images/DeleteSymbol.png';
 import EditSymbol from '../images/EditSymbol.png';
 
-interface ItemStructure 
+interface ItemStructure
 {
     id:number;
     title:string;
     image:string;
     description:string;
+}
+interface TagStructure
+{
+    name:string;
+    status:string;
 }
 
 function CreateTierList()
@@ -39,7 +44,73 @@ function CreateTierList()
 
     const [currentEdit, setCurrentEdit] = useState<ItemStructure>();
     const [deleteItem, setDeleteItem] = useState<ItemStructure>();
+
+    const [tags, setTags] = useState<TagStructure[]>([]);
+    const [tagName, setTagName] = useState('');
+    //const [tagStatus, setTagStatus] = useState('');
+
+    const [isNewTagModalOpen, newTagModalOpen] = useState(false);
+    const openNewTagModal = () => { newTagModalOpen(true); }
+    const closeNewTagModal = () => { newTagModalOpen(false); }
     
+    function handleArrowClick(tag: TagStructure, direction: String)
+    {
+        if((tag.status == "bg-red-500" && direction == "up") || (tag.status == "bg-green-500" && direction == "down"))
+        {
+            setTags(tags.map(curr =>
+                {
+                if(curr.name == tag.name)
+                    {
+                        return {
+                            ...curr,
+                            status: "bg-yellow-500"
+                        };
+                    }
+                    else
+                    {
+                        return curr;
+                    }
+                }   
+            ));
+        }
+        if(tag.status == "bg-yellow-500" && direction == "up")
+        {
+            setTags(tags.map(curr =>
+                {
+                if(curr.name == tag.name)
+                    {
+                        return {
+                            ...curr,
+                            status: "bg-green-500"
+                        };
+                    }
+                    else
+                    {
+                        return curr;
+                    }
+                }   
+            ));
+        }
+        if(tag.status == "bg-yellow-500" && direction == "down")
+        {
+            setTags(tags.map(curr =>
+                {
+                if(curr.name == tag.name)
+                    {
+                        return {
+                            ...curr,
+                            status: "bg-red-500"
+                        };
+                    }
+                    else
+                    {
+                        return curr;
+                    }
+                }   
+            ));
+        }
+    }
+
     function handleEditOpen(item: ItemStructure)
     {
         setEditCardModalOpen(true);
@@ -291,6 +362,19 @@ function CreateTierList()
         setCTierCards(cTierCards.filter(item => item.id != card.id));
 
     }
+    function handleTags()
+    {
+        const newTag = {
+            name: tagName,
+            status: "bg-yellow-500",
+        }
+
+        setTags([...tags, newTag]);
+
+        setTagName('');
+
+        closeNewTagModal();
+    }
 
     const handleItems = () => {
         const newItem = {
@@ -306,8 +390,9 @@ function CreateTierList()
         setItemImage('');
         setItemDescription('');
 
-    closeNewCardModal();
+        closeNewCardModal();
     }
+    
     return (
         <div className="bg-gray-800 h-auto">
             <header className="p-4">
@@ -673,19 +758,36 @@ function CreateTierList()
                                     required
                                 />
                                 </div>
-                                <div className="flex justify-end gap-2 mt-4">
-                                <button
-                                    onClick={closeNewCardModal}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleItems}
-                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-                                >
-                                    Save
-                                </button>
+                                <div className="flex flex-wrap gap-2 ">
+                                    {tags.map((tag, idx) => (
+                                        <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
+                                            <div className="text-sm">{tag.name}</div>
+                                            <div className="flex flex-col">
+                                                <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
+                                                <button className={`${tag.status} rounded-md p-3`} />
+                                                <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between gap-2 mt-4">
+                                    <button className="bg-blue-500 text-white rounded px-4 py-2"
+                                        onClick={openNewTagModal}
+                                        >Tag +</button>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={closeNewCardModal}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleItems}
+                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -728,19 +830,36 @@ function CreateTierList()
                                     required
                                 />
                                 </div>
-                                <div className="flex justify-end gap-2 mt-4">
-                                <button
-                                    onClick={closeEditCardModal}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleEditSave}
-                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-                                >
-                                    Update
-                                </button>
+                                <div className="flex flex-wrap gap-2 ">
+                                    {tags.map((tag, idx) => (
+                                        <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
+                                            <div className="text-sm">{tag.name}</div>
+                                            <div className="flex flex-col">
+                                                <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
+                                                <button className={`${tag.status} rounded-md p-3`} />
+                                                <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="flex justify-between gap-2 mt-4">
+                                    <button className="bg-blue-500 text-white rounded px-4 py-2"
+                                        onClick={openNewTagModal}
+                                        >Tag +</button>
+                                    <div className="flex gap-4">
+                                        <button
+                                            onClick={closeEditCardModal}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleEditSave}
+                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Update
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -765,6 +884,37 @@ function CreateTierList()
                                 </button>
                                 <button
                                     onClick={handleDelete}
+                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                >
+                                    Confirm
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {isNewTagModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
+                            <h2 className="text-xl text-white mb-4 text-center">Create new tag</h2>
+                            <div className="flex flex-col gap-4">
+                                <input
+                                    type="text"
+                                    value={tagName}
+                                    onChange={(e) => setTagName(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Enter title"
+                                    required
+                                />
+                                <div className="flex justify-center gap-2 mt-4">
+                                <button
+                                    onClick={closeDeleteCardModal}
+                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleTags}
                                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                                 >
                                     Confirm
