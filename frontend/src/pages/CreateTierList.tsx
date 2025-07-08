@@ -14,7 +14,6 @@ function CreateTierList()
     const openModal = () => { modalOpen(true); }
     const closeModal = () => { modalOpen(false); }
 
-    let idCounter = 0;
     const [items, setItems] = useState<{id: number, title: string, image: string; description:string}[]>([]);
     const [sTierCards, setSTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
     const [aTierCards, setATierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
@@ -34,36 +33,41 @@ function CreateTierList()
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
         setSTierCards([...sTierCards, card]);
+
         setItems(items.filter(item => item.id != card.id));
     }
     function handleOnDropA(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
         setATierCards([...aTierCards, card]);
+
         setItems(items.filter(item => item.id != card.id));
     }
     function handleOnDropB(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
         setBTierCards([...bTierCards, card]);
+
         setItems(items.filter(item => item.id != card.id));
     }
     function handleOnDropC(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
         setCTierCards([...cTierCards, card]);
+
         setItems(items.filter(item => item.id != card.id));
     }
     function handleOnDropD(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
         setDTierCards([...dTierCards, card]);
+
         setItems(items.filter(item => item.id != card.id));
     }
 
     const handleItems = () => {
         const newItem = {
-            id: idCounter++,
+            id: Math.random(),
             title: itemTitle,
             image: itemImage,
             description: itemDescription,
@@ -75,6 +79,8 @@ function CreateTierList()
         setItemTitle('');
         setItemImage('');
         setItemDescription('');
+
+        console.log(newItem.id);
 
     closeModal();
     }
