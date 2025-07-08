@@ -47,6 +47,7 @@ dependencies:
   flutter_bloc: ^9.1.1
   formz: ^0.8.0
   shared_preferences: ^2.5.3
+  email_validator: ^3.0.0
 
 dev_dependencies:
   flutter_test:

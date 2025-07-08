@@ -1,13 +1,14 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:mobile/login_register.dart/bloc/login_register_bloc.dart';
-import 'package:mobile/login_register.dart/models/username.dart';
-import 'package:mobile/login_register.dart/models/password.dart';
-import 'package:mobile/login_register.dart/models/email.dart';
+import 'package:mobile/login_register/bloc/login_register_bloc.dart';
+import 'package:mobile/login_register/models/confirm_password.dart';
+import 'package:mobile/login_register/models/username.dart';
+import 'package:mobile/login_register/models/password.dart';
+import 'package:mobile/login_register/models/email.dart';
 import 'package:formz/formz.dart';
 
 class RegisterBloc extends LoginRegisterBloc {
-  RegisterBloc({required super.authenticationRepository})  {
+  RegisterBloc({required super.authenticationRepository}) {
     on<LoginRegisterUsernameChanged>(_onUsernameChanged);
     on<LoginRegisterPasswordChanged>(_onPasswordChanged);
     on<LoginRegisterEmailChanged>(_onEmailChanged);
@@ -33,24 +34,6 @@ class RegisterBloc extends LoginRegisterBloc {
     );
   }
 
-  void _onPasswordChanged(
-    LoginRegisterPasswordChanged event,
-    Emitter<LoginRegisterState> emit,
-  ) {
-    final password = Password.dirty(event.password);
-    emit(
-      state.copyWith(
-        password: password,
-        isValid: Formz.validate([
-          state.username,
-          state.email,
-          password,
-          state.confirmPassword,
-        ]),
-      ),
-    );
-  }
-
   void _onEmailChanged(
     LoginRegisterEmailChanged event,
     Emitter<LoginRegisterState> emit,
@@ -69,11 +52,37 @@ class RegisterBloc extends LoginRegisterBloc {
     );
   }
 
+  void _onPasswordChanged(
+    LoginRegisterPasswordChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final password = Password.dirty(event.password);
+    final confirmPassword = ConfirmPassword.dirty(
+      password: password.value,
+      value: state.confirmPassword.value
+    );
+    emit(
+      state.copyWith(
+        password: password,
+        confirmPassword: confirmPassword,
+        isValid: Formz.validate([
+          state.username,
+          state.email,
+          password,
+          confirmPassword,
+        ]),
+      ),
+    );
+  }
+
   void _onConfirmPasswordChanged(
     LoginRegisterConfirmPasswordChanged event,
     Emitter<LoginRegisterState> emit,
   ) {
-    final confirmPassword = Password.dirty(event.confirmPassword);
+    final confirmPassword = ConfirmPassword.dirty(
+      value: event.confirmPassword,
+      password: state.password.value,
+    );
     emit(
       state.copyWith(
         confirmPassword: confirmPassword,
@@ -101,10 +110,12 @@ class RegisterBloc extends LoginRegisterBloc {
         );
         emit(state.copyWith(status: FormzSubmissionStatus.success));
       } on RegisterFailure catch (e) {
-        emit(state.copyWith(
-          status: FormzSubmissionStatus.failure,
-          errorMessage: e.message,
-        ));
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            errorMessage: e.message,
+          ),
+        );
       } catch (_) {
         emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }

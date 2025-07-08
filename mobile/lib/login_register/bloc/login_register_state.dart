@@ -5,7 +5,7 @@ final class LoginRegisterState extends Equatable {
   final Username username;
   final Email email;
   final Password password;
-  final Password confirmPassword;
+  final ConfirmPassword confirmPassword;
   final bool isValid;
   final String? errorMessage;
 
@@ -14,7 +14,7 @@ final class LoginRegisterState extends Equatable {
     this.username = const Username.pure(),
     this.email = const Email.pure(),
     this.password = const Password.pure(),
-    this.confirmPassword = const Password.pure(),
+    this.confirmPassword = const ConfirmPassword.pure(),
     this.isValid = false,
     this.errorMessage,
   });
@@ -24,7 +24,7 @@ final class LoginRegisterState extends Equatable {
     Username? username,
     Email? email,
     Password? password,
-    Password? confirmPassword,
+    ConfirmPassword? confirmPassword,
     bool? isValid,
     String? errorMessage,
   }) {
