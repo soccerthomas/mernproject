@@ -35,6 +35,10 @@ function CreateTierList()
         setSTierCards([...sTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
+        setATierCards(aTierCards.filter(item => item.id != card.id));
+        setBTierCards(bTierCards.filter(item => item.id != card.id));
+        setCTierCards(cTierCards.filter(item => item.id != card.id));
+        setDTierCards(dTierCards.filter(item => item.id != card.id));
     }
     function handleOnDropA(e: React.DragEvent)
     {
@@ -42,6 +46,10 @@ function CreateTierList()
         setATierCards([...aTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
+        setSTierCards(sTierCards.filter(item => item.id != card.id));
+        setBTierCards(bTierCards.filter(item => item.id != card.id));
+        setCTierCards(cTierCards.filter(item => item.id != card.id));
+        setDTierCards(dTierCards.filter(item => item.id != card.id));
     }
     function handleOnDropB(e: React.DragEvent)
     {
@@ -49,6 +57,10 @@ function CreateTierList()
         setBTierCards([...bTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
+        setSTierCards(sTierCards.filter(item => item.id != card.id));
+        setATierCards(aTierCards.filter(item => item.id != card.id));
+        setCTierCards(cTierCards.filter(item => item.id != card.id));
+        setDTierCards(dTierCards.filter(item => item.id != card.id));
     }
     function handleOnDropC(e: React.DragEvent)
     {
@@ -56,6 +68,10 @@ function CreateTierList()
         setCTierCards([...cTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
+        setSTierCards(sTierCards.filter(item => item.id != card.id));
+        setATierCards(aTierCards.filter(item => item.id != card.id));
+        setBTierCards(bTierCards.filter(item => item.id != card.id));
+        setDTierCards(dTierCards.filter(item => item.id != card.id));
     }
     function handleOnDropD(e: React.DragEvent)
     {
@@ -63,6 +79,11 @@ function CreateTierList()
         setDTierCards([...dTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
+        setSTierCards(sTierCards.filter(item => item.id != card.id));
+        setATierCards(aTierCards.filter(item => item.id != card.id));
+        setBTierCards(bTierCards.filter(item => item.id != card.id));
+        setCTierCards(cTierCards.filter(item => item.id != card.id));
+
     }
 
     const handleItems = () => {
@@ -79,8 +100,6 @@ function CreateTierList()
         setItemTitle('');
         setItemImage('');
         setItemDescription('');
-
-        console.log(newItem.id);
 
     closeModal();
     }
@@ -114,11 +133,10 @@ function CreateTierList()
                         onDragOver={handleDragOver}
                         onDrop={handleOnDropS}>
                             {sTierCards.map((sTierCard, idx) => (
-                            <div key={idx}
-                                // draggable 
-                                // onDragStart={(e) => handleOnDrag(e, item)}
-                                // onDragEnd={(e) => handleOnDrag(e, item)}    
-                            >
+                                <div key={idx}
+                                    draggable 
+                                    onDragStart={(e) => handleOnDrag(e, sTierCard)}   
+                                >
                                 <div
                                 className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
                                 >
@@ -143,11 +161,10 @@ function CreateTierList()
                         onDragOver={handleDragOver}
                         onDrop={handleOnDropA}>
                             {aTierCards.map((aTierCard, idx) => (
-                            <div key={idx}
-                                // draggable 
-                                // onDragStart={(e) => handleOnDrag(e, item)}
-                                // onDragEnd={(e) => handleOnDrag(e, item)}    
-                            >
+                                <div key={idx}
+                                    draggable 
+                                    onDragStart={(e) => handleOnDrag(e, aTierCard)}   
+                                >
                                 <div
                                 className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
                                 >
@@ -172,11 +189,10 @@ function CreateTierList()
                         onDragOver={handleDragOver}
                         onDrop={handleOnDropB}>
                             {bTierCards.map((bTierCard, idx) => (
-                            <div key={idx}
-                                // draggable 
-                                // onDragStart={(e) => handleOnDrag(e, item)}
-                                // onDragEnd={(e) => handleOnDrag(e, item)}    
-                            >
+                                <div key={idx}
+                                    draggable 
+                                    onDragStart={(e) => handleOnDrag(e, bTierCard)}   
+                                >
                                 <div
                                 className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
                                 >
@@ -201,11 +217,10 @@ function CreateTierList()
                         onDragOver={handleDragOver}
                         onDrop={handleOnDropC}>
                             {cTierCards.map((cTierCard, idx) => (
-                            <div key={idx}
-                                // draggable 
-                                // onDragStart={(e) => handleOnDrag(e, item)}
-                                // onDragEnd={(e) => handleOnDrag(e, item)}    
-                            >
+                                <div key={idx}
+                                    draggable 
+                                    onDragStart={(e) => handleOnDrag(e, cTierCard)}   
+                                >
                                 <div
                                 className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
                                 >
@@ -230,11 +245,10 @@ function CreateTierList()
                         onDragOver={handleDragOver}
                         onDrop={handleOnDropD}>
                             {dTierCards.map((dTierCard, idx) => (
-                            <div key={idx}
-                                // draggable 
-                                // onDragStart={(e) => handleOnDrag(e, item)}
-                                // onDragEnd={(e) => handleOnDrag(e, item)}    
-                            >
+                                <div key={idx}
+                                    draggable 
+                                    onDragStart={(e) => handleOnDrag(e, dTierCard)}   
+                                >
                                 <div
                                 className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
                                 >
@@ -263,8 +277,7 @@ function CreateTierList()
                         {items.map((item, idx) => (
                             <div key={idx}
                                 draggable 
-                                onDragStart={(e) => handleOnDrag(e, item)}
-                                onDragEnd={(e) => handleOnDrag(e, item)}    
+                                onDragStart={(e) => handleOnDrag(e, item)}    
                             >
                                 <div
                                 
