@@ -29,9 +29,32 @@ function CreateTierList()
     {
         e.preventDefault();
     }
+    function handleOnDropItems(e: React.DragEvent)
+    {
+        const card = JSON.parse(e.dataTransfer.getData("item"));
+
+        if(items.find(item => item.id == card.id))
+        {
+            return;
+        }
+
+        setItems([...items, card]);
+
+        setSTierCards(dTierCards.filter(item => item.id != card.id));
+        setATierCards(aTierCards.filter(item => item.id != card.id));
+        setBTierCards(bTierCards.filter(item => item.id != card.id));
+        setCTierCards(cTierCards.filter(item => item.id != card.id));
+        setDTierCards(dTierCards.filter(item => item.id != card.id));
+    }
     function handleOnDropS(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
+
+        if(sTierCards.find(item => item.id == card.id))
+        {
+            return;
+        }
+
         setSTierCards([...sTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
@@ -43,6 +66,12 @@ function CreateTierList()
     function handleOnDropA(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
+
+        if(aTierCards.find(item => item.id == card.id))
+        {
+            return;
+        }
+
         setATierCards([...aTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
@@ -54,6 +83,12 @@ function CreateTierList()
     function handleOnDropB(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
+        
+        if(bTierCards.find(item => item.id == card.id))
+        {
+            return;
+        }
+
         setBTierCards([...bTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
@@ -65,6 +100,12 @@ function CreateTierList()
     function handleOnDropC(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
+        
+        if(cTierCards.find(item => item.id == card.id))
+        {
+            return;
+        }
+
         setCTierCards([...cTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
@@ -76,6 +117,12 @@ function CreateTierList()
     function handleOnDropD(e: React.DragEvent)
     {
         const card = JSON.parse(e.dataTransfer.getData("item"));
+        
+        if(dTierCards.find(item => item.id == card.id))
+        {
+            return;
+        }
+
         setDTierCards([...dTierCards, card]);
 
         setItems(items.filter(item => item.id != card.id));
@@ -96,7 +143,6 @@ function CreateTierList()
 
         setItems([...items, newItem]);
 
-        // Clear inputs
         setItemTitle('');
         setItemImage('');
         setItemDescription('');
@@ -269,7 +315,9 @@ function CreateTierList()
                 </div>
                 <div className="flex flex-col justify-center gap-y-[20px]">
                     <div className="text-2xl text-white ml-4">Items:</div>
-                    <div className="w-[100%] h-auto rounded-2xl bg-gray-400 flex flex-wrap gap-4 p-4 relative">
+                    <div className="w-[100%] min-h-[90px] rounded-2xl bg-gray-400 flex flex-wrap gap-4 p-4 relative"
+                    onDragOver={handleDragOver}
+                        onDrop={handleOnDropItems}>
                         {items.length == 0 && (
                             <div className="text-white">No items created yet</div>
                         )}
