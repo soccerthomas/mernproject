@@ -772,7 +772,7 @@ function CreateTierList()
                                             <div className="text-sm">{tag.name}</div>
                                             <div className="flex flex-col">
                                                 <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
-                                                <button className={`${tag.status} rounded-md p-3`} />
+                                                <button disabled className={`${tag.status} rounded-md p-3`} />
                                                 <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
                                             </div>
                                         </div>
@@ -844,7 +844,7 @@ function CreateTierList()
                                             <div className="text-sm">{tag.name}</div>
                                             <div className="flex flex-col">
                                                 <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
-                                                <button className={`${tag.status} rounded-md p-3`} />
+                                                <button disabled className={`${tag.status} rounded-md p-3`} />
                                                 <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
                                             </div>
                                         </div>
