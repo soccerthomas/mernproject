@@ -14,9 +14,56 @@ function CreateTierList()
     const openModal = () => { modalOpen(true); }
     const closeModal = () => { modalOpen(false); }
 
-    const [items, setItems] = useState<{title: string, image?: string; description?:string}[]>([]);
+    let idCounter = 0;
+    const [items, setItems] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+    const [sTierCards, setSTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+    const [aTierCards, setATierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+    const [bTierCards, setBTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+    const [cTierCards, setCTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+    const [dTierCards, setDTierCards] = useState<{id: number, title: string, image: string; description:string}[]>([]);
+
+    function handleOnDrag(e: React.DragEvent, item: object)
+    {
+        e.dataTransfer.setData("item", JSON.stringify(item));
+    }
+    function handleDragOver(e: React.DragEvent)
+    {
+        e.preventDefault();
+    }
+    function handleOnDropS(e: React.DragEvent)
+    {
+        const card = JSON.parse(e.dataTransfer.getData("item"));
+        setSTierCards([...sTierCards, card]);
+        setItems(items.filter(item => item.id != card.id));
+    }
+    function handleOnDropA(e: React.DragEvent)
+    {
+        const card = JSON.parse(e.dataTransfer.getData("item"));
+        setATierCards([...aTierCards, card]);
+        setItems(items.filter(item => item.id != card.id));
+    }
+    function handleOnDropB(e: React.DragEvent)
+    {
+        const card = JSON.parse(e.dataTransfer.getData("item"));
+        setBTierCards([...bTierCards, card]);
+        setItems(items.filter(item => item.id != card.id));
+    }
+    function handleOnDropC(e: React.DragEvent)
+    {
+        const card = JSON.parse(e.dataTransfer.getData("item"));
+        setCTierCards([...cTierCards, card]);
+        setItems(items.filter(item => item.id != card.id));
+    }
+    function handleOnDropD(e: React.DragEvent)
+    {
+        const card = JSON.parse(e.dataTransfer.getData("item"));
+        setDTierCards([...dTierCards, card]);
+        setItems(items.filter(item => item.id != card.id));
+    }
+
     const handleItems = () => {
         const newItem = {
+            id: idCounter++,
             title: itemTitle,
             image: itemImage,
             description: itemDescription,
@@ -57,46 +104,177 @@ function CreateTierList()
             <div className = "mx-auto h-auto flex flex-col pt-[50px] p-[100px] gap-y-[50px]">
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-red-500">S</div>
-                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-red-500"></div>
+                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-red-500"
+                        onDragOver={handleDragOver}
+                        onDrop={handleOnDropS}>
+                            {sTierCards.map((sTierCard, idx) => (
+                            <div key={idx}
+                                // draggable 
+                                // onDragStart={(e) => handleOnDrag(e, item)}
+                                // onDragEnd={(e) => handleOnDrag(e, item)}    
+                            >
+                                <div
+                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                >
+                                <div className="font-semibold">{sTierCard.title}</div>
+                                {sTierCard.image && (
+                                    <img
+                                    src={sTierCard.image}
+                                    className="mt-2 max-h-20 w-auto object-contain"
+                                    />
+                                )}
+                                {sTierCard.description && (
+                                    <div className="mt-1 text-sm opacity-70">{sTierCard.description}</div>
+                                )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-orange-500">A</div>
-                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-orange-500"></div>
+                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-orange-500"
+                        onDragOver={handleDragOver}
+                        onDrop={handleOnDropA}>
+                            {aTierCards.map((aTierCard, idx) => (
+                            <div key={idx}
+                                // draggable 
+                                // onDragStart={(e) => handleOnDrag(e, item)}
+                                // onDragEnd={(e) => handleOnDrag(e, item)}    
+                            >
+                                <div
+                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                >
+                                <div className="font-semibold">{aTierCard.title}</div>
+                                {aTierCard.image && (
+                                    <img
+                                    src={aTierCard.image}
+                                    className="mt-2 max-h-20 w-auto object-contain"
+                                    />
+                                )}
+                                {aTierCard.description && (
+                                    <div className="mt-1 text-sm opacity-70">{aTierCard.description}</div>
+                                )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-yellow-500">B</div>
-                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-yellow-500"></div>
+                    <div className="flex flex-wrap gap-5 min-h-[90px] p-[20px] w-[100%] rounded-2xl bg-yellow-500"
+                        onDragOver={handleDragOver}
+                        onDrop={handleOnDropB}>
+                            {bTierCards.map((bTierCard, idx) => (
+                            <div key={idx}
+                                // draggable 
+                                // onDragStart={(e) => handleOnDrag(e, item)}
+                                // onDragEnd={(e) => handleOnDrag(e, item)}    
+                            >
+                                <div
+                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                >
+                                <div className="font-semibold">{bTierCard.title}</div>
+                                {bTierCard.image && (
+                                    <img
+                                    src={bTierCard.image}
+                                    className="mt-2 max-h-20 w-auto object-contain"
+                                    />
+                                )}
+                                {bTierCard.description && (
+                                    <div className="mt-1 text-sm opacity-70">{bTierCard.description}</div>
+                                )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-green-500">C</div>
-                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-green-500"></div>
+                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-green-500"
+                        onDragOver={handleDragOver}
+                        onDrop={handleOnDropC}>
+                            {cTierCards.map((cTierCard, idx) => (
+                            <div key={idx}
+                                // draggable 
+                                // onDragStart={(e) => handleOnDrag(e, item)}
+                                // onDragEnd={(e) => handleOnDrag(e, item)}    
+                            >
+                                <div
+                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                >
+                                <div className="font-semibold">{cTierCard.title}</div>
+                                {cTierCard.image && (
+                                    <img
+                                    src={cTierCard.image}
+                                    className="mt-2 max-h-20 w-auto object-contain"
+                                    />
+                                )}
+                                {cTierCard.description && (
+                                    <div className="mt-1 text-sm opacity-70">{cTierCard.description}</div>
+                                )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="flex items-center gap-x-[30px]">    
                     <div className="text-white p-8 rounded-2xl bg-blue-500">D</div>
-                    <div className="border-4 py-[40px] w-[100%] rounded-2xl border-blue-500"></div>
+                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-blue-500"
+                        onDragOver={handleDragOver}
+                        onDrop={handleOnDropD}>
+                            {dTierCards.map((dTierCard, idx) => (
+                            <div key={idx}
+                                // draggable 
+                                // onDragStart={(e) => handleOnDrag(e, item)}
+                                // onDragEnd={(e) => handleOnDrag(e, item)}    
+                            >
+                                <div
+                                className="bg-gray-700 w-[50px] text-white rounded-lg p-4 min-w-[150px]"
+                                >
+                                <div className="font-semibold">{dTierCard.title}</div>
+                                {dTierCard.image && (
+                                    <img
+                                    src={dTierCard.image}
+                                    className="mt-2 max-h-20 w-auto object-contain"
+                                    />
+                                )}
+                                {dTierCard.description && (
+                                    <div className="mt-1 text-sm opacity-70">{dTierCard.description}</div>
+                                )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
                 <div className="flex flex-col justify-center gap-y-[20px]">
                     <div className="text-2xl text-white ml-4">Items:</div>
                     <div className="w-[100%] h-auto rounded-2xl bg-gray-400 flex flex-wrap gap-4 p-4 relative">
-                        {items.length === 0 && (
+                        {items.length == 0 && (
                             <div className="text-white">No items created yet</div>
                         )}
 
                         {items.map((item, idx) => (
-                            <div
-                            key={idx}
-                            className="bg-gray-700 text-white rounded-lg p-4 min-w-[150px]"
+                            <div key={idx}
+                                draggable 
+                                onDragStart={(e) => handleOnDrag(e, item)}
+                                onDragEnd={(e) => handleOnDrag(e, item)}    
                             >
-                            <div className="font-semibold">{item.title}</div>
-                            {item.image && (
-                                <img
-                                src={item.image}
-                                className="mt-2 max-h-20 w-auto object-contain"
-                                />
-                            )}
-                            {item.description && (
-                                <div className="mt-1 text-sm opacity-70">{item.description}</div>
-                            )}
+                                <div
+                                
+                                className="bg-gray-700 text-white rounded-lg p-4 min-w-[150px]"
+                                >
+                                <div className="font-semibold">{item.title}</div>
+                                {item.image && (
+                                    <img
+                                    src={item.image}
+                                    className="mt-2 max-h-20 w-auto object-contain"
+                                    />
+                                )}
+                                {item.description && (
+                                    <div className="mt-1 text-sm opacity-70">{item.description}</div>
+                                )}
+                                </div>
                             </div>
                         ))}
 
