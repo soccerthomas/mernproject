@@ -3,8 +3,6 @@ import TierListLogo from "../images/TierListLogo.png";
 import RegisterForm from "../components/RegisterForm.tsx";
 
 function Register() {
-  console.log("register test");
-
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -25,19 +23,19 @@ function Register() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a
-              href="./createTierList"
+              href="./login"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Create Tier List
             </a>
             <a
-              href="#"
+              href="./login"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Your Tier Lists
             </a>
             <a
-              href="#"
+              href="/"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Explore

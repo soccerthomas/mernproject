@@ -3,9 +3,6 @@ import TierListLogo from "../images/TierListLogo.png";
 import LoginForm from "../components/LoginForm.tsx";
 
 function Login() {
-  console.log("login test");
-  console.log("If you can see this then the CICD uploaded");
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,19 +21,19 @@ function Login() {
           </div>
           <div className="hidden lg:flex lg:gap-x-12">
             <a
-              href="./createTierList"
+              href="./login"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Create Tier List
             </a>
             <a
-              href="#"
+              href="./login"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Your Tier Lists
             </a>
             <a
-              href="#"
+              href="/"
               className="text-sm/6 font-semibold text-white hover:text-blue-200"
             >
               Explore
