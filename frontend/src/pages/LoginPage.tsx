@@ -4,6 +4,7 @@ import LoginForm from "../components/LoginForm.tsx";
 
 function Login() {
   console.log("login test");
+  console.log("If you can see this then the CICD uploaded");
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
