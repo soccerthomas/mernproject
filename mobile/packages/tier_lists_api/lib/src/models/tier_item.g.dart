@@ -7,6 +7,7 @@ part of 'tier_item.dart';
 // **************************************************************************
 
 TierItem _$TierItemFromJson(Map<String, dynamic> json) => TierItem(
+  id: json['id'] as String,
   name: json['name'] as String,
   description: json['description'] as String? ?? '',
   imageUrl: json['imageUrl'] as String?,
@@ -16,6 +17,7 @@ TierItem _$TierItemFromJson(Map<String, dynamic> json) => TierItem(
 );
 
 Map<String, dynamic> _$TierItemToJson(TierItem instance) => <String, dynamic>{
+  'id': instance.id,
   'imageUrl': instance.imageUrl,
   'name': instance.name,
   'description': instance.description,

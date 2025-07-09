@@ -9,12 +9,14 @@ part 'tier_item.g.dart';
 @immutable
 @JsonSerializable()
 class TierItem extends Equatable {
+  final String id;
   final String? imageUrl;
   final String name;
   final String description;
   final List<Tag> tags;
 
   const TierItem({
+    required this.id,
     required this.name,
     this.description = '',
     this.imageUrl,
@@ -22,6 +24,7 @@ class TierItem extends Equatable {
   });
 
   TierItem copyWith({
+    String? id,
     String? thumbnailUrl,
     String? imageUrl,
     String? name,
@@ -29,6 +32,7 @@ class TierItem extends Equatable {
     List<Tag>? tags,
   }) {
     return TierItem(
+      id: id ?? this.id,
       imageUrl: imageUrl ?? this.imageUrl,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -41,5 +45,5 @@ class TierItem extends Equatable {
   JsonMap toJson() => _$TierItemToJson(this);
 
   @override
-  List<Object?> get props => [imageUrl, name, description, tags];
+  List<Object?> get props => [imageUrl, name, description, tags, id];
 } 

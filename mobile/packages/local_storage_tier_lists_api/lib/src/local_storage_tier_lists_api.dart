@@ -56,6 +56,17 @@ class LocalStorageTierListsApi extends LocalTierListsApi {
       _tierListStreamController.asBroadcastStream();
 
   @override
+  Stream<TierList> getTierList(String id) {
+    return _tierListStreamController.stream.map((tierLists) {
+      try {
+        return tierLists.firstWhere((tierList) => tierList.id == id);
+      } catch (e) {
+        throw TierListNotFoundException();
+      }
+    });
+  }
+
+  @override
   Future<void> saveTierList(TierList tierList) {
     final tierLists = [..._tierListStreamController.value];
     final tierListIndex = tierLists.indexWhere((t) => t.id == tierList.id);

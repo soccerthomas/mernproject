@@ -11,6 +11,15 @@ final class TierListEditorSubscriptionRequested extends TierListEditorEvent {
   const TierListEditorSubscriptionRequested();
 }
 
+final class TierListEditorTierListRenamed extends TierListEditorEvent {
+  final String newTitle;
+
+  const TierListEditorTierListRenamed(this.newTitle);
+
+  @override
+  List<Object?> get props => [newTitle];
+}
+
 final class TierListEditorTierAdded extends TierListEditorEvent {
   const TierListEditorTierAdded();
 }
@@ -74,20 +83,22 @@ final class TierListEditorItemAddedToStaging extends TierListEditorEvent {
 
 final class TierListEditorItemDeleted extends TierListEditorEvent {
   final TierItem item;
+  final ListRow row;
 
-  const TierListEditorItemDeleted(this.item);
+  const TierListEditorItemDeleted({required this.item, required this.row});
 
   @override
-  List<Object?> get props => [item];
+  List<Object?> get props => [item, row];
 }
 
 final class TierListEditorItemUpdated extends TierListEditorEvent {
   final TierItem updatedItem;
+  final ListRow row;
 
-  const TierListEditorItemUpdated(this.updatedItem);
+  const TierListEditorItemUpdated({required this.updatedItem, required this.row});
 
   @override
-  List<Object?> get props => [updatedItem];
+  List<Object?> get props => [updatedItem, row];
 }
 
 final class TierListEditorItemMoved extends TierListEditorEvent {

@@ -48,6 +48,7 @@ dependencies:
   formz: ^0.8.0
   shared_preferences: ^2.5.3
   email_validator: ^3.0.0
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:

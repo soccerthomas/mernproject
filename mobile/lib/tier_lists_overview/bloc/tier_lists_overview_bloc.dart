@@ -29,9 +29,8 @@ class TierListsOverviewBloc
         status: () => TierListsOverviewStatus.success,
         tierLists: () => tierLists,
       ),
-      onError: (_, _) => state.copyWith(
-        status: () => TierListsOverviewStatus.failure
-      )
+      onError: (_, _) =>
+          state.copyWith(status: () => TierListsOverviewStatus.failure),
     );
   }
 

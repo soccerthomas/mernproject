@@ -7,6 +7,7 @@ final class TierListEditorState extends Equatable {
   final TierList? tierList;
   final String? originalTitle;
   final Tier? lastDeletedTier;
+  final int? lastDeletedTierIndex;
   final TierItem? lastMovedItem;
   final String? moveMessage;
 
@@ -15,6 +16,7 @@ final class TierListEditorState extends Equatable {
     this.tierList,
     this.originalTitle,
     this.lastDeletedTier,
+    this.lastDeletedTierIndex,
     this.lastMovedItem,
     this.moveMessage,
   });
@@ -24,6 +26,7 @@ final class TierListEditorState extends Equatable {
     TierList? Function()? tierList,
     String? Function()? originalTitle,
     Tier? Function()? lastDeletedTier,
+    int? Function()? lastDeletedTierIndex,
     TierItem? Function()? lastMovedItem,
     String? Function()? moveMessage,
   }) {
@@ -36,6 +39,9 @@ final class TierListEditorState extends Equatable {
       lastDeletedTier: lastDeletedTier == null
           ? this.lastDeletedTier
           : lastDeletedTier(),
+      lastDeletedTierIndex: lastDeletedTierIndex == null
+          ? this.lastDeletedTierIndex
+          : lastDeletedTierIndex(),
       lastMovedItem: lastMovedItem == null
           ? this.lastMovedItem
           : lastMovedItem(),
@@ -49,6 +55,7 @@ final class TierListEditorState extends Equatable {
     tierList,
     originalTitle,
     lastDeletedTier,
+    lastDeletedTierIndex,
     lastMovedItem,
     moveMessage,
   ];
