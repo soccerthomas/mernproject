@@ -1,19 +1,64 @@
 // this is just an example file for our dashboard, we will need to rewrite this********
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TierListLogo from "../images/TierListLogo.png";
 
+
+interface ItemStructure
+{
+    id:number;
+    title:string;
+    image:string;
+    description:string;
+}
+interface TagStructure
+{
+    name:string;
+    status:string;
+}
+interface CategoriesStructure
+{
+    name:string;
+    items:Array<ItemStructure>;
+}
+
 interface TierList {
-  id: string;
-  name: string;
+  title: string,
+  description: string,
+  categories: Array<CategoriesStructure>,
+  unassignedItems: Array<ItemStructure>,
+  globalTags: Array<TagStructure>
 }
 
 const Dashboard: React.FC = () => {
-  const [tierLists, setTierLists] = useState<TierList[]>([
-    { id: "1", name: "My Favorite Games Tier List" },
-    { id: "2", name: "Best Movies of 2024" },
-    { id: "3", name: "Programming Languages Tier" },
-  ]);
+  const [tierLists, setTierLists] = useState<TierList[]>([]);
+  async function loadTierLists() 
+  {
+      const jwt = localStorage.getItem("userJWT");
+      try {
+        const response = await fetch('api/tierlist', {
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": `${jwt}`
+          }
+        });
+        if(response.ok)
+        {
+            const savedTierLists = await response.json();
+            setTierLists(savedTierLists);
+        }
+    } catch (error) {
+        console.error(error);
+    }
+  } 
+  useEffect(() => { loadTierLists(); }, []);
+  //const [tierLists, setTierLists] = useState<TierList[]>([
+  // const [tierLists] = useState<TierList[]>([
+  //   { id: "1", name: "My Favorite Games Tier List" },
+  //   { id: "2", name: "Best Movies of 2024" },
+  //   { id: "3", name: "Programming Languages Tier" },
+  // ]);
 
   const handleAddTierlist = () => {
     console.log("Navigating to Add Tierlist page...");
@@ -77,14 +122,14 @@ const Dashboard: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {tierLists.map((tierList) => (
                 <div
-                  key={tierList.id}
+                  key={tierList.title}
                   className="bg-gray-700 rounded-lg shadow-lg p-6 hover:bg-gray-600 transition-colors duration-200 cursor-pointer"
                   onClick={() =>
-                    console.log(`Viewing Tierlist: ${tierList.name}`)
+                    console.log(`Viewing Tierlist: ${tierList.title}`)
                   }
                 >
                   <h3 className="text-xl font-semibold mb-2">
-                    {tierList.name}
+                    {tierList.title}
                   </h3>
                   <p className="text-gray-400">Click to view details</p>
                 </div>

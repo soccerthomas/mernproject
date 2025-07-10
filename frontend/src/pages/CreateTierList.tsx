@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import TierListLogo from '../images/TierListLogo.png';
 import DeleteSymbol from '../images/DeleteSymbol.png';
 import EditSymbol from '../images/EditSymbol.png';
@@ -52,7 +53,43 @@ function CreateTierList()
     const [isNewTagModalOpen, newTagModalOpen] = useState(false);
     const openNewTagModal = () => { newTagModalOpen(true); }
     const closeNewTagModal = () => { newTagModalOpen(false); }
+
+    const navigate = useNavigate();
     
+    async function saveTierList() 
+    {
+        const categories = [{name: "S", items: sTierCards}, 
+                            {name: "A", items: aTierCards}, 
+                            {name: "B", items: bTierCards}, 
+                            {name: "C", items: cTierCards}, 
+                            {name: "D", items: dTierCards}]
+        const send = {
+            title: tierListTitle,
+            description: tierListDescription,
+            categories: categories,
+            unassignedItems: items,
+            globalTags: tags
+        };
+        const jwt = localStorage.getItem("userJWT");
+        try {
+            const response = await fetch('api/tierlist', {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "x-auth-token": `${jwt}`
+                },
+                body: JSON.stringify(send),
+            });
+            if(response.ok)
+            {
+                // const savedTierList = await response.json();
+                navigate('/dashboard');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    } 
+
     function handleArrowClick(tag: TagStructure, direction: String)
     {
         if((tag.status == "bg-red-500" && direction == "up") || (tag.status == "bg-green-500" && direction == "down"))
@@ -685,6 +722,9 @@ function CreateTierList()
                         </button>
                     </div>
                 </div>
+                <button className="bg-green-500 p-4 rounded-lg text-white w-[200px] self-center"
+                        onClick={saveTierList}
+                        >Save Tier List</button>
                 {showInfoModal && (
                     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                         <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
