@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
-import 'package:tier_lists_repository/tier_lists_repository.dart' show TierList, TierListsRepository;
+import 'package:tier_lists_repository/tier_lists_repository.dart';
 
 class TierListEditorPage extends StatelessWidget {
   final String tierListId;
@@ -19,8 +19,8 @@ class TierListEditorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => TierListEditorBloc(
-        tierListsRepository: context.read<TierListsRepository>(), 
-        tierListId: tierListId
+        tierListsRepository: context.read<TierListsRepository>(),
+        tierListId: tierListId,
       )..add(const TierListEditorSubscriptionRequested()),
       child: const TierListEditorView(),
     );
@@ -41,12 +41,10 @@ class TierListEditorView extends StatelessWidget {
         }
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text(state.tierList!.title),
-          ),
+          appBar: AppBar(title: Text(state.tierList!.title)),
           body: const Center(child: Text('Your Tierlist')),
         );
-      }
+      },
     );
   }
 }

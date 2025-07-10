@@ -98,17 +98,7 @@ class AuthenticationRepository {
       }),
     );
 
-    if (response.statusCode == 200) {
-      final body = jsonDecode(response.body);
-      final token = body['token'] as String?;
-
-      if (token == null) {
-        throw const RegisterFailure('Server response did not contain a token.');
-      }
-
-      await _secureStorage.write(key: 'auth_token', value: token);
-      _controller.add(AuthenticationStatus.authenticated);
-    } else {
+    if (response.statusCode >= 400) {
       throw const RegisterFailure();
     }
   }

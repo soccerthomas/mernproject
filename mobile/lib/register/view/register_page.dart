@@ -15,6 +15,9 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign up'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: BlocProvider(
