@@ -107,7 +107,7 @@ class TierListsOverviewView extends StatelessWidget {
                       );
                     },
                     onTap: () {
-                      Navigator.of(context).push(TierListEditorPage.route(tierList));
+                      Navigator.of(context).push(TierListEditorPage.route(tierList.id));
                     }
                   );
                 },
