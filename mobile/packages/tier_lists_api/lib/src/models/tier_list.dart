@@ -38,6 +38,7 @@ class TierList extends Equatable {
     return TierList(
       id: id ?? this.id, 
       title: title ?? this.title, 
+      description: description ?? this.description,
       tiers: tiers ?? List.from(this.tiers), 
       tags: tags ?? List.from(this.tags), 
       stagingArea: stagingArea ?? this.stagingArea
