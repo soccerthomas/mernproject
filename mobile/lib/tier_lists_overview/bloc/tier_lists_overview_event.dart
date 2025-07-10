@@ -11,6 +11,16 @@ final class TierListsOverviewSubscriptionRequested extends TierListsOverviewEven
   const TierListsOverviewSubscriptionRequested();
 }
 
+final class TierListsOverviewTierListAdded extends TierListsOverviewEvent {
+  final String name;
+  final String description;
+
+  const TierListsOverviewTierListAdded({
+    required this.name,
+    required this.description
+  });
+}
+
 final class TierListsOverviewTierListDeleted extends TierListsOverviewEvent {
   final TierList tierList;
 

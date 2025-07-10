@@ -6,6 +6,8 @@ import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
 import 'package:mobile/tier_lists_overview/widgets/tier_list_list_tile.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
 
+import '../widgets/add_tier_list_button.dart';
+
 class TierListsOverviewPage extends StatelessWidget {
   const TierListsOverviewPage({super.key});
 
@@ -26,7 +28,12 @@ class TierListsOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Your Tierlists')),
+      appBar: AppBar(
+        title: const Text('Your Tierlists'),
+        actions: [
+          const AddTierListButton()
+        ],
+      ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TierListsOverviewBloc, TierListsOverviewState>(
