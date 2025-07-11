@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -13,18 +16,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies and build
-        run: |
-          npm install
-          npm run build
-
       - name: Install sshpass
         run: sudo apt-get install -y sshpass
 
-      - name: Upload dist folder
+      - name: Deploy to Server
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
-          sshpass -p "${SSH_KEY}" scp -o StrictHostKeyChecking=no -r dist/* ${SSH_USERNAME}@${SSH_HOST}:/var/www/orbitcontacts.xyz/html/
+          sshpass -p "${SSH_KEY}" ssh -o StrictHostKeyChecking=no ${SSH_USERNAME}@${SSH_HOST} << 'EOF'
+            cd /var/www/orbitcontacts.xyz/html
+            git pull origin main
+            npm install
+            npm run build
+            sudo systemctl restart nginx
+          EOF
