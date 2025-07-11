@@ -25,6 +25,7 @@ class RegisterForm extends StatelessWidget {
             ..showSnackBar(
               const SnackBar(content: Text('Registration Successful'))
             );
+          Navigator.of(context).pop();
         }
       },
       child: Align(
@@ -155,15 +156,13 @@ class _ConfirmPasswordInput extends StatelessWidget {
 class _RegisterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final status = context.select(
-      (RegisterBloc bloc) => bloc.state.status,
+    final isInProgressOrSuccess = context.select(
+      (RegisterBloc bloc) => bloc.state.status.isInProgressOrSuccess,
     );
 
-    if (status.isInProgress) { 
+    if (isInProgressOrSuccess) { 
       return const CircularProgressIndicator();
-    } else if (status.isSuccess) {
-      Navigator.of(context).pop();
-    }
+    } 
 
     final isValid = context.select((RegisterBloc bloc) => bloc.state.isValid);
 

@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
 
+import '../widgets/tier_row_widget.dart';
+
 class TierListEditorPage extends StatelessWidget {
   final String tierListId;
 
@@ -42,7 +44,18 @@ class TierListEditorView extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(title: Text(state.tierList!.title)),
-          body: const Center(child: Text('Your Tierlist')),
+          body: Center(
+            child: ListView.builder(
+              itemCount: state.tierList!.tiers.length + 1,
+              itemBuilder: (_, index) {
+                return TierRowWidget(
+                  row: index == state.tierList!.tiers.length
+                      ? state.tierList!.stagingArea
+                      : state.tierList!.tiers[index],
+                );
+              },
+            ),
+          ),
         );
       },
     );
