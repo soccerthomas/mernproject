@@ -42,7 +42,7 @@ function LoginForm({
 
       if (response.ok) {
         if (data.success && data.token) {
-          localStorage.setItem("userJWT", data.token);
+          localStorage.setItem("token", data.token);
           localStorage.setItem("userData", JSON.stringify(data.user));
           navigate("/dashboard");
         } else {
