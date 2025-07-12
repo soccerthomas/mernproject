@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no root@YOUR.SERVER.IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@134.199.200.50 << 'EOF'
             cd /var/www/html/COP4331-LargeProject
 
             echo "Pulling latest code..."
