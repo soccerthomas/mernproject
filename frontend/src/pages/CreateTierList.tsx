@@ -438,6 +438,11 @@ function CreateTierList()
         closeNewCardModal();
     }
 
+    const cleanupTitle = () => {
+        setTierListTitle('');
+        setTierListDescription('');
+    }
+
     return(
         <div className="bg-gray-800 h-auto">
             <header className="p-4">
@@ -459,9 +464,15 @@ function CreateTierList()
                     </div>
                 </nav>
             </header>
-            <div className="flex justify-center text-5xl text-white mt-[40px]">{tierListTitle}</div>
+            <div className="relative">
+
+            </div>
+            <button className = "bg-gray-400 p-2 px-4 flex justify-self-end rounded-xl text-white mr-[30px] mt-[10px] hover:bg-yellow-500"
+            onClick={() => setShowInfoModal(true)}>Edit Title/Description</button>
+            <div className="flex justify-center text-5xl text-white mt-[20px]">{tierListTitle}</div>
             <div className="flex justify-center text-xl text-white mt-[20px]">{tierListDescription}</div>
-            <div className="mx-auto h-auto flex flex-col pt-[50px] p-[100px] gap-y-[50px]">
+            
+            <div className="mx-auto h-auto flex flex-col pt-[20px] p-[100px] gap-y-[50px]">
                 <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
                     <div className="flex items-stretch min-h-[120px] gap-6">
                         <div className="w-24 flex items-center justify-center">
@@ -795,7 +806,12 @@ function CreateTierList()
                                     </div>
                                     <div className="flex justify-end gap-2 mt-4">
                                         <button
-                                            onClick={() => setShowInfoModal(false)}
+                                            onClick={() => 
+                                                {
+                                                    cleanupTitle();
+                                                    setShowInfoModal(false);
+                                                }     
+                                            }
                                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                         >
                                             Cancel
