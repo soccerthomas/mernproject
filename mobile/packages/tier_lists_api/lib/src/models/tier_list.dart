@@ -1,12 +1,45 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:meta/meta.dart';
 import 'tier.dart';
 import 'tag.dart';
 import 'staging_area.dart';
 import 'json_map.dart';
+import 'package:flutter/material.dart';
 
 part 'tier_list.g.dart';
+
+const List<Tier> defaultTiers = [
+  Tier(
+    id: 's',
+    name: 'S',
+    color: Color(0xFFEF4444),
+    items: []
+  ),
+  Tier(
+    id: 'a',
+    name: 'A',
+    color: Color(0xFFF97316),
+    items: []
+  ),
+  Tier(
+    id: 'b',
+    name: 'B',
+    color: Color(0xFFEAB308),
+    items: []
+  ),
+  Tier(
+    id: 'c',
+    name: 'C',
+    color: Color(0xFF22C55E),
+    items: []
+  ),
+  Tier(
+    id: 'd',
+    name: 'D',
+    color: Color(0xFF3B82F6),
+    items: []
+  ),
+];
 
 @immutable
 @JsonSerializable()

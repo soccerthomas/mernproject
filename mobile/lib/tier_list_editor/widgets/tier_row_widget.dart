@@ -24,6 +24,7 @@ class TierRowWidget extends StatelessWidget {
                 )
               ),
         Container(
+          height: 180,
           color: row.color,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,

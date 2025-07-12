@@ -45,7 +45,7 @@ class TierListsOverviewBloc
         id: const Uuid().v4(),
         title: event.name,
         description: event.description,
-        tiers: [],
+        tiers: defaultTiers,
         tags: [],
         stagingArea: const StagingArea(items: [])
       )
