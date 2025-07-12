@@ -5,14 +5,27 @@ import jwtAuth from '../config/jwtAuth.js';
 const router = express.Router();
 
 // View or retrieve all tierlists
-router.get('/', async (req, res) => {
+router.get('/', jwtAuth, async (req, res) => {
     try {
-        const tierLists = await TierList.find().sort({createdAt: -1});
+        const userId = req.user.id;
+        console.log(userId);
+        const tierLists = await TierList.find({user:req.user.id}).sort({createdAt: -1});
         res.json(tierLists);
     } catch(error) {
         return res.status(500).json({success: false, message: error.message});
     }
 });
+
+// View or retrieve user's tierlists
+// router.get('/my-lists', jwtAuth, async (req, res) => {
+//     console.log('HIT: /my-lists route'); // Add this
+//     try {
+//         const tierLists = await TierList.find({user:req.user._id}).sort({createdAt: -1});
+//         res.json(tierLists);
+//     } catch(error) {
+//         return res.status(500).json({success: false, message: error.message});
+//     }
+// });
 
 // Get a specific tierlist with populated tags
 router.get('/:id', async (req, res) => {
