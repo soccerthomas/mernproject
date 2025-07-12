@@ -20,6 +20,7 @@ interface TagStructure
 function CreateTierList()
 {
     const [isNewCardModalOpen, newCardModalOpen] = useState(false);
+    const [isViewCardOpen, viewCardOpen] = useState(false);
     const [isEditCardModalOpen, setEditCardModalOpen] = useState(false);
     const [isDeleteCardModalOpen, setDeleteCardModalOpen] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(true);
@@ -43,6 +44,7 @@ function CreateTierList()
     const [cTierCards, setCTierCards] = useState<ItemStructure[]>([]);
     const [dTierCards, setDTierCards] = useState<ItemStructure[]>([]);
 
+    const [currentView, setCurrentView] = useState<ItemStructure>();
     const [currentEdit, setCurrentEdit] = useState<ItemStructure>();
     const [deleteItem, setDeleteItem] = useState<ItemStructure>();
 
@@ -489,27 +491,16 @@ function CreateTierList()
                                         <div key={idx}
                                             draggable 
                                             onDragStart={(e) => handleOnDrag(e, sTierCard)}>
-                                            <div className="bg-gray-700 text-white rounded-lg p-3 h-[100px] w-[150px] flex shadow-md relative">
-                                                <div className="flex-1 flex items-center">
-                                                    <div className="text-md text-left truncate pr-2">
-                                                        {sTierCard.title}
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-3 justify-center items-end">
-                                                    <button className="bg-yellow-500 hover:bg-yellow-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setCurrentEdit(sTierCard);
-                                                            handleEditOpen(sTierCard);
-                                                        }}>
-                                                        <img src={EditSymbol} alt="Edit" className="w-4 h-4" />
-                                                    </button>
-                                                    <button className="bg-red-500 hover:bg-red-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setDeleteItem(sTierCard);
-                                                            setDeleteCardModalOpen(true);
-                                                        }}>
-                                                        <img src={DeleteSymbol} alt="Delete" className="w-4 h-4" />
-                                                    </button>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(sTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {sTierCard.title}
                                                 </div>
                                             </div>
                                         </div>
@@ -539,27 +530,16 @@ function CreateTierList()
                                         <div key={idx}
                                             draggable 
                                             onDragStart={(e) => handleOnDrag(e, aTierCard)}>
-                                            <div className="bg-gray-700 text-white rounded-lg p-3 h-[100px] w-[150px] flex shadow-md relative">
-                                                <div className="flex-1 flex items-center">
-                                                    <div className="text-md text-left truncate pr-2">
-                                                        {aTierCard.title}
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-3 justify-center items-end">
-                                                    <button className="bg-yellow-500 hover:bg-yellow-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setCurrentEdit(aTierCard);
-                                                            handleEditOpen(aTierCard);
-                                                        }}>
-                                                        <img src={EditSymbol} alt="Edit" className="w-4 h-4" />
-                                                    </button>
-                                                    <button className="bg-red-500 hover:bg-red-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setDeleteItem(aTierCard);
-                                                            setDeleteCardModalOpen(true);
-                                                        }}>
-                                                        <img src={DeleteSymbol} alt="Delete" className="w-4 h-4" />
-                                                    </button>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(aTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {aTierCard.title}
                                                 </div>
                                             </div>
                                         </div>
@@ -589,27 +569,16 @@ function CreateTierList()
                                         <div key={idx}
                                             draggable 
                                             onDragStart={(e) => handleOnDrag(e, bTierCard)}>
-                                            <div className="bg-gray-700 text-white rounded-lg p-3 h-[100px] w-[150px] flex shadow-md relative">
-                                                <div className="flex-1 flex items-center">
-                                                    <div className="text-md text-left truncate pr-2">
-                                                        {bTierCard.title}
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-3 justify-center items-end">
-                                                    <button className="bg-yellow-500 hover:bg-yellow-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setCurrentEdit(bTierCard);
-                                                            handleEditOpen(bTierCard);
-                                                        }}>
-                                                        <img src={EditSymbol} alt="Edit" className="w-4 h-4" />
-                                                    </button>
-                                                    <button className="bg-red-500 hover:bg-red-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setDeleteItem(bTierCard);
-                                                            setDeleteCardModalOpen(true);
-                                                        }}>
-                                                        <img src={DeleteSymbol} alt="Delete" className="w-4 h-4" />
-                                                    </button>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(bTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {bTierCard.title}
                                                 </div>
                                             </div>
                                         </div>
@@ -639,27 +608,16 @@ function CreateTierList()
                                         <div key={idx}
                                             draggable 
                                             onDragStart={(e) => handleOnDrag(e, cTierCard)}>
-                                            <div className="bg-gray-700 text-white rounded-lg p-3 h-[100px] w-[150px] flex shadow-md relative">
-                                                <div className="flex-1 flex items-center">
-                                                    <div className="text-md text-left truncate pr-2">
-                                                        {cTierCard.title}
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-3 justify-center items-end">
-                                                    <button className="bg-yellow-500 hover:bg-yellow-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setCurrentEdit(cTierCard);
-                                                            handleEditOpen(cTierCard);
-                                                        }}>
-                                                        <img src={EditSymbol} alt="Edit" className="w-4 h-4" />
-                                                    </button>
-                                                    <button className="bg-red-500 hover:bg-red-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setDeleteItem(cTierCard);
-                                                            setDeleteCardModalOpen(true);
-                                                        }}>
-                                                        <img src={DeleteSymbol} alt="Delete" className="w-4 h-4" />
-                                                    </button>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(cTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {cTierCard.title}
                                                 </div>
                                             </div>
                                         </div>
@@ -689,27 +647,16 @@ function CreateTierList()
                                         <div key={idx}
                                             draggable 
                                             onDragStart={(e) => handleOnDrag(e, dTierCard)}>
-                                            <div className="bg-gray-700 text-white rounded-lg p-3 h-[100px] w-[150px] flex shadow-md relative">
-                                                <div className="flex-1 flex items-center">
-                                                    <div className="text-md text-left truncate pr-2">
-                                                        {dTierCard.title}
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col gap-3 justify-center items-end">
-                                                    <button className="bg-yellow-500 hover:bg-yellow-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setCurrentEdit(dTierCard);
-                                                            handleEditOpen(dTierCard);
-                                                        }}>
-                                                        <img src={EditSymbol} alt="Edit" className="w-4 h-4" />
-                                                    </button>
-                                                    <button className="bg-red-500 hover:bg-red-600 p-1 rounded-lg"
-                                                        onClick={() => {
-                                                            setDeleteItem(dTierCard);
-                                                            setDeleteCardModalOpen(true);
-                                                        }}>
-                                                        <img src={DeleteSymbol} alt="Delete" className="w-4 h-4" />
-                                                    </button>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(dTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {dTierCard.title}
                                                 </div>
                                             </div>
                                         </div>
@@ -737,27 +684,16 @@ function CreateTierList()
                                 <div key={idx}
                                     draggable 
                                     onDragStart={(e) => handleOnDrag(e, item)}>
-                                    <div className="bg-gray-700 text-white rounded-lg p-3 h-[100px] w-[150px] flex shadow-md relative">
-                                        <div className="flex-1 flex items-center">
-                                            <div className="text-md text-left truncate pr-2">
-                                                {item.title}
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-3 justify-center items-end">
-                                            <button className="bg-yellow-500 hover:bg-yellow-600 p-1 rounded-lg"
-                                                onClick={() => {
-                                                    setCurrentEdit(item);
-                                                    handleEditOpen(item);
-                                                }}>
-                                                <img src={EditSymbol} alt="Edit" className="w-4 h-4" />
-                                            </button>
-                                            <button className="bg-red-500 hover:bg-red-600 p-1 rounded-lg"
-                                                onClick={() => {
-                                                    setDeleteItem(item);
-                                                    setDeleteCardModalOpen(true);
-                                                }}>
-                                                <img src={DeleteSymbol} alt="Delete" className="w-4 h-4" />
-                                            </button>
+                                    <div 
+                                    onClick={() => 
+                                        {
+                                            viewCardOpen(true);
+                                            setCurrentView(item);    
+                                        }
+                                    }
+                                    className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                        <div className="text-md truncate">
+                                            {item.title}
                                         </div>
                                     </div>
                                 </div>
@@ -1047,6 +983,82 @@ function CreateTierList()
                             </div>
                         </div>
                     </div>
+                )}
+                {isViewCardOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-800 max-h-[95vh] w-full max-w-4xl rounded-2xl relative overflow-hidden">
+                            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                            <h2 className="text-2xl font-bold text-white">Item Details</h2>
+                            <button
+                                onClick={() => viewCardOpen(false)}
+                                className="text-gray-400 hover:text-white p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                            >
+                            </button>
+                            </div>
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <div className="bg-gray-700 rounded-xl p-6 shadow-lg">
+                                        <div className="flex flex-col lg:flex-row gap-6">
+                                            <div className="flex-shrink-0">
+                                                <div className="w-48 h-48 bg-gray-600 rounded-xl flex items-center justify-center overflow-hidden">
+                                                    <img src={currentView?.image} alt={currentView?.title}className="w-full h-full object-cover" />
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 space-y-4">
+                                                <div>
+                                                    <h3 className="text-3xl font-bold text-white mb-2">{currentView?.title}</h3>
+                                                    {currentView?.description && (
+                                                    <p className="text-gray-300 text-lg leading-relaxed">
+                                                        {currentView?.description}
+                                                    </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Footer with Action Buttons */}
+                            <div className="flex items-center justify-between p-6 border-t border-gray-700 bg-gray-800">
+                            <div className="flex items-center gap-3">
+                                <button
+                                onClick={() => 
+                                    {
+                                        viewCardOpen(false)
+                                        handleEditOpen(currentView);
+                                        setCurrentEdit(currentView);
+                                        handleEditSave;
+                                    }
+                                }
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                                >
+                                Edit
+                                </button>
+                                <button
+                                onClick={() => 
+                                    {
+                                        viewCardOpen(false);
+                                        setDeleteCardModalOpen(true);
+                                        setDeleteItem(currentView);
+                                        handleDelete;
+                                    }
+                                }
+                                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                                >
+                                Delete
+                                </button>
+                            </div>
+                            
+                            <button
+                                onClick={() => viewCardOpen(false)}
+                                className="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                            >
+                                Close
+                            </button>
+                            </div>
+                        </div>
+                        </div>
                 )}
             </div>
     );
