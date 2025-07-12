@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
 
+import '../widgets/tier_list_editor_options_button.dart';
 import '../widgets/tier_row_widget.dart';
 
 class TierListEditorPage extends StatelessWidget {
@@ -43,7 +44,12 @@ class TierListEditorView extends StatelessWidget {
         }
 
         return Scaffold(
-          appBar: AppBar(title: Text(state.tierList!.title)),
+          appBar: AppBar(
+            title: Text(state.originalTitle!),
+            actions: [
+              const TierListEditorOptionsButton(),
+            ],
+          ),
           body: Center(
             child: ListView.builder(
               itemCount: state.tierList!.tiers.length + 1,
