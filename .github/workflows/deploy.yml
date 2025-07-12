@@ -1,0 +1,43 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@YOUR.SERVER.IP << 'EOF'
+            cd /var/www/html/COP4331-LargeProject
+
+            echo "Pulling latest code..."
+            git reset --hard HEAD
+            git pull origin main
+
+            echo "Installing backend deps..."
+            cd backend
+            npm install
+
+            echo "Restarting backend (PM2 recommended)..."
+            pm2 restart server || pm2 start server.js --name server
+
+            echo "Building frontend..."
+            cd ../frontend
+            npm install
+            npm run build
+
+            echo "Deployment complete!"
+          EOF
