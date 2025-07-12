@@ -20,6 +20,7 @@ interface TagStructure
 function CreateTierList()
 {
     const [isNewCardModalOpen, newCardModalOpen] = useState(false);
+    const [isViewCardOpen, viewCardOpen] = useState(false);
     const [isEditCardModalOpen, setEditCardModalOpen] = useState(false);
     const [isDeleteCardModalOpen, setDeleteCardModalOpen] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(true);
@@ -43,6 +44,7 @@ function CreateTierList()
     const [cTierCards, setCTierCards] = useState<ItemStructure[]>([]);
     const [dTierCards, setDTierCards] = useState<ItemStructure[]>([]);
 
+    const [currentView, setCurrentView] = useState<ItemStructure>();
     const [currentEdit, setCurrentEdit] = useState<ItemStructure>();
     const [deleteItem, setDeleteItem] = useState<ItemStructure>();
 
@@ -437,8 +439,13 @@ function CreateTierList()
 
         closeNewCardModal();
     }
-    
-    return (
+
+    const cleanupTitle = () => {
+        setTierListTitle('');
+        setTierListDescription('');
+    }
+
+    return(
         <div className="bg-gray-800 h-auto">
             <header className="p-4">
                 <nav className="mx-auto flex items-center justify-between p-2 lg:px-8 rounded-lg bg-gray-600">
@@ -459,378 +466,294 @@ function CreateTierList()
                     </div>
                 </nav>
             </header>
-            <div className="flex justify-center text-5xl text-white mt-[40px]">{tierListTitle}</div>
+            <div className="relative">
+
+            </div>
+            <button className = "bg-gray-400 p-2 px-4 flex justify-self-end rounded-xl text-white mr-[30px] mt-[10px] hover:bg-yellow-500"
+            onClick={() => setShowInfoModal(true)}>Edit Title/Description</button>
+            <div className="flex justify-center text-5xl text-white mt-[20px]">{tierListTitle}</div>
             <div className="flex justify-center text-xl text-white mt-[20px]">{tierListDescription}</div>
-            <div className = "mx-auto h-auto flex flex-col pt-[50px] p-[100px] gap-y-[50px]">
-                <div className="flex items-center gap-x-[30px]">    
-                    <div className="text-white p-8 rounded-2xl bg-red-500">S</div>
-                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-red-500"
-                        onDragOver={handleDragOver}
-                        onDrop={handleOnDropS}>
-                            {sTierCards.map((sTierCard, idx) => (
-                                <div key={idx}
-                                    draggable 
-                                    onDragStart={(e) => handleOnDrag(e, sTierCard)}   
-                                >
-                                <div
-                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
-                                >
-                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setCurrentEdit(sTierCard);
-                                        handleEditOpen(sTierCard);
-                                    }
-                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setDeleteItem(sTierCard);
-                                        setDeleteCardModalOpen(true);
-                                    }
-                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <div className="font-semibold">{sTierCard.title}</div>
-                                {sTierCard.image && (
-                                    <img
-                                    src={sTierCard.image}
-                                    className="mt-2 max-h-20 w-auto object-contain"
-                                    />
-                                )}
-                                {sTierCard.description && (
-                                    <div className="mt-1 text-sm opacity-70">{sTierCard.description}</div>
-                                )}
-                                </div>
+            
+            <div className="mx-auto h-auto flex flex-col pt-[20px] p-[100px] gap-y-[50px]">
+                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-6">
+                        <div className="w-24 flex items-center justify-center">
+                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-red-500">
+                                S
                             </div>
-                        ))}
+                        </div>
+                        <div className="flex-1 bg-red-500 rounded-xl p-4"
+                            onDragOver={handleDragOver}
+                            onDrop={handleOnDropS}>
+                            <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
+                                {sTierCards.length > 0 ? (
+                                    sTierCards.map((sTierCard, idx) => (
+                                        <div key={idx}
+                                            draggable 
+                                            onDragStart={(e) => handleOnDrag(e, sTierCard)}>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(sTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {sTierCard.title}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-white text-center w-full py-10">
+                                        No items in this tier
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-x-[30px]">    
-                    <div className="text-white p-8 rounded-2xl bg-orange-500">A</div>
-                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-orange-500"
-                        onDragOver={handleDragOver}
-                        onDrop={handleOnDropA}>
-                            {aTierCards.map((aTierCard, idx) => (
-                                <div key={idx}
-                                    draggable 
-                                    onDragStart={(e) => handleOnDrag(e, aTierCard)}   
-                                >
-                                <div
-                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
-                                >
-                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setCurrentEdit(aTierCard);
-                                        handleEditOpen(aTierCard);
-                                    }
-                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setDeleteItem(aTierCard);
-                                        setDeleteCardModalOpen(true);
-                                    }
-                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <div className="font-semibold">{aTierCard.title}</div>
-                                {aTierCard.image && (
-                                    <img
-                                    src={aTierCard.image}
-                                    className="mt-2 max-h-20 w-auto object-contain"
-                                    />
-                                )}
-                                {aTierCard.description && (
-                                    <div className="mt-1 text-sm opacity-70">{aTierCard.description}</div>
-                                )}
-                                </div>
+                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-6">
+                        <div className="w-24 flex items-center justify-center">
+                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-orange-500">
+                                A
                             </div>
-                        ))}
+                        </div>
+                        <div className="flex-1 bg-orange-500 rounded-xl p-4"
+                            onDragOver={handleDragOver}
+                            onDrop={handleOnDropA}>
+                            <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
+                                {aTierCards.length > 0 ? (
+                                    aTierCards.map((aTierCard, idx) => (
+                                        <div key={idx}
+                                            draggable 
+                                            onDragStart={(e) => handleOnDrag(e, aTierCard)}>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(aTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {aTierCard.title}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-white text-center w-full py-10">
+                                        No items in this tier
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-x-[30px]">    
-                    <div className="text-white p-8 rounded-2xl bg-yellow-500">B</div>
-                    <div className="flex flex-wrap gap-5 min-h-[90px] p-[20px] w-[100%] rounded-2xl bg-yellow-500"
-                        onDragOver={handleDragOver}
-                        onDrop={handleOnDropB}>
-                            {bTierCards.map((bTierCard, idx) => (
-                                <div key={idx}
-                                    draggable 
-                                    onDragStart={(e) => handleOnDrag(e, bTierCard)}   
-                                >
-                                <div
-                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
-                                >
-                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setCurrentEdit(bTierCard);
-                                        handleEditOpen(bTierCard);
-                                    }
-                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setDeleteItem(bTierCard);
-                                        setDeleteCardModalOpen(true);
-                                    }
-                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <div className="font-semibold">{bTierCard.title}</div>
-                                {bTierCard.image && (
-                                    <img
-                                    src={bTierCard.image}
-                                    className="mt-2 max-h-20 w-auto object-contain"
-                                    />
-                                )}
-                                {bTierCard.description && (
-                                    <div className="mt-1 text-sm opacity-70">{bTierCard.description}</div>
-                                )}
-                                </div>
+                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-6">
+                        <div className="w-24 flex items-center justify-center">
+                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-yellow-500">
+                                B
                             </div>
-                        ))}
+                        </div>
+                        <div className="flex-1 bg-yellow-500 rounded-xl p-4"
+                            onDragOver={handleDragOver}
+                            onDrop={handleOnDropB}>
+                            <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
+                                {bTierCards.length > 0 ? (
+                                    bTierCards.map((bTierCard, idx) => (
+                                        <div key={idx}
+                                            draggable 
+                                            onDragStart={(e) => handleOnDrag(e, bTierCard)}>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(bTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {bTierCard.title}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-white text-center w-full py-10">
+                                        No items in this tier
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-x-[30px]">    
-                    <div className="text-white p-8 rounded-2xl bg-green-500">C</div>
-                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-green-500"
-                        onDragOver={handleDragOver}
-                        onDrop={handleOnDropC}>
-                            {cTierCards.map((cTierCard, idx) => (
-                                <div key={idx}
-                                    draggable 
-                                    onDragStart={(e) => handleOnDrag(e, cTierCard)}   
-                                >
-                                <div
-                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
-                                >
-                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setCurrentEdit(cTierCard);
-                                        handleEditOpen(cTierCard);
-                                    }
-                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setDeleteItem(cTierCard);
-                                        setDeleteCardModalOpen(true);
-                                    }
-                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <div className="font-semibold">{cTierCard.title}</div>
-                                {cTierCard.image && (
-                                    <img
-                                    src={cTierCard.image}
-                                    className="mt-2 max-h-20 w-auto object-contain"
-                                    />
-                                )}
-                                {cTierCard.description && (
-                                    <div className="mt-1 text-sm opacity-70">{cTierCard.description}</div>
-                                )}
-                                </div>
+                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-6">
+                        <div className="w-24 flex items-center justify-center">
+                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-green-500">
+                                C
                             </div>
-                        ))}
+                        </div>
+                        <div className="flex-1 bg-green-500 rounded-xl p-4"
+                            onDragOver={handleDragOver}
+                            onDrop={handleOnDropC}>
+                            <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
+                                {cTierCards.length > 0 ? (
+                                    cTierCards.map((cTierCard, idx) => (
+                                        <div key={idx}
+                                            draggable 
+                                            onDragStart={(e) => handleOnDrag(e, cTierCard)}>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(cTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {cTierCard.title}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-white text-center w-full py-10">
+                                        No items in this tier
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex items-center gap-x-[30px]">    
-                    <div className="text-white p-8 rounded-2xl bg-blue-500">D</div>
-                    <div className="flex flex-wrap min-h-[90px] gap-5 p-[20px] w-[100%] rounded-2xl bg-blue-500"
-                        onDragOver={handleDragOver}
-                        onDrop={handleOnDropD}>
-                            {dTierCards.map((dTierCard, idx) => (
-                                <div key={idx}
-                                    draggable 
-                                    onDragStart={(e) => handleOnDrag(e, dTierCard)}   
-                                >
-                                <div
-                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
-                                >
-                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setCurrentEdit(dTierCard);
-                                        handleEditOpen(dTierCard);
-                                    }
-                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setDeleteItem(dTierCard);
-                                        setDeleteCardModalOpen(true);
-                                    }
-                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <div className="font-semibold">{dTierCard.title}</div>
-                                {dTierCard.image && (
-                                    <img
-                                    src={dTierCard.image}
-                                    className="mt-2 max-h-20 w-auto object-contain"
-                                    />
-                                )}
-                                {dTierCard.description && (
-                                    <div className="mt-1 text-sm opacity-70">{dTierCard.description}</div>
-                                )}
-                                </div>
+                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-6">
+                        <div className="w-24 flex items-center justify-center">
+                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-blue-500">
+                                D
                             </div>
-                        ))}
+                        </div>
+                        <div className="flex-1 bg-blue-500 rounded-xl p-4"
+                            onDragOver={handleDragOver}
+                            onDrop={handleOnDropD}>
+                            <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
+                                {dTierCards.length > 0 ? (
+                                    dTierCards.map((dTierCard, idx) => (
+                                        <div key={idx}
+                                            draggable 
+                                            onDragStart={(e) => handleOnDrag(e, dTierCard)}>
+                                            <div 
+                                            onClick={() => 
+                                                {
+                                                    viewCardOpen(true);
+                                                    setCurrentView(dTierCard);    
+                                                }
+                                            }
+                                            className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                                <div className="text-md truncate">
+                                                    {dTierCard.title}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-white text-center w-full py-10">
+                                        No items in this tier
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="flex flex-col justify-center gap-y-[20px]">
-                    <div className="text-2xl text-white ml-4">Items:</div>
-                    <div className="w-[100%] min-h-[90px] rounded-2xl bg-gray-400 flex flex-wrap gap-4 p-4 relative"
-                    onDragOver={handleDragOver}
+                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <div className="text-2xl text-white mb-4">Items:</div>
+                    <div className="w-full min-h-[90px] rounded-xl bg-gray-400 flex flex-wrap gap-4 p-4 relative"
+                        onDragOver={handleDragOver}
                         onDrop={handleOnDropItems}>
-                        {items.length == 0 && (
-                            <div className="text-white">No items created yet</div>
-                        )}
-
-                        {items.map((item, idx) => (
-                            <div key={idx}
-                                draggable 
-                                onDragStart={(e) => handleOnDrag(e, item)}    
-                            >
-                                <div
-                                className="bg-gray-700 text-white rounded-lg p-4 min-h-[100px] min-w-[150px] relative"
-                                >
-                                <button className="bg-yellow-500 top-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setCurrentEdit(item);
-                                        handleEditOpen(item);
-                                    }
-                                }><img src={EditSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <button className="bg-red-500 bottom-[10px] right-[10px] p-1 rounded-lg absolute"
-                                onClick={() => 
-                                    {
-                                        setDeleteItem(item);
-                                        setDeleteCardModalOpen(true);
-                                    }
-                                }><img src={DeleteSymbol} alt="Button icon" className="w-5 h-5" /></button>
-                                <div className="font-semibold">{item.title}</div>
-                                {item.image && (
-                                    <img
-                                    src={item.image}
-                                    className="mt-2 max-h-20 w-auto object-contain"
-                                    />
-                                )}
-                                {item.description && (
-                                    <div className="mt-1 text-sm opacity-70">{item.description}</div>
-                                )}
-                                </div>
+                        {items.length === 0 ? (
+                            <div className="text-gray-400 text-center w-full py-8">
+                                No items created yet
                             </div>
-                        ))}
-
-                        <button className="bg-gray-700 text-white rounded-xl ml-[20px] pl-3 pr-3 pt-2 pb-2 absolute top-[10px] right-[10px]" onClick={openNewCardModal}>
+                        ) : (
+                            items.map((item, idx) => (
+                                <div key={idx}
+                                    draggable 
+                                    onDragStart={(e) => handleOnDrag(e, item)}>
+                                    <div 
+                                    onClick={() => 
+                                        {
+                                            viewCardOpen(true);
+                                            setCurrentView(item);    
+                                        }
+                                    }
+                                    className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative">
+                                        <div className="text-md truncate">
+                                            {item.title}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                        <button className="bg-gray-700 hover:bg-gray-600 text-white rounded-xl px-4 py-2 absolute top-[10px] right-[10px] font-medium transition-colors duration-200 shadow-md hover:shadow-lg" 
+                            onClick={openNewCardModal}>
                             +
                         </button>
                     </div>
                 </div>
-                <button className="bg-green-500 p-4 rounded-lg text-white w-[200px] self-center"
-                        onClick={saveTierList}
-                        >Save Tier List</button>
+
+                <button className="bg-green-500 hover:bg-green-600 p-4 rounded-lg text-white w-[200px] self-center font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
+                    onClick={saveTierList}>
+                    Save Tier List
+                </button>
+            </div>
                 {showInfoModal && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-2xl text-white mb-4 text-center">Create Tier List</h2>
-                            <div className="flex flex-col gap-4">
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Title</label>
-                                <input
-                                    type="text"
-                                    value={tierListTitle}
-                                    onChange={(e) => setTierListTitle(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter title"
-                                    required
-                                />
-                                </div>
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Description</label>
-                                <textarea
-                                    value={tierListDescription}
-                                    onChange={(e) => setTierListDescription(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter description"
-                                    required
-                                />
-                                </div>
-                                <div className="flex justify-end gap-2 mt-4">
-                                <button
-                                    onClick={() => setShowInfoModal(false)}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={() => setShowInfoModal(false)}
-                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-                                >
-                                    Save
-                                </button>
-                                </div>
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
+                            <div className="bg-blue-500 p-6 text-center">
+                                <h2 className="text-white text-3xl font-bold mb-2">Create Tier List</h2>
                             </div>
-                        </div>
-                    </div>
-                )}
-                {isNewCardModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-2xl text-white mb-4 text-center">Create Item</h2>
-                            <div className="flex flex-col gap-4">
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Name</label>
-                                <input
-                                    type="text"
-                                    value={itemTitle}
-                                    onChange={(e) => setItemTitle(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter title"
-                                    required
-                                />
-                                </div>
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Image</label>
-                                <input
-                                    type="text"
-                                    value={itemImage}
-                                    onChange={(e) => setItemImage(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter image URL"
-                                    required
-                                />
-                                </div>
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Description</label>
-                                <textarea
-                                    value={itemDescription}
-                                    onChange={(e) => setItemDescription(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter description"
-                                    required
-                                />
-                                </div>
-                                <div className="flex flex-wrap gap-2 ">
-                                    {tags.map((tag, idx) => (
-                                        <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
-                                            <div className="text-sm">{tag.name}</div>
-                                            <div className="flex flex-col">
-                                                <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
-                                                <button disabled className={`${tag.status} rounded-md p-3`} />
-                                                <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="flex justify-between gap-2 mt-4">
-                                    <button className="bg-blue-500 text-white rounded px-4 py-2"
-                                        onClick={openNewTagModal}
-                                        >Tag +</button>
-                                    <div className="flex gap-4">
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Title</label>
+                                        <input
+                                            type="text"
+                                            value={tierListTitle}
+                                            onChange={(e) => setTierListTitle(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter title"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Description</label>
+                                        <textarea
+                                            value={tierListDescription}
+                                            onChange={(e) => setTierListDescription(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter description"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex justify-end gap-2 mt-4">
                                         <button
-                                            onClick={cleanup}
+                                            onClick={() => 
+                                                {
+                                                    cleanupTitle();
+                                                    setShowInfoModal(false);
+                                                }     
+                                            }
                                             className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                         >
                                             Cancel
                                         </button>
                                         <button
-                                            onClick={handleItems}
+                                            onClick={() => setShowInfoModal(false)}
                                             className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                                         >
                                             Save
@@ -841,72 +764,152 @@ function CreateTierList()
                         </div>
                     </div>
                 )}
-                {isEditCardModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-2xl text-white mb-4 text-center">Edit Item</h2>
-                            <div className="flex flex-col gap-4">
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Name</label>
-                                <input
-                                    type="text"
-                                    value={itemTitle}
-                                    onChange={(e) => setItemTitle(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter title"
-                                    required
-                                />
-                                </div>
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Image</label>
-                                <input
-                                    type="text"
-                                    value={itemImage}
-                                    onChange={(e) => setItemImage(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter image URL"
-                                    required
-                                />
-                                </div>
-                                <div>
-                                <label className="text-white text-sm mb-1 block">Description</label>
-                                <textarea
-                                    value={itemDescription}
-                                    onChange={(e) => setItemDescription(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter description"
-                                    required
-                                />
-                                </div>
-                                <div className="flex flex-wrap gap-2 ">
-                                    {tags.map((tag, idx) => (
-                                        <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
-                                            <div className="text-sm">{tag.name}</div>
-                                            <div className="flex flex-col">
-                                                <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
-                                                <button disabled className={`${tag.status} rounded-md p-3`} />
-                                                <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
+                {isNewCardModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
+                            <div className="bg-blue-500 p-6 text-center">
+                                <h2 className="text-white text-3xl font-bold mb-2">Create Item</h2>
+                            </div>
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Name</label>
+                                        <input
+                                            type="text"
+                                            value={itemTitle}
+                                            onChange={(e) => setItemTitle(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter title"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Image</label>
+                                        <input
+                                            type="text"
+                                            value={itemImage}
+                                            onChange={(e) => setItemImage(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter image URL"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Description</label>
+                                        <textarea
+                                            value={itemDescription}
+                                            onChange={(e) => setItemDescription(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter description"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {tags.map((tag, idx) => (
+                                            <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
+                                                <div className="text-sm">{tag.name}</div>
+                                                <div className="flex flex-col">
+                                                    <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
+                                                    <button disabled className={`${tag.status} rounded-md p-3`} />
+                                                    <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
+                                                </div>
                                             </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-between gap-2 mt-4">
+                                        <button className="bg-blue-500 text-white rounded px-4 py-2"
+                                            onClick={openNewTagModal}
+                                            >Tag +</button>
+                                        <div className="flex gap-4">
+                                            <button
+                                                onClick={cleanup}
+                                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={handleItems}
+                                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                            >
+                                                Save
+                                            </button>
                                         </div>
-                                    ))}
+                                    </div>
                                 </div>
-                                <div className="flex justify-between gap-2 mt-4">
-                                    <button className="bg-blue-500 text-white rounded px-4 py-2"
-                                        onClick={openNewTagModal}
-                                        >Tag +</button>
-                                    <div className="flex gap-4">
-                                        <button
-                                            onClick={closeEditCardModal}
-                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            onClick={handleEditSave}
-                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-                                        >
-                                            Update
-                                        </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {isEditCardModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
+                            <div className="bg-blue-500 p-6 text-center">
+                                <h2 className="text-white text-3xl font-bold mb-2">Edit Item</h2>
+                            </div>
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Name</label>
+                                        <input
+                                            type="text"
+                                            value={itemTitle}
+                                            onChange={(e) => setItemTitle(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter title"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Image</label>
+                                        <input
+                                            type="text"
+                                            value={itemImage}
+                                            onChange={(e) => setItemImage(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter image URL"
+                                            required
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-white text-sm mb-1 block">Description</label>
+                                        <textarea
+                                            value={itemDescription}
+                                            onChange={(e) => setItemDescription(e.target.value)}
+                                            className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="Enter description"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {tags.map((tag, idx) => (
+                                            <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
+                                                <div className="text-sm">{tag.name}</div>
+                                                <div className="flex flex-col">
+                                                    <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
+                                                    <button disabled className={`${tag.status} rounded-md p-3`} />
+                                                    <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="flex justify-between gap-2 mt-4">
+                                        <button className="bg-blue-500 text-white rounded px-4 py-2"
+                                            onClick={openNewTagModal}
+                                            >Tag +</button>
+                                        <div className="flex gap-4">
+                                            <button
+                                                onClick={closeEditCardModal}
+                                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                onClick={handleEditSave}
+                                                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                            >
+                                                Update
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -914,66 +917,150 @@ function CreateTierList()
                     </div>
                 )}
                 {isDeleteCardModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-xl text-white mb-4 text-center">Are you sure you want to delete this item?</h2>
-                            <div className="flex flex-col gap-4">
-                                <div className="flex justify-center gap-2 mt-4">
-                                <button
-                                    onClick={ ()  => 
-                                        {
-                                            setDeleteItem(undefined);
-                                            closeDeleteCardModal();
-                                        }
-                                    }
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleDelete}
-                                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
-                                >
-                                    Confirm
-                                </button>
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
+                            <div className="bg-blue-500 p-6 text-center">
+                                <h2 className="text-white text-3xl font-bold mb-2">Delete Item</h2>
+                            </div>
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <div className="text-white text-center">Are you sure you want to delete this item?</div>
+                                    <div className="flex justify-center gap-2 mt-4">
+                                        <button
+                                            onClick={ ()  => 
+                                                {
+                                                    setDeleteItem(undefined);
+                                                    closeDeleteCardModal();
+                                                }
+                                            }
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={handleDelete}
+                                            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Confirm
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 )}
                 {isNewTagModalOpen && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                        <div className="bg-gray-700 w-[400px] p-6 rounded-xl shadow-lg">
-                            <h2 className="text-xl text-white mb-4 text-center">Create new tag</h2>
-                            <div className="flex flex-col gap-4">
-                                <input
-                                    type="text"
-                                    value={tagName}
-                                    onChange={(e) => setTagName(e.target.value)}
-                                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="Enter title"
-                                    required
-                                />
-                                <div className="flex justify-center gap-2 mt-4">
-                                <button
-                                    onClick={closeDeleteCardModal}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
-                                >
-                                    Cancel
-                                </button>
-                                <button
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
+                            <div className="bg-blue-500 p-6 text-center">
+                                <h2 className="text-white text-3xl font-bold mb-2">Create new tag</h2>
+                            </div>
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <input
+                                        type="text"
+                                        value={tagName}
+                                        onChange={(e) => setTagName(e.target.value)}
+                                        className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="Enter title"
+                                        required
+                                    />
+                                    <div className="flex justify-center gap-2 mt-4">
+                                        <button
+                                            onClick={closeDeleteCardModal}
+                                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
                                     onClick={handleTags}
                                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
                                 >
                                     Confirm
                                 </button>
                                 </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 )}
+                {isViewCardOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+                        <div className="bg-gray-800 max-h-[95vh] w-full max-w-4xl rounded-2xl relative overflow-hidden">
+                            <div className="flex items-center justify-between p-6 border-b border-gray-700">
+                            <h2 className="text-2xl font-bold text-white">Item Details</h2>
+                            <button
+                                onClick={() => viewCardOpen(false)}
+                                className="text-gray-400 hover:text-white p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                            >
+                            </button>
+                            </div>
+                            <div className="p-6 max-h-[70vh] overflow-y-auto">
+                                <div className="space-y-6">
+                                    <div className="bg-gray-700 rounded-xl p-6 shadow-lg">
+                                        <div className="flex flex-col lg:flex-row gap-6">
+                                            <div className="flex-shrink-0">
+                                                <div className="w-48 h-48 bg-gray-600 rounded-xl flex items-center justify-center overflow-hidden">
+                                                    <img src={currentView?.image} alt={currentView?.title}className="w-full h-full object-cover" />
+                                                </div>
+                                            </div>
+                                            <div className="flex-1 space-y-4">
+                                                <div>
+                                                    <h3 className="text-3xl font-bold text-white mb-2">{currentView?.title}</h3>
+                                                    {currentView?.description && (
+                                                    <p className="text-gray-300 text-lg leading-relaxed">
+                                                        {currentView?.description}
+                                                    </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Footer with Action Buttons */}
+                            <div className="flex items-center justify-between p-6 border-t border-gray-700 bg-gray-800">
+                            <div className="flex items-center gap-3">
+                                <button
+                                onClick={() => 
+                                    {
+                                        viewCardOpen(false)
+                                        handleEditOpen(currentView);
+                                        setCurrentEdit(currentView);
+                                        handleEditSave;
+                                    }
+                                }
+                                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                                >
+                                Edit
+                                </button>
+                                <button
+                                onClick={() => 
+                                    {
+                                        viewCardOpen(false);
+                                        setDeleteCardModalOpen(true);
+                                        setDeleteItem(currentView);
+                                        handleDelete;
+                                    }
+                                }
+                                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                                >
+                                Delete
+                                </button>
+                            </div>
+                            
+                            <button
+                                onClick={() => viewCardOpen(false)}
+                                className="bg-gray-600 hover:bg-gray-500 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                            >
+                                Close
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                )}
             </div>
-        </div>
     );
 }
 

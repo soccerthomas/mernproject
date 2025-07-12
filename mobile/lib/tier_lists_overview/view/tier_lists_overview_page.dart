@@ -5,7 +5,6 @@ import 'package:mobile/tier_list_editor/view/tier_list_editor_page.dart';
 import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
 import 'package:mobile/tier_lists_overview/widgets/tier_list_list_tile.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
-
 import '../widgets/add_tier_list_button.dart';
 
 class TierListsOverviewPage extends StatelessWidget {

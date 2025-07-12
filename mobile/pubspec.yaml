@@ -48,7 +48,9 @@ dependencies:
   formz: ^0.8.0
   shared_preferences: ^2.5.3
   email_validator: ^3.0.0
-  uuid: ^3.0.7
+  uuid: ^4.4.0
+  cached_network_image: ^3.4.1
+  flutter_colorpicker: ^1.1.0
 
 dev_dependencies:
   flutter_test:
