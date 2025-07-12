@@ -19,6 +19,7 @@ interface TagStructure
 interface CategoriesStructure
 {
     name:string;
+    color:string;
     items:Array<ItemStructure>;
 }
 
@@ -45,6 +46,7 @@ const Dashboard: React.FC = () => {
   categories: [
     {
       name: "S Tier",
+      color: "bg-red-500",
       items: [
         {
           id: 1,
@@ -68,6 +70,7 @@ const Dashboard: React.FC = () => {
     },
     {
       name: "A Tier",
+      color: "bg-orange-500",
       items: [
         {
           id: 4,
@@ -91,6 +94,7 @@ const Dashboard: React.FC = () => {
     },
     {
       name: "B Tier",
+      color: "bg-yellow-500",
       items: [
         {
           id: 7,
@@ -108,6 +112,7 @@ const Dashboard: React.FC = () => {
     },
     {
       name: "C Tier",
+      color: "bg-green-500",
       items: [
         {
           id: 9,
@@ -177,7 +182,7 @@ const Dashboard: React.FC = () => {
         });
         if(response.ok)
         {
-            const savedTierLists = await response.json();
+            // const savedTierLists = await response.json();
             //setTierLists(savedTierLists);
         }
     } catch (error) {
@@ -312,11 +317,11 @@ const Dashboard: React.FC = () => {
                     <div key={categoryIdx} className="bg-gray-800 rounded-xl p-4 shadow-lg">
                       <div className="flex items-stretch min-h-[120px] gap-4">
                         <div className="w-24 flex items-center justify-center">
-                          <div className="text-white font-bold text-xl p-7 rounded-xl text-center w-full bg-blue-500">
+                          <div className={`${category.color} text-white font-bold text-xl p-7 rounded-xl text-center w-full`}>
                             {category.name}
                           </div>
                         </div>
-                        <div className="flex-1 bg-blue-500 rounded-xl p-4">
+                        <div className={`${category.color} flex-1 rounded-xl p-4`}>
                           <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
                             {category.items.length > 0 ? (
                               category.items.map((item, itemIdx) => (
