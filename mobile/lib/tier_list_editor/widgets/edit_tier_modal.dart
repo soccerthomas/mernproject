@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart' show Tier;
 import 'rename_tier_dialog.dart';
+import 'color_picker_dialog.dart';
 
 class EditTierModal extends StatelessWidget {
   final Tier tier;
@@ -31,9 +32,19 @@ class EditTierModal extends StatelessWidget {
               );
             },
           ),
-          const ListTile(
-            leading: Icon(Icons.palette),
-            title: Text('Change Tier Color'),
+          ListTile(
+            leading: const Icon(Icons.palette),
+            title: const Text('Change Tier Color'),
+            onTap: () {
+              Navigator.of(context).pop();
+              showDialog(
+                context: context, 
+                builder: (_) => BlocProvider.value(
+                  value: context.read<TierListEditorBloc>(),
+                  child: ColorPickerDialog(tier),
+                )
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.delete), 
