@@ -1,6 +1,7 @@
 import TierListLogo from "../images/TierListLogo.png";
 
 function Homepage() {
+  console.log("this is a cicd test");
   return (
     <div className="min-h-screen bg-gray-800">
       <header className="p-4">
