@@ -35,35 +35,55 @@ class TierListEditorView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TierListEditorBloc, TierListEditorState>(
-      builder: (context, state) {
-        if (state.status == TierListEditorStatus.loading) {
-          return const Center(child: CupertinoActivityIndicator());
-        } else if (state.status != TierListEditorStatus.success) {
-          return const Center(child: Text('Error loading tier list'));
-        }
-
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(state.originalTitle!),
-            actions: [
-              const TierListEditorOptionsButton(),
-            ],
-          ),
-          body: Center(
-            child: ListView.builder(
-              itemCount: state.tierList!.tiers.length + 1,
-              itemBuilder: (_, index) {
-                return TierRowWidget(
-                  row: index == state.tierList!.tiers.length
-                      ? state.tierList!.stagingArea
-                      : state.tierList!.tiers[index],
-                );
-              },
-            ),
-          ),
-        );
+    return BlocListener<TierListEditorBloc, TierListEditorState>(
+      listenWhen: (previous, current) =>
+          previous.lastDeletedTier != current.lastDeletedTier &&
+          current.lastDeletedTier != null,
+      listener: (context, state) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text('Deleted Tier ${state.lastDeletedTier!.name}'),
+              action: SnackBarAction(
+                label: 'Undo', 
+                onPressed: () {
+                  context.read<TierListEditorBloc>().add(
+                    const TierListEditorUndoTierDeletionRequested()
+                  );
+                }
+              ),
+            )
+          );
       },
+      child: BlocBuilder<TierListEditorBloc, TierListEditorState>(
+        builder: (context, state) {
+          if (state.status == TierListEditorStatus.loading) {
+            return const Center(child: CupertinoActivityIndicator());
+          } else if (state.status != TierListEditorStatus.success) {
+            return const Center(child: Text('Error loading tier list'));
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(state.originalTitle!),
+              actions: [const TierListEditorOptionsButton()],
+            ),
+            body: Center(
+              child: ListView.builder(
+                itemCount: state.tierList!.tiers.length + 1,
+                itemBuilder: (_, index) {
+                  return TierRowWidget(
+                    row: index == state.tierList!.tiers.length
+                        ? state.tierList!.stagingArea
+                        : state.tierList!.tiers[index],
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

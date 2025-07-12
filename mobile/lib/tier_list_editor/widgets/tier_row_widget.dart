@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tier_lists_repository/tier_lists_repository.dart' show ListRow;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show ListRow, Tier;
+import 'edit_tier_modal.dart';
 import 'tier_item_tile.dart';
 
 
@@ -13,6 +16,7 @@ class TierRowWidget extends StatelessWidget {
     final stagingOffset = row.id == 'staging' ? 1 : 0;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         row.id == 'staging'
             ? const SizedBox(height: 36)
@@ -20,6 +24,15 @@ class TierRowWidget extends StatelessWidget {
                 width: 42, 
                 height: 24, 
                 child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context, 
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<TierListEditorBloc>(),
+                        child: EditTierModal(row as Tier)
+                      )
+                    );
+                  },
                   child: Text(row.name)
                 )
               ),
