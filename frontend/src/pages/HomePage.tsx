@@ -2,7 +2,7 @@ import TierListLogo from "../images/TierListLogo.png";
 
 function Homepage() {
   return (
-    <div className="bg-gray-800">
+    <div className="min-h-screen bg-gray-800">
       <header className="p-4">
         <nav className="mx-auto flex items-center justify-between p-2 lg:px-8 rounded-lg bg-gray-600">
           <div className="flex lg:flex-1">
