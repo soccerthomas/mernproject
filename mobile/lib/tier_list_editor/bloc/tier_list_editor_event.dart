@@ -65,20 +65,12 @@ final class TierListEditorUndoTierDeletionRequested
 }
 
 final class TierListEditorItemAddedToStaging extends TierListEditorEvent {
-  final String title;
-  final String? imagePath;
-  final String? description;
-  final List<Tag>? tags;
+  final TierItem item;
 
-  const TierListEditorItemAddedToStaging({
-    required this.title,
-    this.imagePath,
-    this.description,
-    this.tags,
-  });
+  const TierListEditorItemAddedToStaging(this.item);
 
   @override
-  List<Object?> get props => [title, imagePath, description, tags];
+  List<Object?> get props => [item];
 }
 
 final class TierListEditorItemDeleted extends TierListEditorEvent {
@@ -93,12 +85,12 @@ final class TierListEditorItemDeleted extends TierListEditorEvent {
 
 final class TierListEditorItemUpdated extends TierListEditorEvent {
   final TierItem updatedItem;
-  final ListRow row;
+  final String rowId;
 
-  const TierListEditorItemUpdated({required this.updatedItem, required this.row});
+  const TierListEditorItemUpdated({required this.updatedItem, required this.rowId});
 
   @override
-  List<Object?> get props => [updatedItem, row];
+  List<Object?> get props => [updatedItem, rowId];
 }
 
 final class TierListEditorItemMoved extends TierListEditorEvent {

@@ -148,15 +148,7 @@ class TierListEditorBloc
     final newStagingItems = List<TierItem>.from(
       state.tierList!.stagingArea.items,
     );
-    newStagingItems.add(
-      TierItem(
-        id: const Uuid().v4(),
-        name: event.title,
-        imageUrl: event.imagePath,
-        tags: event.tags ?? [],
-        description: event.description ?? '',
-      ),
-    );
+    newStagingItems.add(event.item);
     final newStagingArea = state.tierList!.stagingArea.copyWith(
       items: newStagingItems,
     );
@@ -201,7 +193,7 @@ class TierListEditorBloc
   ) {
     final newTiers = state.tierList!.tiers
         .map(
-          (tier) => tier.id == event.row.id
+          (tier) => tier.id == event.rowId
               ? tier.copyWith(
                   items: tier.items
                       .map(
@@ -215,7 +207,7 @@ class TierListEditorBloc
         )
         .toList();
 
-    final newStagingArea = event.row.id == 'staging'
+    final newStagingArea = event.rowId == 'staging'
         ? state.tierList!.stagingArea.copyWith(
             items: state.tierList!.stagingArea.items
                 .map(
