@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/item_details/view/item_details_page.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
-import 'package:tier_lists_repository/tier_lists_repository.dart'
-    show TierItem, ListRow;
+import 'package:tier_lists_repository/tier_lists_repository.dart' show TierItem;
+
+import 'move_item_sheet.dart';
 
 class TierItemTile extends StatelessWidget {
   final String? _itemId;
@@ -26,7 +27,9 @@ class TierItemTile extends StatelessWidget {
     if (_itemId == null) {
       item = null;
     } else if (_rowId == 'staging') {
-      item = tierList.stagingArea.items.firstWhere((item) => item.id == _itemId);
+      item = tierList.stagingArea.items.firstWhere(
+        (item) => item.id == _itemId,
+      );
     } else {
       item = tierList.tiers
           .firstWhere((tier) => tier.id == _rowId)
@@ -38,7 +41,7 @@ class TierItemTile extends StatelessWidget {
     if (_itemId == null) {
       child = const Center(child: Icon(Icons.add, size: 48));
     } else if (item!.imageUrl == null || item.imageUrl!.isEmpty) {
-      child = Center(child: Text(item!.name, textAlign: TextAlign.center));
+      child = Center(child: Text(item.name, textAlign: TextAlign.center));
     } else {
       child = CachedNetworkImage(
         imageUrl: item.imageUrl!,
@@ -49,7 +52,7 @@ class TierItemTile extends StatelessWidget {
       );
     }
 
-    const tileSize = 150.0; 
+    const tileSize = 150.0;
     return SizedBox(
       width: tileSize,
       height: tileSize,
@@ -63,7 +66,18 @@ class TierItemTile extends StatelessWidget {
             ),
           );
         },
-        child: child,
+        onLongPress: () {
+          if (_itemId == null) return;
+
+          showModalBottomSheet(
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: context.read<TierListEditorBloc>(),
+              child: MoveItemSheet(item: item!, sourceRowId: _rowId),
+            ),
+          );
+        },
+        child: Card(child: child),
       ),
     );
   }

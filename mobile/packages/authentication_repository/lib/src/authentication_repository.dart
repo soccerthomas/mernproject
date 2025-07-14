@@ -55,28 +55,28 @@ class AuthenticationRepository {
     required String username,
     required String password,
   }) async {
-    // final response = await http.post(
-    //   Uri.parse('$_baseUrl/api/auth/login'),
-    //   headers: {'Content-Type': 'application/json'},
-    //   body: jsonEncode({'username': username, 'password': password}),
-    // );
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'username': username, 'password': password}),
+    );
 
-    // if (response.statusCode == 200) {
-    //   final body = jsonDecode(response.body);
-    //   final token = body['token'] as String?;
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final token = body['token'] as String?;
 
-    //   if (token == null) {
-    //     throw const LogInFailure('Server response did not contain a token.');
-    //   }
+      if (token == null) {
+        throw const LogInFailure('Server response did not contain a token.');
+      }
 
-    //   await _secureStorage.write(key: 'auth_token', value: token);
-    //   _controller.add(AuthenticationStatus.authenticated);
-    // } else if (response.statusCode == 401) {
-    //   throw const LogInFailure('Invalid username or password.');
-    // } else {
-    //   throw const LogInFailure();
-    // }
-    _controller.add(AuthenticationStatus.authenticated);
+      await _secureStorage.write(key: 'auth_token', value: token);
+      _controller.add(AuthenticationStatus.authenticated);
+    } else if (response.statusCode == 401) {
+      throw const LogInFailure('Invalid username or password.');
+    } else {
+      throw const LogInFailure();
+    }
+    // _controller.add(AuthenticationStatus.authenticated);
   }
 
   void logOut() async {
