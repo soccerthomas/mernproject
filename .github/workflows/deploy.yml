@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,17 +21,21 @@ jobs:
       - name: Deploy to Server
         run: |
           ssh -o StrictHostKeyChecking=no root@134.199.200.50 << 'EOF'
+            set -e
+
+            echo "Changing to project directory..."
             cd /var/www/html/COP4331-LargeProject
 
             echo "Pulling latest code..."
             git reset --hard HEAD
             git pull origin main
 
-            echo "Installing backend deps..."
+            echo "Installing backend dependencies..."
             cd backend
             npm install
 
-            echo "Restarting backend (PM2 recommended)..."
+            echo "Restarting or starting pm2 processes..."
+            pm2 restart backend || pm2 start server.js --name backend
             pm2 restart server || pm2 start server.js --name server
 
             echo "Building frontend..."
