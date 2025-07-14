@@ -478,7 +478,7 @@ function CreateTierList()
                 <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
                     <div className="flex items-stretch min-h-[120px] gap-6">
                         <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-red-500">
+                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-red-500">
                                 S
                             </div>
                         </div>
@@ -517,7 +517,7 @@ function CreateTierList()
                 <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
                     <div className="flex items-stretch min-h-[120px] gap-6">
                         <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-orange-500">
+                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-orange-500">
                                 A
                             </div>
                         </div>
@@ -556,7 +556,7 @@ function CreateTierList()
                 <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
                     <div className="flex items-stretch min-h-[120px] gap-6">
                         <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-yellow-500">
+                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-yellow-500">
                                 B
                             </div>
                         </div>
@@ -595,7 +595,7 @@ function CreateTierList()
                 <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
                     <div className="flex items-stretch min-h-[120px] gap-6">
                         <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-green-500">
+                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-green-500">
                                 C
                             </div>
                         </div>
@@ -634,7 +634,7 @@ function CreateTierList()
                 <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
                     <div className="flex items-stretch min-h-[120px] gap-6">
                         <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl p-[48px] w-[150px] rounded-xl text-center w-full bg-blue-500">
+                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-blue-500">
                                 D
                             </div>
                         </div>
