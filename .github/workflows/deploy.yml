@@ -20,18 +20,27 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          ssh -o StrictHostKeyChecking=no root@134.199.200.50 << 'EOF'
+          ssh -o StrictHostKeyChecking=no root@134.199.200.50 << EOF
+            set -e
+
+            echo "Loading environment..."
+            export NVM_DIR="\$HOME/.nvm"
+            [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+            [ -s "\$NVM_DIR/bash_completion" ] && \. "\$NVM_DIR/bash_completion"
+
+            echo "Navigating to project..."
             cd /var/www/html/COP4331-LargeProject
 
-            echo "Pulling latest code..."
+            echo "Resetting any local changes..."
             git reset --hard HEAD
+            echo "Pulling latest code from origin..."
             git pull origin main
 
-            echo "Installing backend deps..."
+            echo "Installing backend dependencies..."
             cd backend
             npm install
 
-            echo "Restarting backend (PM2 recommended)..."
+            echo "Restarting backend server with PM2..."
             pm2 restart server || pm2 start server.js --name server
 
             echo "Building frontend..."
