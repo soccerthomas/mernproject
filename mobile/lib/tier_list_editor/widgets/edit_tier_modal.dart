@@ -6,12 +6,19 @@ import 'rename_tier_dialog.dart';
 import 'color_picker_dialog.dart';
 
 class EditTierModal extends StatelessWidget {
-  final Tier tier;
+  final String _tierId;
 
-  const EditTierModal(this.tier, {super.key});
+  const EditTierModal(String tierId, {super.key}) : _tierId = tierId;
 
   @override
   Widget build(BuildContext context) {
+    final tier = context
+        .read<TierListEditorBloc>()
+        .state
+        .tierList!
+        .tiers
+        .firstWhere((tier) => tier.id == _tierId);
+
     return Container(
       height: 250,
       color: tier.color,
@@ -19,7 +26,7 @@ class EditTierModal extends StatelessWidget {
         children: [
           Text(tier.name),
           ListTile(
-            leading: const Icon(Icons.edit), 
+            leading: const Icon(Icons.edit),
             title: const Text('Rename Tier'),
             onTap: () {
               Navigator.of(context).pop();
@@ -28,7 +35,7 @@ class EditTierModal extends StatelessWidget {
                 builder: (_) => BlocProvider.value(
                   value: context.read<TierListEditorBloc>(),
                   child: RenameTierDialog(tier),
-                )
+                ),
               );
             },
           ),
@@ -38,16 +45,16 @@ class EditTierModal extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               showDialog(
-                context: context, 
+                context: context,
                 builder: (_) => BlocProvider.value(
                   value: context.read<TierListEditorBloc>(),
                   child: ColorPickerDialog(tier),
-                )
+                ),
               );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.delete), 
+            leading: const Icon(Icons.delete),
             title: const Text('Delete Tier'),
             onTap: () {
               Navigator.of(context).pop();
@@ -55,8 +62,8 @@ class EditTierModal extends StatelessWidget {
                 context: context,
                 builder: (_) => BlocProvider.value(
                   value: context.read<TierListEditorBloc>(),
-                  child: DeleteTierDialog(tier)
-                )
+                  child: DeleteTierDialog(tier),
+                ),
               );
             },
           ),
@@ -84,13 +91,13 @@ class DeleteTierDialog extends StatelessWidget {
         TextButton(
           onPressed: () {
             context.read<TierListEditorBloc>().add(
-              TierListEditorTierDeleted(tier)
+              TierListEditorTierDeleted(tier),
             );
             Navigator.pop(context);
-          }, 
-          child: const Text('Delete')
-        )
+          },
+          child: const Text('Delete'),
+        ),
       ],
     );
   }
-} 
+}

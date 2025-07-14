@@ -74,9 +74,9 @@ class TierListEditorView extends StatelessWidget {
                 itemCount: state.tierList!.tiers.length + 1,
                 itemBuilder: (_, index) {
                   return TierRowWidget(
-                    row: index == state.tierList!.tiers.length
-                        ? state.tierList!.stagingArea
-                        : state.tierList!.tiers[index],
+                    rowId: index == state.tierList!.tiers.length
+                        ? state.tierList!.stagingArea.id
+                        : state.tierList!.tiers[index].id,
                   );
                 },
               ),

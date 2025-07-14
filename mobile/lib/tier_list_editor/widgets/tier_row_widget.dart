@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
-import 'package:tier_lists_repository/tier_lists_repository.dart' show ListRow, Tier;
 import 'edit_tier_modal.dart';
 import 'tier_item_tile.dart';
 
-
 class TierRowWidget extends StatelessWidget {
-  final ListRow row;
+  final String _rowId;
 
-  const TierRowWidget({super.key, required this.row});
+  const TierRowWidget({super.key, required String rowId}) : _rowId = rowId;
 
   @override
   Widget build(BuildContext context) {
-    final stagingOffset = row.id == 'staging' ? 1 : 0;
+    final stagingOffset = _rowId == 'staging' ? 1 : 0;
+    final editorBloc = context.read<TierListEditorBloc>();
+    final tierList = editorBloc.state.tierList!;
+    final row = _rowId == 'staging'
+        ? tierList.stagingArea
+        : tierList.tiers.firstWhere((tier) => tier.id == _rowId);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        row.id == 'staging'
+        _rowId == 'staging'
             ? const SizedBox(height: 36)
             : SizedBox(
-                width: 42, 
-                height: 24, 
+                width: 42,
+                height: 24,
                 child: InkWell(
                   onTap: () {
                     showModalBottomSheet(
-                      context: context, 
+                      context: context,
                       builder: (_) => BlocProvider.value(
-                        value: context.read<TierListEditorBloc>(),
-                        child: EditTierModal(row as Tier)
-                      )
+                        value: editorBloc,
+                        child: EditTierModal(_rowId),
+                      ),
                     );
                   },
-                  child: Text(row.name)
-                )
+                  child: Text(row.name),
+                ),
               ),
         Container(
           height: 180,
@@ -44,10 +47,13 @@ class TierRowWidget extends StatelessWidget {
             itemCount: row.items.length + stagingOffset,
             itemBuilder: (context, index) {
               if (index == 0 && row.id == 'staging') {
-                return const TierItemTile(item: null);
+                return TierItemTile(itemId: null, rowId: _rowId);
               }
 
-              return TierItemTile(item: row.items[index-stagingOffset]);
+              return TierItemTile(
+                itemId: row.items[index - stagingOffset].id,
+                rowId: _rowId,
+              );
             },
           ),
         ),
