@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import TierListLogo from '../images/TierListLogo.png';
-import DeleteSymbol from '../images/DeleteSymbol.png';
-import EditSymbol from '../images/EditSymbol.png';
 
 interface ItemStructure
 {
@@ -150,13 +148,16 @@ function CreateTierList()
         }
     }
 
-    function handleEditOpen(item: ItemStructure)
+    function handleEditOpen(item: ItemStructure | undefined)
     {
-        setEditCardModalOpen(true);
+        if(item)
+        {
+            setEditCardModalOpen(true);
 
-        setItemTitle(item.title);
-        setItemImage(item.image);
-        setItemDescription(item.description);
+            setItemTitle(item.title);
+            setItemImage(item.image);
+            setItemDescription(item.description);
+        }        
     }
     function handleEditSave()
     {
@@ -1018,8 +1019,6 @@ function CreateTierList()
                                     </div>
                                 </div>
                             </div>
-
-                            {/* Footer with Action Buttons */}
                             <div className="flex items-center justify-between p-6 border-t border-gray-700 bg-gray-800">
                             <div className="flex items-center gap-3">
                                 <button
