@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:tier_lists_api/src/helpers/color_converter.dart';
+import 'package:uuid/uuid.dart';
 import 'json_map.dart';
 import 'tier_item.dart';
 import 'list_row.dart';
@@ -10,12 +11,14 @@ part 'tier.g.dart';
 @immutable
 @JsonSerializable()
 class Tier extends ListRow {
-  const Tier({
-    required super.id,
+  Tier({
+    String? id,
     required super.name,
     required super.color,
     required super.items,
-  });
+  }) : super(
+    id: id ?? const Uuid().v4(),
+  );
 
   Tier copyWith({
     String? id,
@@ -36,6 +39,7 @@ class Tier extends ListRow {
   @override
   JsonMap toJson() {
     final json = _$TierToJson(this);
+    json.remove('id');
     return {...json, 'type': 'tier'};
   }
 }

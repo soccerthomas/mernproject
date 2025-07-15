@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
-import 'package:uuid/uuid.dart';
 
 part 'tier_lists_overview_event.dart';
 part 'tier_lists_overview_state.dart';
@@ -25,6 +24,8 @@ class TierListsOverviewBloc
   ) async {
     emit(state.copyWith(status: () => TierListsOverviewStatus.loading));
 
+    _tierListsRepository.refreshTierLists();
+
     await emit.forEach<List<TierList>>(
       _tierListsRepository.getTierLists(), // subscribe to stream
       onData: (tierLists) => state.copyWith(
@@ -42,11 +43,9 @@ class TierListsOverviewBloc
   ) {
     _tierListsRepository.saveTierList(
       TierList(
-        id: const Uuid().v4(),
         title: event.name,
         description: event.description,
         tiers: defaultTiers,
-        tags: [],
         stagingArea: const StagingArea(items: [])
       )
     );

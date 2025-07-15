@@ -80,73 +80,84 @@ class ItemDetailsPage extends StatelessWidget {
               },
               child: Icon(state.isEditing ? Icons.check : Icons.edit),
             ),
-            body: Column(
-              children: [
-                state.isEditing
-                    ? TextFormField(
-                        initialValue: state.title,
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: const Alignment(0, -1 / 3),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    state.isEditing
+                        ? TextFormField(
+                            initialValue: state.title,
+                            onChanged: (value) {
+                              context.read<ItemDetailsBloc>().add(
+                                ItemDetailsTitleChanged(value),
+                              );
+                            },
+                          )
+                        : Text(state.title),
+                    const SizedBox(height: 24),
+                    if (! state.isEditing && state.imageUrl != null)
+                      Column(
+                        children: [
+                          CachedNetworkImage(imageUrl: state.imageUrl!),
+                          SizedBox(height: state.isEditing ? 12 : 24),
+                        ],
+                      ),
+                    if (state.isEditing)
+                      Column(
+                        children: [
+                          TextFormField(
+                            initialValue: state.imageUrl,
+                            onChanged: (value) {
+                              context.read<ItemDetailsBloc>().add(
+                                ItemDetailsImageUrlChanged(value),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+                    TagsWidget(tags: state.tags!, isEditing: state.isEditing),
+                    const SizedBox(height: 24),
+                    if (state.isEditing)
+                      TextFormField(
+                        initialValue: state.description,
                         onChanged: (value) {
                           context.read<ItemDetailsBloc>().add(
-                            ItemDetailsTitleChanged(value),
+                            ItemDetailsDescriptionChanged(value),
                           );
                         },
                       )
-                    : Text(state.title),
-                const SizedBox(height: 24),
-                if (state.imageUrl != null)
-                  Column(
-                    children: [
-                      CachedNetworkImage(imageUrl: state.imageUrl!),
-                      SizedBox(height: state.isEditing ? 12 : 24),
-                    ],
-                  ),
-                if (state.isEditing)
-                  Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: const Text('Upload Image'),
-                      ),
-                      const SizedBox(height: 24),
-                    ],
-                  ),
-                TagsWidget(tags: state.tags!, isEditing: state.isEditing),
-                const SizedBox(height: 24),
-                if (state.isEditing)
-                  TextFormField(
-                    initialValue: state.description,
-                    onChanged: (value) {
-                      context.read<ItemDetailsBloc>().add(
-                        ItemDetailsDescriptionChanged(value),
-                      );
-                    },
-                  )
-                else
-                  Text(state.description),
-                if (state.isEditing && !state.isNew)
-                  Column(
-                    children: [
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<TierListEditorBloc>().add(
-                            TierListEditorItemDeleted(
-                              item: state.initialItem!,
-                              row: row,
+                    else
+                      Text(state.description),
+                    if (state.isEditing && !state.isNew)
+                      Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<TierListEditorBloc>().add(
+                                TierListEditorItemDeleted(
+                                  item: state.initialItem!,
+                                  row: row,
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Delete Item',
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.red),
                             ),
-                          );
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          'Delete Item',
-                          style: Theme.of(
-                            context,
-                          ).textTheme.bodyMedium?.copyWith(color: Colors.red),
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-              ],
+                  ],
+                ),
+              ),
             ),
           );
         },

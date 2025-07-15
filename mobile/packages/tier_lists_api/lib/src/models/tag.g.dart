@@ -9,13 +9,12 @@ part of 'tag.dart';
 Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
   type: $enumDecode(_$TagTypeEnumMap, json['type']),
   text: json['text'] as String,
-  id: json['id'] as String,
+  id: json['id'] as String?,
 );
 
 Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
   'type': _$TagTypeEnumMap[instance.type]!,
   'text': instance.text,
-  'id': instance.id,
 };
 
 const _$TagTypeEnumMap = {

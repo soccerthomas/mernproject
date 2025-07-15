@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
-import 'package:uuid/uuid.dart';
 
 part 'item_details_state.dart';
 part 'item_details_event.dart';
@@ -10,7 +9,6 @@ part 'item_details_event.dart';
 class ItemDetailsBloc extends Bloc<ItemDetailsEvent, ItemDetailsState> {
   final TierListEditorBloc _editorBloc;
   final String? _tierRowId;
-  final _uuid = const Uuid();
 
   ItemDetailsBloc({
     required TierListEditorBloc editorBloc,
@@ -78,7 +76,7 @@ class ItemDetailsBloc extends Bloc<ItemDetailsEvent, ItemDetailsState> {
     if (!state.isValid) return;
 
     final newItem = TierItem(
-      id: state.initialItem?.id ?? _uuid.v4(),
+      id: state.initialItem?.id,
       name: state.title,
       description: state.description,
       imageUrl: state.imageUrl,

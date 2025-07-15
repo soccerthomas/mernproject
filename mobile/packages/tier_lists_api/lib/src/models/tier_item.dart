@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 import 'json_map.dart';
 import 'tag.dart';
 
@@ -9,19 +10,21 @@ part 'tier_item.g.dart';
 @immutable
 @JsonSerializable()
 class TierItem extends Equatable {
+  @JsonKey(includeToJson: false)
   final String id;
+
   final String? imageUrl;
   final String name;
   final String description;
   final List<Tag> tags;
 
-  const TierItem({
-    required this.id,
+  TierItem({
+    String? id,
     required this.name,
     this.description = '',
     this.imageUrl,
     required this.tags
-  });
+  }) : id = id ?? const Uuid().v4();
 
   TierItem copyWith({
     String? id,

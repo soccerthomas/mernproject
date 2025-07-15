@@ -19,6 +19,12 @@ class TagChipWidget extends StatelessWidget {
        _tags = tags,
        _isEditing = isEditing;
 
+  static const Map<TagType, IconData> _iconMap = {
+    TagType.positive: Icons.add,
+    TagType.neutral: Icons.circle_outlined,
+    TagType.negative: Icons.remove
+  };
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -35,6 +41,7 @@ class TagChipWidget extends StatelessWidget {
           : null,
       child: Chip(
         label: Text(_tag.text),
+        avatar: Icon(_iconMap[_tag.type], color: kColorMap[_tag.type],),
         side: BorderSide(color: kColorMap[_tag.type]!),
         onDeleted: _isEditing
             ? () {

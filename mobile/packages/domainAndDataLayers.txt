@@ -1,0 +1,722 @@
+export 'src/authentication_repository.dart';import 'dart:async';
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+enum AuthenticationStatus { unknown, authenticated, unauthenticated }
+
+class LogInFailure implements Exception {
+  final String message;
+  const LogInFailure([this.message = 'An unknown exception occurred.']);
+}
+
+class RegisterFailure implements Exception {
+  final String message;
+  const RegisterFailure([this.message = 'An unknown exception occured.']);
+}
+
+class AuthenticationRepository {
+  final _controller = StreamController<AuthenticationStatus>();
+  final _secureStorage = const FlutterSecureStorage();
+  static final _baseUrl = dotenv.env['BASE_URL'];
+
+  Stream<AuthenticationStatus> get status async* {
+    try {
+      final String? userToken = await _secureStorage.read(key: 'auth_token');
+      if (userToken == null) {
+        yield AuthenticationStatus.unauthenticated;
+      } else {
+        final response = await http.post(
+          Uri.parse('$_baseUrl/api/auth/tokenVerify'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'token': userToken}),
+        );
+
+        if (response.statusCode == 200) {
+          final body = jsonDecode(response.body);
+          final isValid = body['isValid'] as bool;
+          yield isValid
+              ? AuthenticationStatus.authenticated
+              : AuthenticationStatus.unauthenticated;
+        } else {
+          print('tokenVerify endpoint status code is not 200');
+          yield AuthenticationStatus.unauthenticated;
+        }
+      }
+    } catch (e) {
+      print(e);
+      yield AuthenticationStatus.unauthenticated;
+    }
+    yield* _controller.stream;
+  }
+
+  Future<void> logIn({
+    required String username,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'username': username, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final token = body['token'] as String?;
+
+      if (token == null) {
+        throw const LogInFailure('Server response did not contain a token.');
+      }
+
+      await _secureStorage.write(key: 'auth_token', value: token);
+      _controller.add(AuthenticationStatus.authenticated);
+    } else if (response.statusCode == 401) {
+      throw const LogInFailure('Invalid username or password.');
+    } else {
+      throw const LogInFailure();
+    }
+    // _controller.add(AuthenticationStatus.authenticated);
+  }
+
+  void logOut() async {
+    await _secureStorage.delete(key: 'auth_token');
+    _controller.add(AuthenticationStatus.unauthenticated);
+  }
+
+  Future<void> register({
+    required String username,
+    required String email,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'username': username,
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode >= 400) {
+      throw const RegisterFailure();
+    }
+  }
+
+  void dispose() => _controller.close();
+}
+export 'src/local_storage_tier_lists_api.dart';import 'dart:async';
+import 'dart:convert';
+import 'package:tier_lists_api/tier_lists_api.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LocalStorageTierListsApi extends LocalTierListsApi {
+  final SharedPreferences _plugin;
+  static const kTierListsCollectionKey = '__tier_lists_collection_key__';
+  late final _tierListStreamController = BehaviorSubject<List<TierList>>.seeded(
+    const [],
+  ); // BehaviorSubject is like a normal stream controller but it caches its latest item
+
+  LocalStorageTierListsApi({required SharedPreferences plugin})
+    : _plugin = plugin {
+    _init();
+  }
+
+  String? _getValue(String key) => _plugin.getString(key);
+
+  Future<void> _setValue(String key, String value) =>
+      _plugin.setString(key, value);
+
+  void _init() {
+    final tierListsJson = _getValue(kTierListsCollectionKey);
+    if (tierListsJson == null) {
+      _tierListStreamController.add(const []);
+      return;
+    }
+
+    final tierLists =
+        List<Map<dynamic, dynamic>>.from(json.decode(tierListsJson))
+            .map(
+              (jsonMap) =>
+                  TierList.fromJson(Map<String, dynamic>.from(jsonMap)),
+            )
+            .toList();
+    _tierListStreamController.add(tierLists);
+  }
+
+  @override
+  Future<void> deleteTierList(String id) {
+    final tierLists = [..._tierListStreamController.value];
+    final tierListIndex = tierLists.indexWhere((t) => t.id == id);
+    if (tierListIndex == -1) {
+      throw TierListNotFoundException();
+    } else {
+      tierLists.removeAt(tierListIndex);
+      _tierListStreamController.add(tierLists);
+      return _setValue(kTierListsCollectionKey, json.encode(tierLists));
+    }
+  }
+
+  @override
+  Stream<List<TierList>> getTierLists() =>
+      _tierListStreamController.asBroadcastStream();
+
+  @override
+  Stream<TierList> getTierList(String id) {
+    return _tierListStreamController.stream.map((tierLists) {
+      try {
+        return tierLists.firstWhere((tierList) => tierList.id == id);
+      } catch (e) {
+        throw TierListNotFoundException();
+      }
+    });
+  }
+
+  @override
+  Future<void> saveTierList(TierList tierList) {
+    final tierLists = [..._tierListStreamController.value];
+    final tierListIndex = tierLists.indexWhere((t) => t.id == tierList.id);
+    if (tierListIndex >= 0) {
+      tierLists[tierListIndex] = tierList;
+    } else {
+      tierLists.add(tierList);
+    }
+
+    _tierListStreamController.add(tierLists);
+    return _setValue(kTierListsCollectionKey, json.encode(tierLists));
+  }
+
+  @override
+  Future<void> close() {
+    return _tierListStreamController.close();
+  }
+}
+// @dart=3.6
+// ignore_for_file: directives_ordering
+// build_runner >=2.4.16
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:build_runner_core/build_runner_core.dart' as _i1;
+import 'package:json_serializable/builder.dart' as _i2;
+import 'package:source_gen/builder.dart' as _i3;
+import 'dart:isolate' as _i4;
+import 'package:build_runner/src/build_script_generate/build_process_state.dart'
+    as _i5;
+import 'package:build_runner/build_runner.dart' as _i6;
+import 'dart:io' as _i7;
+
+final _builders = <_i1.BuilderApplication>[
+  _i1.apply(
+    r'json_serializable:json_serializable',
+    [_i2.jsonSerializable],
+    _i1.toDependentsOf(r'json_serializable'),
+    hideOutput: true,
+    appliesBuilders: const [r'source_gen:combining_builder'],
+  ),
+  _i1.apply(
+    r'source_gen:combining_builder',
+    [_i3.combiningBuilder],
+    _i1.toNoneByDefault(),
+    hideOutput: false,
+    appliesBuilders: const [r'source_gen:part_cleanup'],
+  ),
+  _i1.applyPostProcess(
+    r'source_gen:part_cleanup',
+    _i3.partCleanup,
+  ),
+];
+void main(
+  List<String> args, [
+  _i4.SendPort? sendPort,
+]) async {
+  await _i5.buildProcessState.receive(sendPort);
+  _i5.buildProcessState.isolateExitCode = await _i6.run(
+    args,
+    _builders,
+  );
+  _i7.exitCode = _i5.buildProcessState.isolateExitCode!;
+  await _i5.buildProcessState.send(sendPort);
+}
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+/// A custom converter for the Color class.
+/// This tells json_serializable how to convert a Color object to and from an integer.
+class ColorConverter implements JsonConverter<Color, int> {
+  const ColorConverter();
+
+  // Converts an integer from JSON to a Color object.
+  @override
+  Color fromJson(int json) {
+    return Color(json);
+  }
+
+  // Converts a Color object to an integer for JSON.
+  @override
+  int toJson(Color object) {
+    return object.toARGB32();
+  }
+}import 'models/tier_list.dart';
+
+abstract class LocalTierListsApi {
+  Stream<List<TierList>> getTierLists();
+
+  Stream<TierList> getTierList(String id);
+
+  Future<void> saveTierList(TierList tierList);
+
+  Future<void> deleteTierList(String id);
+
+  Future<void> close();
+}
+
+class TierListNotFoundException implements Exception {}/// The type definition for a JSON-serializable [Map].
+typedef JsonMap = Map<String, dynamic>;import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tier_lists_api/src/helpers/color_converter.dart';
+import 'tier_item.dart';
+import 'json_map.dart';
+import 'tier.dart';
+import 'staging_area.dart';
+
+@JsonSerializable()
+abstract class ListRow extends Equatable {
+  final String id;
+  final String name;
+
+  @ColorConverter()
+  final Color color;
+
+  final List<TierItem> items;
+
+  const ListRow({
+    required this.id,
+    required this.name,
+    required this.color,
+    required this.items
+  });
+
+  factory ListRow.fromJson(JsonMap json) {
+    switch (json['type'] as String) {
+      case 'tier':
+        return Tier.fromJson(json);
+      case 'staging_area':
+        return StagingArea.fromJson(json);
+      default:
+        throw UnimplementedError('Unknown ListRow type: ${json['type']}');
+    }
+  }
+
+  JsonMap toJson();
+
+  @override
+  List<Object> get props => [id, name, color, items];
+}export 'json_map.dart';
+export 'staging_area.dart';
+export 'list_row.dart';
+export 'tag.dart';
+export 'tier_item.dart';
+export 'tier_list.dart';
+export 'tier.dart';import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'json_map.dart';
+import 'tier_item.dart';
+import 'list_row.dart';
+
+part 'staging_area.g.dart';
+
+@immutable
+@JsonSerializable()
+class StagingArea extends ListRow {
+  const StagingArea({required super.items})
+    : super(id: 'staging', name: 'Staging Area', color: Colors.grey);
+
+  StagingArea copyWith({List<TierItem>? items}) {
+    return StagingArea(items: items ?? List.from(this.items));
+  }
+
+  factory StagingArea.fromJson(JsonMap json) => _$StagingAreaFromJson(json);
+
+  @override
+  JsonMap toJson() {
+    final json = _$StagingAreaToJson(this);
+    return {...json, 'type': 'staging_area'};
+  }
+
+  @override
+  List<Object> get props => [items];
+}
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'staging_area.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+StagingArea _$StagingAreaFromJson(Map<String, dynamic> json) => StagingArea(
+  items: (json['items'] as List<dynamic>)
+      .map((e) => TierItem.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$StagingAreaToJson(StagingArea instance) =>
+    <String, dynamic>{'items': instance.items};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'json_map.dart';
+import 'package:flutter/material.dart';
+
+part 'tag.g.dart';
+
+enum TagType { positive, neutral, negative }
+
+const Map<TagType, Color> kColorMap = {
+    TagType.positive: Colors.green,
+    TagType.neutral: Colors.grey,
+    TagType.negative: Colors.red,
+  };
+
+@immutable
+@JsonSerializable()
+class Tag extends Equatable {
+  final TagType type;
+  final String text;
+  final String id;
+
+  const Tag({
+    required this.type,
+    required this.text,
+    required this.id,
+  });
+
+  Tag copyWith({
+    TagType? type,
+    String? text
+  }) {
+    return Tag(
+      id: id,
+      type: type ?? this.type,
+      text: text ?? this.text,
+    );
+  }
+
+  static Tag fromJson(JsonMap json) => _$TagFromJson(json);
+
+  JsonMap toJson() => _$TagToJson(this);
+
+  @override
+  List<Object> get props => [type, text, id];
+}// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tag.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
+  type: $enumDecode(_$TagTypeEnumMap, json['type']),
+  text: json['text'] as String,
+  id: json['id'] as String,
+);
+
+Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
+  'type': _$TagTypeEnumMap[instance.type]!,
+  'text': instance.text,
+  'id': instance.id,
+};
+
+const _$TagTypeEnumMap = {
+  TagType.positive: 'positive',
+  TagType.neutral: 'neutral',
+  TagType.negative: 'negative',
+};
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tier_lists_api/src/helpers/color_converter.dart';
+import 'json_map.dart';
+import 'tier_item.dart';
+import 'list_row.dart';
+
+part 'tier.g.dart';
+
+@immutable
+@JsonSerializable()
+class Tier extends ListRow {
+  const Tier({
+    required super.id,
+    required super.name,
+    required super.color,
+    required super.items,
+  });
+
+  Tier copyWith({
+    String? id,
+    String? name,
+    Color? color,
+    List<TierItem>? items,
+  }) {
+    return Tier(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+      items: items ?? List.from(this.items),
+    );
+  }
+
+  factory Tier.fromJson(JsonMap json) => _$TierFromJson(json);
+
+  @override
+  JsonMap toJson() {
+    final json = _$TierToJson(this);
+    return {...json, 'type': 'tier'};
+  }
+}
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tier.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  color: const ColorConverter().fromJson((json['color'] as num).toInt()),
+  items: (json['items'] as List<dynamic>)
+      .map((e) => TierItem.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$TierToJson(Tier instance) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'color': const ColorConverter().toJson(instance.color),
+  'items': instance.items,
+};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
+import 'json_map.dart';
+import 'tag.dart';
+
+part 'tier_item.g.dart';
+
+@immutable
+@JsonSerializable()
+class TierItem extends Equatable {
+  final String id;
+  final String? imageUrl;
+  final String name;
+  final String description;
+  final List<Tag> tags;
+
+  const TierItem({
+    required this.id,
+    required this.name,
+    this.description = '',
+    this.imageUrl,
+    required this.tags
+  });
+
+  TierItem copyWith({
+    String? id,
+    String? thumbnailUrl,
+    String? imageUrl,
+    String? name,
+    String? description,
+    List<Tag>? tags,
+  }) {
+    return TierItem(
+      id: id ?? this.id,
+      imageUrl: imageUrl ?? this.imageUrl,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      tags: tags ?? List.from(this.tags)
+    );
+  }
+
+  static TierItem fromJson(JsonMap json) => _$TierItemFromJson(json);
+
+  JsonMap toJson() => _$TierItemToJson(this);
+
+  @override
+  List<Object?> get props => [imageUrl, name, description, tags, id];
+} // GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tier_item.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TierItem _$TierItemFromJson(Map<String, dynamic> json) => TierItem(
+  id: json['id'] as String,
+  name: json['name'] as String,
+  description: json['description'] as String? ?? '',
+  imageUrl: json['imageUrl'] as String?,
+  tags: (json['tags'] as List<dynamic>)
+      .map((e) => Tag.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$TierItemToJson(TierItem instance) => <String, dynamic>{
+  'id': instance.id,
+  'imageUrl': instance.imageUrl,
+  'name': instance.name,
+  'description': instance.description,
+  'tags': instance.tags,
+};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'tier.dart';
+import 'tag.dart';
+import 'staging_area.dart';
+import 'json_map.dart';
+import 'package:flutter/material.dart';
+
+part 'tier_list.g.dart';
+
+const List<Tier> defaultTiers = [
+  Tier(
+    id: 's',
+    name: 'S',
+    color: Color(0xFFEF4444),
+    items: []
+  ),
+  Tier(
+    id: 'a',
+    name: 'A',
+    color: Color(0xFFF97316),
+    items: []
+  ),
+  Tier(
+    id: 'b',
+    name: 'B',
+    color: Color(0xFFEAB308),
+    items: []
+  ),
+  Tier(
+    id: 'c',
+    name: 'C',
+    color: Color(0xFF22C55E),
+    items: []
+  ),
+  Tier(
+    id: 'd',
+    name: 'D',
+    color: Color(0xFF3B82F6),
+    items: []
+  ),
+];
+
+@immutable
+@JsonSerializable()
+class TierList extends Equatable {
+  final String id;
+  final String title;
+  final String description;
+  final List<Tier> tiers;
+  final List<Tag> tags;
+  final StagingArea stagingArea;
+
+  const TierList({
+    required this.id,
+    required this.title,
+    this.description = '',
+    required this.tiers,
+    required this.tags,
+    required this.stagingArea
+  });
+
+  TierList copyWith({
+    String? id,
+    String? title,
+    String? description,
+    List<Tier>? tiers,
+    List<Tag>? tags,
+    StagingArea? stagingArea,
+  }) {
+    return TierList(
+      id: id ?? this.id, 
+      title: title ?? this.title, 
+      description: description ?? this.description,
+      tiers: tiers ?? List.from(this.tiers), 
+      tags: tags ?? List.from(this.tags), 
+      stagingArea: stagingArea ?? this.stagingArea
+    );
+  }
+
+  static TierList fromJson(JsonMap json) => _$TierListFromJson(json);
+
+  JsonMap toJson() => _$TierListToJson(this);
+
+  @override
+  List<Object> get props => [id, title, description, tiers, tags, stagingArea];
+}// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tier_list.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
+  id: json['id'] as String,
+  title: json['title'] as String,
+  description: json['description'] as String? ?? '',
+  tiers: (json['tiers'] as List<dynamic>)
+      .map((e) => Tier.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  tags: (json['tags'] as List<dynamic>)
+      .map((e) => Tag.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  stagingArea: StagingArea.fromJson(
+    json['stagingArea'] as Map<String, dynamic>,
+  ),
+);
+
+Map<String, dynamic> _$TierListToJson(TierList instance) => <String, dynamic>{
+  'id': instance.id,
+  'title': instance.title,
+  'description': instance.description,
+  'tiers': instance.tiers,
+  'tags': instance.tags,
+  'stagingArea': instance.stagingArea,
+};
+import 'models/tier_list.dart';
+
+abstract class RemoteTierListsApi {
+  Future<List<TierList>> searchTierLists();
+
+  Future<void> saveTierList(TierList tierList);
+
+  Future<void> deleteTierList(String id);
+}export 'src/models/models.dart';
+export 'src/local_tier_lists_api.dart';
+export 'src/remote_tier_lists_api.dart';import 'package:tier_lists_api/tier_lists_api.dart';
+
+class TierListsRepository {
+  final LocalTierListsApi _localTierListsApi;
+
+  const TierListsRepository({required LocalTierListsApi localTierListsApi})
+    : _localTierListsApi = localTierListsApi;
+
+  Stream<List<TierList>> getTierLists() => _localTierListsApi.getTierLists();
+
+  Stream<TierList> getTierList(String id) => _localTierListsApi.getTierList(id);
+
+  Future<void> saveTierList(TierList tierList) =>
+      _localTierListsApi.saveTierList(tierList);
+
+  Future<void> deleteTierList(String id) =>
+      _localTierListsApi.deleteTierList(id);
+
+  void dispose() => _localTierListsApi.close();
+}
+export 'package:tier_lists_api/tier_lists_api.dart';
+export 'src/tier_lists_repository.dart';

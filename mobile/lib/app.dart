@@ -10,10 +10,12 @@ import 'package:tier_lists_repository/tier_lists_repository.dart';
 
 class App extends StatelessWidget {
   final LocalTierListsApi localTierListsApi;
+  final RemoteTierListsApi remoteTierListsApi;
 
   const App({
     super.key,
-    required this.localTierListsApi
+    required this.localTierListsApi,
+    required this.remoteTierListsApi,
   });
 
   @override
@@ -25,9 +27,12 @@ class App extends StatelessWidget {
           dispose: (repository) => repository.dispose(),
         ),
         RepositoryProvider(
-          create: (_) => TierListsRepository(localTierListsApi: localTierListsApi),
+          create: (_) => TierListsRepository(
+            localTierListsApi: localTierListsApi,
+            remoteTierListsApi: remoteTierListsApi,
+          ),
           dispose: (repository) => repository.dispose(),
-        )
+        ),
       ],
       child: BlocProvider(
         lazy: false,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/item_details/bloc/item_details_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
-import 'package:uuid/uuid.dart';
 
 class EditTagDialog extends StatefulWidget {
   final Tag? _tag;
@@ -18,18 +17,17 @@ class EditTagDialog extends StatefulWidget {
 
 class _EditTagDialogState extends State<EditTagDialog> {
   late final TextEditingController _textController;
-  bool _isButtonDisabled = true;
-  TagType _selectedType = TagType.neutral;
+  late bool _isButtonDisabled;
+  late TagType _selectedType;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget._tag != null) {
-      _selectedType = widget._tag!.type;
-    }
-
+    _selectedType = widget._tag == null ? TagType.neutral : widget._tag!.type;
     _textController = TextEditingController(text: widget._tag?.text ?? '');
+    _isButtonDisabled = _textController.text.isEmpty;
+
     _textController.addListener(() {
       setState(() {
         _isButtonDisabled = _textController.text.isEmpty;
@@ -50,8 +48,10 @@ class _EditTagDialogState extends State<EditTagDialog> {
       content: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _createChoiceChip(TagType.positive),
                 _createChoiceChip(TagType.neutral),
@@ -73,7 +73,7 @@ class _EditTagDialogState extends State<EditTagDialog> {
               ? null
               : () {
                   final newTag = Tag(
-                    id: widget._tag?.id ?? const Uuid().v4(),
+                    id: widget._tag?.id,
                     text: _textController.text,
                     type: _selectedType,
                   );
@@ -106,7 +106,7 @@ class _EditTagDialogState extends State<EditTagDialog> {
     } else if (type == TagType.negative) {
       label = '-';
     } else {
-      label = '';
+      label = 'o';
     }
 
     return ChoiceChip(

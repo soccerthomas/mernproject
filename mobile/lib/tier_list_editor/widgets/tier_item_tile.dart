@@ -45,7 +45,7 @@ class TierItemTile extends StatelessWidget {
     } else {
       child = CachedNetworkImage(
         imageUrl: item.imageUrl!,
-        fit: BoxFit.cover,
+        fit: BoxFit.contain,
         placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
         errorWidget: (context, url, error) => const Icon(Icons.error),

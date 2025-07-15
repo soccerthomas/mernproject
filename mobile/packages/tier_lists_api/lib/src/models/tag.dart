@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'json_map.dart';
 import 'package:flutter/material.dart';
 
@@ -18,13 +19,15 @@ const Map<TagType, Color> kColorMap = {
 class Tag extends Equatable {
   final TagType type;
   final String text;
+
+  @JsonKey(includeToJson: false)
   final String id;
 
-  const Tag({
+  Tag({
     required this.type,
     required this.text,
-    required this.id,
-  });
+    String? id,
+  }) : id = id ?? const Uuid().v4();
 
   Tag copyWith({
     TagType? type,
