@@ -70,7 +70,7 @@ function CreateTierList()
             unassignedItems: items,
             globalTags: tags
         };
-        const jwt = localStorage.getItem("userJWT");
+        const jwt = localStorage.getItem("token");
         try {
             const response = await fetch('api/tierlist', {
                 method: 'POST',
