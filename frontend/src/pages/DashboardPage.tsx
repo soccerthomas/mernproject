@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import TierListLogo from "../images/TierListLogo.png";
+import { useNavigate } from "react-router-dom";
 
 
 interface ItemStructure
@@ -40,7 +41,8 @@ const Dashboard: React.FC = () => {
   const [isDeleteCardModalOpen, setDeleteCardModalOpen] = useState(false);
   const closeDeleteCardModal = () => { setDeleteCardModalOpen(false); }
   const [deleteItem, setDeleteItem] = useState<TierList>();
-  
+
+  const navigate = useNavigate();
 
   async function loadTierLists() 
   {
@@ -90,8 +92,12 @@ const Dashboard: React.FC = () => {
   //   { id: "3", name: "Programming Languages Tier" },
   // ]);
 
+  const handleEdit = (tierlist: TierList) => {
+    navigate(`/createTierList?edit=${tierlist._id}`);
+  };
   const handleAddTierlist = () => {
     console.log("Navigating to Add Tierlist page...");
+    navigate('/createTierList');
   };
 
   return (
@@ -145,7 +151,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-200 mb-4">
+          <h2 className="text-2xl font-semibold text-white mb-4">
             Current Tierlists
           </h2>
           {tierLists.length > 0 ? (
@@ -164,13 +170,13 @@ const Dashboard: React.FC = () => {
                   <h3 className="text-xl font-semibold mb-2">
                     {tierList.title}
                   </h3>
-                  <p className="text-gray-400">Click to view details</p>
+                  <p className="text-white">Click to view details</p>
                 </div>
               ))}
             </div>
           ) : (
             <div className="text-center py-12 bg-gray-700 rounded-lg shadow-lg">
-              <p className="text-xl text-gray-400">
+              <p className="text-xl text-white">
                 No Tierlists available. Click "Add New Tierlist" to create one!
               </p>
             </div>
@@ -206,13 +212,13 @@ const Dashboard: React.FC = () => {
                                   <div className="invisible group-hover:visible absolute z-50 bg-gray-900 text-white text-xs rounded-lg p-2 mt-1 shadow-lg max-w-xs">
                                     <div className="font-semibold">{item.name}</div>
                                     {item.description && (
-                                      <div className="text-gray-300 mt-1">{item.description}</div>
+                                      <div className="text-white mt-1">{item.description}</div>
                                     )}
                                   </div>
                                 </div>
                               ))
                             ) : (
-                              <div className="text-gray-400 text-center w-full py-8">
+                              <div className="text-white text-center w-full py-8">
                                 No items in this tier
                               </div>
                             )}
@@ -234,7 +240,16 @@ const Dashboard: React.FC = () => {
                   </button>
                   
                   <div className="flex gap-3">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
+                            onClick={ () => 
+                              {
+                                setListModalOpen(false);
+                                if(currentList)
+                                {
+                                  handleEdit(currentList);
+                                }
+                              }
+                            }>
                       Edit Tier List
                     </button>
                     <button className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 shadow-md hover:shadow-lg"
@@ -299,7 +314,7 @@ const Dashboard: React.FC = () => {
           <h1 className="pt-8 font-semibold text-white lg:text-2xl sm:text-xl">
             About Tier List Maker
           </h1>
-          <p className="mt-4 text-md font-medium text-pretty text-gray-400 sm:text-md">
+          <p className="mt-4 text-md font-medium text-pretty text-white sm:text-md">
             Create and share easily accessible tier lists of all of your
             favorite subjects. You can create tier lists for movies, TV shows,
             video games, etc.

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from "react-router-dom";
 import TierListLogo from '../images/TierListLogo.png';
 
 interface ItemStructure
@@ -13,6 +13,20 @@ interface TagStructure
 {
     name:string;
     status:string;
+}
+interface CategoriesStructure
+{
+    name:string;
+    color:string;
+    items:Array<ItemStructure>;
+}
+interface TierList {
+  _id: string
+  title: string,
+  description: string,
+  categories: Array<CategoriesStructure>,
+  unassignedItems: Array<ItemStructure>,
+  globalTags: Array<TagStructure>
 }
 
 function CreateTierList()
@@ -55,35 +69,122 @@ function CreateTierList()
     const closeNewTagModal = () => { newTagModalOpen(false); }
 
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    
+    // const [categories, setCategories] = useState<CategoriesStructure>();
+    // const [unassignedItems, setUnassignedItems] = useState([]);
+    // const [globalTags, setGlobalTags] = useState([]);
+    
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingId, setEditingId] = useState<string>();
+    // const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const editId = searchParams.get('edit');
+        if(editId)
+        {
+            setIsEditing(true);
+            setEditingId(editId);
+            fetchEdit(editId)
+        }
+    }, [searchParams]);
+
+    async function fetchEdit(tierListId: string)
+    {
+        try
+        {
+            const jwt = localStorage.getItem("token");
+            const response = await fetch(`api/tierlist/${tierListId}`, {
+                headers: {
+                    "x-auth-token": `${jwt}`
+                },
+            });
+            const tierlist = await response.json();
+            if(response.ok)
+            {
+                setTierListTitle(tierlist.title || "");
+                setTierListDescription(tierlist.description || "");
+                setSTierCards(tierlist.categories[0].items || []);
+                setATierCards(tierlist.categories[1].items || []);
+                setBTierCards(tierlist.categories[2].items || []);
+                setCTierCards(tierlist.categories[3].items || []);
+                setDTierCards(tierlist.categories[4].items || []);
+                setItems(tierlist.items || []);
+                setTags(tierlist.tags || []);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
     
     async function saveTierList() 
     {
-        const categories = [{name: "S", items: sTierCards}, 
-                            {name: "A", items: aTierCards}, 
-                            {name: "B", items: bTierCards}, 
-                            {name: "C", items: cTierCards}, 
-                            {name: "D", items: dTierCards}]
-        const send = {
+        const categories = [{name: "S", color: "bg-red-500", items: sTierCards}, 
+                            {name: "A", color: "bg-orange-500", items: aTierCards}, 
+                            {name: "B", color: "bg-yellow-500", items: bTierCards}, 
+                            {name: "C", color: "bg-green-500", items: cTierCards}, 
+                            {name: "D", color: "bg-blue-500", items: dTierCards}]
+        // const send = {
+        //     tierListTitle,
+        //     tierListDescription,
+        //     categories,
+        //     items,
+        //     tags
+        // };
+        const data = {
             title: tierListTitle,
             description: tierListDescription,
             categories: categories,
             unassignedItems: items,
             globalTags: tags
         };
+        if(isEditing && editingId)
+        {
+            const response = await updateTierList(editingId, data);
+            if(response)
+            {
+                navigate('/dashboard');
+                setShowInfoModal(false);
+            }
+        } else {    
+            const jwt = localStorage.getItem("token");
+            try {
+                
+                const response = await fetch('api/tierlist', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-auth-token": `${jwt}`
+                    },
+                    body: JSON.stringify(data),
+                });
+                if(response.ok)
+                {
+                    // const savedTierList = await response.json();
+                    navigate('/dashboard');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    } 
+
+    async function updateTierList(tierListId: string, updated: Partial<TierList>) 
+    {
         const jwt = localStorage.getItem("token");
         try {
-            const response = await fetch('api/tierlist', {
-                method: 'POST',
+            const response = await fetch(`api/tierlist/${tierListId}`, {
+                method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
                     "x-auth-token": `${jwt}`
                 },
-                body: JSON.stringify(send),
+                body: JSON.stringify(updated),
             });
             if(response.ok)
             {
-                // const savedTierList = await response.json();
-                navigate('/dashboard');
+                const updatedTierList = await response.json();
+                return updatedTierList;
             }
         } catch (error) {
             console.error(error);
