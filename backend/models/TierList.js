@@ -9,7 +9,7 @@ const tagSchema = new mongoose.Schema({
     },
     color: {
         type: String,
-        default: "#3B82F6" // Default blue color
+        default: "border-gray-500"
     }
 });
 
@@ -26,11 +26,7 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
-    // Per-item tags - references to global tags
-    tags: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tag'
-    }]
+    tags: [tagSchema]
 });
 
 const categorySchema = new mongoose.Schema({

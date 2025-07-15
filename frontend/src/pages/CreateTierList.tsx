@@ -8,11 +8,12 @@ interface ItemStructure
     name:string;
     image:string;
     description:string;
+    tags: Array<TagStructure>;
 }
 interface TagStructure
 {
     name:string;
-    status:string;
+    color:string;
 }
 interface CategoriesStructure
 {
@@ -41,6 +42,7 @@ function CreateTierList()
     const [itemName, setItemName] = useState('');
     const [itemImage, setItemImage] = useState('');
     const [itemDescription, setItemDescription] = useState('');
+    const [itemTags, setItemTags] = useState<TagStructure[]>([]);
 
     const openNewCardModal = () => { newCardModalOpen(true); }
     const closeNewCardModal = () => { newCardModalOpen(false); }
@@ -60,7 +62,7 @@ function CreateTierList()
     const [currentEdit, setCurrentEdit] = useState<ItemStructure>();
     const [deleteItem, setDeleteItem] = useState<ItemStructure>();
 
-    const [tags, setTags] = useState<TagStructure[]>([]);
+    // const [tags, setTags] = useState<TagStructure[]>([]);
     const [tagName, setTagName] = useState('');
     //const [tagStatus, setTagStatus] = useState('');
 
@@ -71,13 +73,8 @@ function CreateTierList()
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     
-    // const [categories, setCategories] = useState<CategoriesStructure>();
-    // const [unassignedItems, setUnassignedItems] = useState([]);
-    // const [globalTags, setGlobalTags] = useState([]);
-    
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState<string>();
-    // const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const editId = searchParams.get('edit');
@@ -110,7 +107,7 @@ function CreateTierList()
                 setCTierCards(tierlist.categories[3].items || []);
                 setDTierCards(tierlist.categories[4].items || []);
                 setItems(tierlist.items || []);
-                setTags(tierlist.tags || []);
+                // setTags(tierlist.tags || []);
             }
         } catch (error) {
             console.error(error);
@@ -124,19 +121,12 @@ function CreateTierList()
                             {name: "B", color: "bg-yellow-500", items: bTierCards}, 
                             {name: "C", color: "bg-green-500", items: cTierCards}, 
                             {name: "D", color: "bg-blue-500", items: dTierCards}]
-        // const send = {
-        //     tierListTitle,
-        //     tierListDescription,
-        //     categories,
-        //     items,
-        //     tags
-        // };
         const data = {
             title: tierListTitle,
             description: tierListDescription,
             categories: categories,
             unassignedItems: items,
-            globalTags: tags
+            // globalTags: tags
         };
         if(isEditing && editingId)
         {
@@ -144,7 +134,6 @@ function CreateTierList()
             if(response)
             {
                 navigate('/dashboard');
-                setShowInfoModal(false);
             }
         } else {    
             const jwt = localStorage.getItem("token");
@@ -191,63 +180,28 @@ function CreateTierList()
         }
     } 
 
-    function handleArrowClick(tag: TagStructure, direction: String)
-    {
-        if((tag.status == "bg-red-500" && direction == "up") || (tag.status == "bg-green-500" && direction == "down"))
-        {
-            setTags(tags.map(curr =>
-                {
-                if(curr.name == tag.name)
-                    {
-                        return {
-                            ...curr,
-                            status: "bg-yellow-500"
-                        };
-                    }
-                    else
-                    {
-                        return curr;
-                    }
-                }   
-            ));
-        }
-        if(tag.status == "bg-yellow-500" && direction == "up")
-        {
-            setTags(tags.map(curr =>
-                {
-                if(curr.name == tag.name)
-                    {
-                        return {
-                            ...curr,
-                            status: "bg-green-500"
-                        };
-                    }
-                    else
-                    {
-                        return curr;
-                    }
-                }   
-            ));
-        }
-        if(tag.status == "bg-yellow-500" && direction == "down")
-        {
-            setTags(tags.map(curr =>
-                {
-                if(curr.name == tag.name)
-                    {
-                        return {
-                            ...curr,
-                            status: "bg-red-500"
-                        };
-                    }
-                    else
-                    {
-                        return curr;
-                    }
-                }   
-            ));
-        }
+    function handleTagClick(tag: TagStructure) {
+        const updatedTags = itemTags.map(curr => {
+            if (curr.name === tag.name) {
+                let newColor = "border-gray-500";
+                if (tag.color === "border-gray-500") {
+                    newColor = "border-green-500 text-lg";
+                } else if (tag.color === "border-green-500 text-lg") {
+                    newColor = "border-red-500 text-lg";
+                }
+                return { ...curr, color: newColor };
+            }
+            return curr;
+        });
+        setItemTags(updatedTags);
     }
+    const getStatusText = (color: string) => {
+        switch(color) {
+            case "border-green-500 text-lg": return "+";
+            case "border-red-500 text-lg": return "–";
+            case "border-gray-500": return "○";
+        }
+    };
 
     function handleEditOpen(item: ItemStructure | undefined)
     {
@@ -258,6 +212,7 @@ function CreateTierList()
             setItemName(item.name);
             setItemImage(item.image);
             setItemDescription(item.description);
+            setItemTags([...item.tags]);
         }        
     }
     function handleEditSave()
@@ -272,7 +227,8 @@ function CreateTierList()
                             ...item,
                             name: itemName,
                             image: itemImage,
-                            description: itemDescription
+                            description: itemDescription,
+                            tags: itemTags
                         };
                     }
                     else
@@ -289,7 +245,8 @@ function CreateTierList()
                             ...item,
                             name: itemName,
                             image: itemImage,
-                            description: itemDescription
+                            description: itemDescription,
+                            tags: itemTags
                         };
                     }
                     else
@@ -306,7 +263,8 @@ function CreateTierList()
                             ...item,
                             name: itemName,
                             image: itemImage,
-                            description: itemDescription
+                            description: itemDescription,
+                            tags: itemTags
                         };
                     }
                     else
@@ -323,7 +281,8 @@ function CreateTierList()
                             ...item,
                             name: itemName,
                             image: itemImage,
-                            description: itemDescription
+                            description: itemDescription,
+                            tags: itemTags
                         };
                     }
                     else
@@ -340,7 +299,8 @@ function CreateTierList()
                             ...item,
                             name: itemName,
                             image: itemImage,
-                            description: itemDescription
+                            description: itemDescription,
+                            tags: itemTags
                         };
                     }
                     else
@@ -357,7 +317,8 @@ function CreateTierList()
                             ...item,
                             name: itemName,
                             image: itemImage,
-                            description: itemDescription
+                            description: itemDescription,
+                            tags: itemTags
                         };
                     }
                     else
@@ -370,6 +331,7 @@ function CreateTierList()
             setItemName('');
             setItemImage('');
             setItemDescription('');
+            setItemTags([]);
 
             setCurrentEdit(undefined);
         }
@@ -507,10 +469,10 @@ function CreateTierList()
     {
         const newTag = {
             name: tagName,
-            status: "bg-yellow-500",
+            color: "border-gray-500",
         }
 
-        setTags([...tags, newTag]);
+        setItemTags([...itemTags, newTag]);
 
         setTagName('');
 
@@ -523,6 +485,7 @@ function CreateTierList()
             name: itemName,
             image: itemImage,
             description: itemDescription,
+            tags: itemTags
         };
 
         setItems([...items, newItem]);
@@ -530,6 +493,7 @@ function CreateTierList()
         setItemName('');
         setItemImage('');
         setItemDescription('');
+        setItemTags([]);
 
         closeNewCardModal();
     }
@@ -538,6 +502,7 @@ function CreateTierList()
         setItemName('');
         setItemImage('');
         setItemDescription('');
+        setItemTags([]);
 
         closeNewCardModal();
     }
@@ -907,14 +872,12 @@ function CreateTierList()
                                         />
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {tags.map((tag, idx) => (
-                                            <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
-                                                <div className="text-sm">{tag.name}</div>
-                                                <div className="flex flex-col">
-                                                    <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
-                                                    <button disabled className={`${tag.status} rounded-md p-3`} />
-                                                    <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
-                                                </div>
+                                        {itemTags.map((tag, idx) => (
+                                            <div key={idx} 
+                                                onClick={() => handleTagClick(tag)}
+                                                className={`${tag.color} cursor-pointer flex items-center text-white gap-2 shadow-lg border-4 bg-gray-800 p-4 pt-1 pb-1 rounded-3xl`}>
+                                                <div className="text-lg">{tag.name}</div>
+                                                <div>{getStatusText(tag.color)}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -983,14 +946,12 @@ function CreateTierList()
                                         />
                                     </div>
                                     <div className="flex flex-wrap gap-2">
-                                        {tags.map((tag, idx) => (
-                                            <div key={idx} className="flex items-center text-white gap-4 border-2 border-white p-4 pt-1 pb-1 rounded-md">
-                                                <div className="text-sm">{tag.name}</div>
-                                                <div className="flex flex-col">
-                                                    <button onClick={() => handleArrowClick(tag, 'up')}>+</button>
-                                                    <button disabled className={`${tag.status} rounded-md p-3`} />
-                                                    <button onClick={() => handleArrowClick(tag, 'down')} className="-mt-[2px]">-</button>
-                                                </div>
+                                        {itemTags.map((tag, idx) => (
+                                            <div key={idx} 
+                                                onClick={() => handleTagClick(tag)}
+                                                className={`${tag.color} cursor-pointer flex items-center text-white gap-2 shadow-lg border-4 bg-gray-800 p-4 pt-1 pb-1 rounded-3xl`}>
+                                                <div className="text-lg">{tag.name}</div>
+                                                <div>{getStatusText(tag.color)}</div>
                                             </div>
                                         ))}
                                     </div>
@@ -1117,6 +1078,20 @@ function CreateTierList()
                                                 </div>
                                             </div>
                                         </div>
+                                        {currentView?.tags && currentView.tags.length > 0 && (
+                                            <div className="mt-4">
+                                                <h4 className="text-lg font-semibold text-white mb-2">Tags:</h4>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {currentView.tags.map((tag, idx) => (
+                                                        <div key={idx} 
+                                                            className={`${tag.color} flex items-center text-white gap-2 shadow-lg border-4 bg-gray-800 p-2 rounded-3xl`}>
+                                                            <div className="text-sm">{tag.name}</div>
+                                                            <div className="text-sm">{getStatusText(tag.color)}</div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
