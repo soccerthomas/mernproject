@@ -24,6 +24,7 @@ router.get('/search', jwtAuth, async (req, res) => {
         
         const tierList = await TierList.find({ 
             title: {$regex: title, $options: 'i'},
+            user: req.user.id
         });
         res.json(tierList);
     } catch(error) {
