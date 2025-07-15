@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TierListLogo from '../images/TierListLogo.png';
+import ColorSymbol from '../images/ColorSymbol.png';
 
 interface ItemStructure
 {
@@ -36,6 +37,7 @@ function CreateTierList()
     const [isViewCardOpen, viewCardOpen] = useState(false);
     const [isEditCardModalOpen, setEditCardModalOpen] = useState(false);
     const [isDeleteCardModalOpen, setDeleteCardModalOpen] = useState(false);
+    const [isColorModalOpen, colorModalOpen] = useState(false);
     const [showInfoModal, setShowInfoModal] = useState(true);
     const [tierListTitle, setTierListTitle] = useState('');
     const [tierListDescription, setTierListDescription] = useState('');
@@ -75,6 +77,45 @@ function CreateTierList()
     
     const [isEditing, setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState<string>();
+
+    const [selectedCategory, setSelectedCategory] = useState('');    
+    const [selectedColorS, setSelectedColorS] = useState('bg-red-500');
+    const [selectedColorA, setSelectedColorA] = useState('bg-orange-500');
+    const [selectedColorB, setSelectedColorB] = useState('bg-yellow-500');
+    const [selectedColorC, setSelectedColorC] = useState('bg-green-500');
+    const [selectedColorD, setSelectedColorD] = useState('bg-blue-500');
+
+    const colorOptions = [
+        'bg-red-500', 'bg-orange-500', 'bg-green-500', 'bg-blue-500',
+        'bg-purple-500', 'bg-pink-500', 'bg-yellow-500', 'bg-amber-500',
+        'bg-lime-500', 'bg-emerald-500', 'bg-teal-500', 'bg-sky-500',
+        'bg-cyan-500', 'bg-black', 'bg-violet-500', 'bg-fuchsia-500',
+        'bg-rose-500', 'bg-indigo-500', 'bg-zinc-500', 'bg-stone-500',
+    ];
+
+    function handleColorSelect(color: string)
+    {
+        if(selectedCategory == "S")
+        {
+            setSelectedColorS(color);
+        }
+        if(selectedCategory == "A")
+        {
+            setSelectedColorA(color);
+        }
+        if(selectedCategory == "B")
+        {
+            setSelectedColorB(color);
+        }
+        if(selectedCategory == "C")
+        {
+            setSelectedColorC(color);
+        }
+        if(selectedCategory == "D")
+        {
+            setSelectedColorD(color);
+        }
+    }
 
     useEffect(() => {
         const editId = searchParams.get('edit');
@@ -116,11 +157,11 @@ function CreateTierList()
     
     async function saveTierList() 
     {
-        const categories = [{name: "S", color: "bg-red-500", items: sTierCards}, 
-                            {name: "A", color: "bg-orange-500", items: aTierCards}, 
-                            {name: "B", color: "bg-yellow-500", items: bTierCards}, 
-                            {name: "C", color: "bg-green-500", items: cTierCards}, 
-                            {name: "D", color: "bg-blue-500", items: dTierCards}]
+        const categories = [{name: "S", color: selectedColorS, items: sTierCards}, 
+                            {name: "A", color: selectedColorA, items: aTierCards}, 
+                            {name: "B", color: selectedColorB, items: bTierCards}, 
+                            {name: "C", color: selectedColorC, items: cTierCards}, 
+                            {name: "D", color: selectedColorD, items: dTierCards}]
         const data = {
             title: tierListTitle,
             description: tierListDescription,
@@ -541,15 +582,22 @@ function CreateTierList()
             <div className="flex justify-center text-5xl text-white mt-[20px]">{tierListTitle}</div>
             <div className="flex justify-center text-xl text-white mt-[20px]">{tierListDescription}</div>
             
-            <div className="mx-auto h-auto flex flex-col pt-[20px] p-[100px] gap-y-[50px]">
-                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
-                    <div className="flex items-stretch min-h-[120px] gap-6">
-                        <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-red-500">
+            <div className="mx-auto h-auto flex flex-col pt-[20px] p-[80px] gap-y-[20px]">
+                <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-12">
+                        <div className="w-24 flex items-center justify-center gap-3">
+                            <img src={ColorSymbol}
+                                    onClick={() => {
+                                        colorModalOpen(true);
+                                        setSelectedCategory("S");
+                                    }}
+                                    className="h-8 w-auto cursor-pointer">
+                                    </img>
+                            <div className={`${selectedColorS} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}>
                                 S
                             </div>
                         </div>
-                        <div className="flex-1 bg-red-500 rounded-xl p-4"
+                        <div className={`${selectedColorS} flex-1 rounded-xl p-4`}
                             onDragOver={handleDragOver}
                             onDrop={handleOnDropS}>
                             <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
@@ -573,7 +621,7 @@ function CreateTierList()
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-white text-center w-full py-10">
+                                    <div className="text-white text-center w-full">
                                         No items in this tier
                                     </div>
                                 )}
@@ -581,14 +629,21 @@ function CreateTierList()
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
-                    <div className="flex items-stretch min-h-[120px] gap-6">
-                        <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-orange-500">
+                <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-12">
+                        <div className="w-24 flex items-center justify-center gap-3">
+                            <img src={ColorSymbol}
+                                    onClick={() => {
+                                        colorModalOpen(true);
+                                        setSelectedCategory("A");
+                                    }}
+                                    className="h-8 w-auto cursor-pointer">
+                                    </img>
+                            <div className={`${selectedColorA} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}>
                                 A
                             </div>
                         </div>
-                        <div className="flex-1 bg-orange-500 rounded-xl p-4"
+                        <div className={`${selectedColorA} flex-1 rounded-xl p-4`}
                             onDragOver={handleDragOver}
                             onDrop={handleOnDropA}>
                             <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
@@ -612,7 +667,7 @@ function CreateTierList()
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-white text-center w-full py-10">
+                                    <div className="text-white text-center w-full">
                                         No items in this tier
                                     </div>
                                 )}
@@ -620,14 +675,21 @@ function CreateTierList()
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
-                    <div className="flex items-stretch min-h-[120px] gap-6">
-                        <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-yellow-500">
+                <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-12">
+                        <div className="w-24 flex items-center justify-center gap-3">
+                            <img src={ColorSymbol}
+                                    onClick={() => {
+                                        colorModalOpen(true);
+                                        setSelectedCategory("B");
+                                    }}
+                                    className="h-8 w-auto cursor-pointer">
+                                    </img>
+                            <div className={`${selectedColorB} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}>
                                 B
                             </div>
                         </div>
-                        <div className="flex-1 bg-yellow-500 rounded-xl p-4"
+                        <div className={`${selectedColorB} flex-1 rounded-xl p-4`}
                             onDragOver={handleDragOver}
                             onDrop={handleOnDropB}>
                             <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
@@ -651,7 +713,7 @@ function CreateTierList()
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-white text-center w-full py-10">
+                                    <div className="text-white text-center w-full">
                                         No items in this tier
                                     </div>
                                 )}
@@ -659,14 +721,21 @@ function CreateTierList()
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
-                    <div className="flex items-stretch min-h-[120px] gap-6">
-                        <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-green-500">
+                <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-12">
+                        <div className="w-24 flex items-center justify-center gap-3">
+                            <img src={ColorSymbol}
+                                    onClick={() => {
+                                        colorModalOpen(true);
+                                        setSelectedCategory("C");
+                                    }}
+                                    className="h-8 w-auto cursor-pointer">
+                                    </img>
+                            <div className={`${selectedColorC} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}>
                                 C
                             </div>
                         </div>
-                        <div className="flex-1 bg-green-500 rounded-xl p-4"
+                        <div className={`${selectedColorC} flex-1 rounded-xl p-4`}
                             onDragOver={handleDragOver}
                             onDrop={handleOnDropC}>
                             <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
@@ -690,7 +759,7 @@ function CreateTierList()
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-white text-center w-full py-10">
+                                    <div className="text-white text-center w-full">
                                         No items in this tier
                                     </div>
                                 )}
@@ -698,14 +767,21 @@ function CreateTierList()
                         </div>
                     </div>
                 </div>
-                <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
-                    <div className="flex items-stretch min-h-[120px] gap-6">
-                        <div className="w-24 flex items-center justify-center">
-                            <div className="text-white font-bold text-3xl py-[50px] px-[60px] rounded-xl flex items-center justify-center w-full bg-blue-500">
+                <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
+                    <div className="flex items-stretch min-h-[120px] gap-12">
+                        <div className="w-24 flex items-center justify-center gap-3">
+                            <img src={ColorSymbol}
+                                    onClick={() => {
+                                        colorModalOpen(true);
+                                        setSelectedCategory("D");
+                                    }}
+                                    className="h-8 w-auto cursor-pointer">
+                                    </img>
+                            <div className={`${selectedColorD} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}>
                                 D
                             </div>
                         </div>
-                        <div className="flex-1 bg-blue-500 rounded-xl p-4"
+                        <div className={`${selectedColorD} flex-1 rounded-xl p-4`}
                             onDragOver={handleDragOver}
                             onDrop={handleOnDropD}>
                             <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
@@ -729,7 +805,7 @@ function CreateTierList()
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-white text-center w-full py-10">
+                                    <div className="text-white text-center w-full">
                                         No items in this tier
                                     </div>
                                 )}
@@ -766,7 +842,7 @@ function CreateTierList()
                                 </div>
                             ))
                         )}
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white rounded-xl px-4 py-2 absolute top-[10px] right-[10px] font-medium transition-colors duration-200 shadow-md hover:shadow-lg" 
+                        <button className="bg-gray-700 hover:bg-gray-600 text-white rounded-xl px-4 py-2 absolute top-[10px] right-[10px] font-medium transition-colors duration-200 shadow-xl hover:shadow-2xl" 
                             onClick={openNewCardModal}>
                             +
                         </button>
@@ -1044,6 +1120,31 @@ function CreateTierList()
                                 </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                )}
+                {isColorModalOpen && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+                        <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
+                            <h2 className="text-lg font-semibold mb-4 text-center text-white">Pick a Color</h2>
+                            <div className="grid grid-cols-4 gap-3 gap-x-10 mx-auto w-fit">
+                                {colorOptions.map((color, idx) => (
+                                    <button
+                                    key={idx}
+                                    onClick={() => {
+                                        handleColorSelect(color);
+                                        colorModalOpen(false);
+                                    }}
+                                    className={`${color} w-10 h-10 rounded-full border-2 border-gray-600 hover:scale-110 transition-transform`}
+                                    />
+                                ))}
+                            </div>
+                            <button
+                            onClick={() => colorModalOpen(false)}
+                            className="mt-5 w-full py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                            >
+                            Cancel
+                            </button>
                         </div>
                     </div>
                 )}
