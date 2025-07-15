@@ -1,9 +1,6 @@
-// this is just an example file for our dashboard, we will need to rewrite this********
-
 import React, { useState, useEffect } from "react";
 import TierListLogo from "../images/TierListLogo.png";
 import { useNavigate } from "react-router-dom";
-
 
 interface ItemStructure
 {
@@ -44,6 +41,7 @@ const Dashboard: React.FC = () => {
 
   const [searchTitle, setsearchTitle] = useState<string>();
 
+  const [searched, setSearched] = useState(false);
 
   const navigate = useNavigate();
 
@@ -100,18 +98,13 @@ const Dashboard: React.FC = () => {
         {
             const tierLists = await response.json()
             setTierLists(tierLists);
+            setSearched(true);
         }
     } catch (error) {
         console.error(error);
     }
   } 
   useEffect(() => { loadTierLists(); }, []);
-  //const [tierLists, setTierLists] = useState<TierList[]>([
-  // const [tierLists] = useState<TierList[]>([
-  //   { id: "1", name: "My Favorite Games Tier List" },
-  //   { id: "2", name: "Best Movies of 2024" },
-  //   { id: "3", name: "Programming Languages Tier" },
-  // ]);
 
   const handleEdit = (tierlist: TierList) => {
     navigate(`/createTierList?edit=${tierlist._id}`);
@@ -179,14 +172,23 @@ const Dashboard: React.FC = () => {
             <input className="w-full rounded-xl px-2 py-1 text-black" 
                     placeholder = "Enter tier list title..."
                     onChange={(e) => setsearchTitle(e.target.value)}/>
-            <button className="rounded-xl px-2 py-1 bg-green-500"
-                    onClick={() => {
-                        if(searchTitle)
-                        {
-                          searchTierLists(searchTitle)
+            <div className="flex gap-4">
+              <button className="rounded-xl px-2 py-1 bg-green-500"
+                      onClick={() => {
+                          if(searchTitle)
+                          {
+                            searchTierLists(searchTitle)
+                          }
                         }
-                      }
-                    }>Search</button>
+                      }>Search</button>
+              {searched && (
+                <button className="rounded-xl px-4 py-1 bg-purple-500 whitespace-nowrap"
+                        onClick={() => { 
+                          loadTierLists(); 
+                          setSearched(false);
+                        }}>Show All</button>
+              )}
+            </div>
           </div>
           {tierLists.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative">
@@ -207,6 +209,12 @@ const Dashboard: React.FC = () => {
                   <p className="text-white">Click to view details</p>
                 </div>
               ))}
+            </div>
+          ) : searched ? (
+            <div className="text-center py-12 bg-gray-700 rounded-lg shadow-lg">
+              <p className="text-xl text-white">
+                No Tierlists found.
+              </p>
             </div>
           ) : (
             <div className="text-center py-12 bg-gray-700 rounded-lg shadow-lg">
