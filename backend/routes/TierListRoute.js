@@ -21,11 +21,20 @@ router.get('/', jwtAuth, async (req, res) => {
 router.get('/search', jwtAuth, async (req, res) => {
     try {
         const {title} = req.query;
+        if(title == "")
+        {
+            const tierList = await TierList.find({ 
+                user: req.user.id
+            });
+        }
+        else
+        {
+            const tierList = await TierList.find({ 
+                title: {$regex: title, $options: 'i'},
+                user: req.user.id
+            });
+        }
         
-        const tierList = await TierList.find({ 
-            title: {$regex: title, $options: 'i'},
-            user: req.user.id
-        });
         res.json(tierList);
     } catch(error) {
         return res.status(500).json({success: false, message: error.message});
