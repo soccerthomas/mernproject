@@ -110,18 +110,42 @@ class ItemDetailsPage extends StatelessWidget {
                       const SizedBox(height: 24),
                     ],
                   ),
-                const TagsWidget(),
+                TagsWidget(tags: state.tags!, isEditing: state.isEditing),
                 const SizedBox(height: 24),
-                state.isEditing
-                    ? TextFormField(
-                        initialValue: state.description,
-                        onChanged: (value) {
-                          context.read<ItemDetailsBloc>().add(
-                            ItemDetailsDescriptionChanged(value),
+                if (state.isEditing)
+                  TextFormField(
+                    initialValue: state.description,
+                    onChanged: (value) {
+                      context.read<ItemDetailsBloc>().add(
+                        ItemDetailsDescriptionChanged(value),
+                      );
+                    },
+                  )
+                else
+                  Text(state.description),
+                if (state.isEditing && !state.isNew)
+                  Column(
+                    children: [
+                      const SizedBox(height: 24),
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<TierListEditorBloc>().add(
+                            TierListEditorItemDeleted(
+                              item: state.initialItem!,
+                              row: row,
+                            ),
                           );
+                          Navigator.of(context).pop();
                         },
-                      )
-                    : Text(state.description),
+                        child: Text(
+                          'Delete Item',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           );

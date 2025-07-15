@@ -10,6 +10,7 @@ part 'item_details_event.dart';
 class ItemDetailsBloc extends Bloc<ItemDetailsEvent, ItemDetailsState> {
   final TierListEditorBloc _editorBloc;
   final String? _tierRowId;
+  final _uuid = const Uuid();
 
   ItemDetailsBloc({
     required TierListEditorBloc editorBloc,
@@ -22,6 +23,9 @@ class ItemDetailsBloc extends Bloc<ItemDetailsEvent, ItemDetailsState> {
            isEditing: initialItem == null,
            initialItem: initialItem,
            title: initialItem?.name ?? '',
+           description: initialItem?.description ?? '',
+           imageUrl: initialItem?.imageUrl,
+           tags: initialItem?.tags ?? []
          ),
        ) {
     on<ItemDetailsTitleChanged>(_onTitleChanged);
@@ -74,7 +78,7 @@ class ItemDetailsBloc extends Bloc<ItemDetailsEvent, ItemDetailsState> {
     if (!state.isValid) return;
 
     final newItem = TierItem(
-      id: state.initialItem?.id ?? const Uuid().v4(),
+      id: state.initialItem?.id ?? _uuid.v4(),
       name: state.title,
       description: state.description,
       imageUrl: state.imageUrl,
