@@ -42,6 +42,9 @@ const Dashboard: React.FC = () => {
   const closeDeleteCardModal = () => { setDeleteCardModalOpen(false); }
   const [deleteItem, setDeleteItem] = useState<TierList>();
 
+  const [searchTitle, setsearchTitle] = useState<string>();
+
+
   const navigate = useNavigate();
 
   async function loadTierLists() 
@@ -79,6 +82,24 @@ const Dashboard: React.FC = () => {
         {
             console.log("Tier List Deleted");
             setTierLists(tierLists.filter(tierlist => tierlist._id != deleteItem?._id));
+        }
+    } catch (error) {
+        console.error(error);
+    }
+  } 
+  async function searchTierLists(title: string) 
+  {
+      const jwt = localStorage.getItem("token");
+      try {
+        const response = await fetch(`api/tierlist/search?title=${encodeURIComponent(title)}`, {
+          headers: {
+            "x-auth-token": `${jwt}`
+          }
+        });
+        if(response.ok)
+        {
+            const tierLists = await response.json()
+            setTierLists(tierLists);
         }
     } catch (error) {
         console.error(error);
@@ -154,6 +175,19 @@ const Dashboard: React.FC = () => {
           <h2 className="text-2xl font-semibold text-white mb-4">
             Current Tierlists
           </h2>
+          <div className="flex gap-5 mb-6">
+            <input className="w-full rounded-xl px-2 py-1 text-black" 
+                    placeholder = "Enter tier list title..."
+                    onChange={(e) => setsearchTitle(e.target.value)}/>
+            <button className="rounded-xl px-2 py-1 bg-green-500"
+                    onClick={() => {
+                        if(searchTitle)
+                        {
+                          searchTierLists(searchTitle)
+                        }
+                      }
+                    }>Search</button>
+          </div>
           {tierLists.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 relative">
               {tierLists.map((tierList) => (

@@ -7,10 +7,25 @@ const router = express.Router();
 // View or retrieve all tierlists
 router.get('/', jwtAuth, async (req, res) => {
     try {
+        console.log("TEST");
         const userId = req.user.id;
         console.log(userId);
         const tierLists = await TierList.find({user:req.user.id}).sort({createdAt: -1});
         res.json(tierLists);
+    } catch(error) {
+        return res.status(500).json({success: false, message: error.message});
+    }
+});
+
+// Search for tier list by title
+router.get('/search', jwtAuth, async (req, res) => {
+    try {
+        const {title} = req.query;
+        
+        const tierList = await TierList.find({ 
+            title: {$regex: title, $options: 'i'},
+        });
+        res.json(tierList);
     } catch(error) {
         return res.status(500).json({success: false, message: error.message});
     }
