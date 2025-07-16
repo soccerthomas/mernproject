@@ -26,6 +26,9 @@ function RegisterForm({
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string;
+  }>({});
 
   //new email stuff
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -33,10 +36,101 @@ function RegisterForm({
 
   const navigate = useNavigate();
 
+  // Validation functions
+  const validateUsername = (username: string): string => {
+    if (username.length < 3) {
+      return "Username must be at least 3 characters long";
+    }
+    return "";
+  };
+
+  const validateEmail = (email: string): string => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const validatePassword = (password: string): string => {
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (/\s/.test(password)) {
+      return "Password cannot contain spaces";
+    }
+    if (!/\d/.test(password)) {
+      return "Password must contain at least one number";
+    }
+    return "";
+  };
+
+  const validateConfirmPassword = (
+    password: string,
+    confirmPassword: string
+  ): string => {
+    if (password !== confirmPassword) {
+      return "Passwords do not match";
+    }
+    return "";
+  };
+
+  // Real-time validation on input change
+  const handleUsernameChange = (value: string) => {
+    setUsername(value);
+    const error = validateUsername(value);
+    setValidationErrors((prev) => ({ ...prev, username: error }));
+  };
+
+  const handleEmailChange = (value: string) => {
+    setEmail(value);
+    const error = validateEmail(value);
+    setValidationErrors((prev) => ({ ...prev, email: error }));
+  };
+
+  const handlePasswordChange = (value: string) => {
+    setPassword(value);
+    const error = validatePassword(value);
+    setValidationErrors((prev) => ({ ...prev, password: error }));
+
+    //re-validate confirm password if it exists
+    if (confirmPassword) {
+      const confirmError = validateConfirmPassword(value, confirmPassword);
+      setValidationErrors((prev) => ({
+        ...prev,
+        confirmPassword: confirmError,
+      }));
+    }
+  };
+
+  const handleConfirmPasswordChange = (value: string) => {
+    setConfirmPassword(value);
+    const error = validateConfirmPassword(password, value);
+    setValidationErrors((prev) => ({ ...prev, confirmPassword: error }));
+  };
+
+  //validate all fields before submission
+  const validateForm = (): boolean => {
+    const errors: { [key: string]: string } = {};
+
+    errors.username = validateUsername(username);
+    errors.email = validateEmail(email);
+    errors.password = validatePassword(password);
+    errors.confirmPassword = validateConfirmPassword(password, confirmPassword);
+
+    setValidationErrors(errors);
+
+    return !Object.values(errors).some((error) => error !== "");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
+
+    if (!validateForm()) {
+      return;
+    }
 
     setIsLoading(true);
 
@@ -65,8 +159,8 @@ function RegisterForm({
           setEmail("");
           setPassword("");
           setConfirmPassword("");
+          setValidationErrors({});
         } else {
-          //maybe add a delay
           navigate("/login");
         }
       } else {
@@ -126,12 +220,20 @@ function RegisterForm({
             id="username"
             type="text"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={(e) => handleUsernameChange(e.target.value)}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              validationErrors.username ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="Choose a username"
             required
           />
+          {validationErrors.username && (
+            <p className="mt-1 text-sm text-red-500">
+              {validationErrors.username}
+            </p>
+          )}
         </div>
+
         <div>
           <label
             htmlFor="email"
@@ -143,12 +245,20 @@ function RegisterForm({
             id="email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={(e) => handleEmailChange(e.target.value)}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              validationErrors.email ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="Enter your email"
             required
           />
+          {validationErrors.email && (
+            <p className="mt-1 text-sm text-red-500">
+              {validationErrors.email}
+            </p>
+          )}
         </div>
+
         <div>
           <label
             htmlFor="password"
@@ -160,13 +270,25 @@ function RegisterForm({
             id="password"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={(e) => handlePasswordChange(e.target.value)}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              validationErrors.password ? "border-red-500" : "border-gray-300"
+            }`}
             placeholder="Create a password"
             required
             minLength={8}
           />
+          {validationErrors.password && (
+            <p className="mt-1 text-sm text-red-500">
+              {validationErrors.password}
+            </p>
+          )}
+          <p className="mt-1 text-xs text-gray-400">
+            Password must be at least 8 characters, contain a number, and have
+            no spaces
+          </p>
         </div>
+
         <div>
           <label
             htmlFor="confirmPassword"
@@ -178,12 +300,21 @@ function RegisterForm({
             id="confirmPassword"
             type="password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            onChange={(e) => handleConfirmPasswordChange(e.target.value)}
+            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              validationErrors.confirmPassword
+                ? "border-red-500"
+                : "border-gray-300"
+            }`}
             placeholder="Confirm your password"
             required
             minLength={8}
           />
+          {validationErrors.confirmPassword && (
+            <p className="mt-1 text-sm text-red-500">
+              {validationErrors.confirmPassword}
+            </p>
+          )}
         </div>
 
         <button

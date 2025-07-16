@@ -93,24 +93,7 @@ router.post('/register', async (req, res) => {
             email: email,
             requiresVerification: true
         });
-
-        /*
-        const newUser = new User({
-            username, 
-            email, 
-            password: hashedPwd
-        });
-
-        await newUser.save();
-
-        //user redirected to login
-        res.status(201).json({
-            success: true, 
-            message: 'User registered successfully', 
-            redirectTo: '/login'
-        });
-        */
-
+        
     }catch(error){
         return res.status(500).json({success: false, message: error.message});
     }
@@ -141,7 +124,7 @@ router.post('/sendCode', async (req, res) => {
 
 router.post('/verifyCode', async (req, res) => {
     try{
-        const {email, code} = req.body;
+        const {email, code} = req.body; 
 
         if (!email || !code) {
             return res.status(400).json({
