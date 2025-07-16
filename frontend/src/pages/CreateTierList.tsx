@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import TierListLogo from "../images/TierListLogo.png";
-import ColorSymbol from "../images/ColorSymbol.png";
+import TierListLogo from "../Images/TierListLogo.png";
+import ColorSymbol from "../Images/ColorSymbol.png";
 
 interface ItemStructure {
   id: number;
