@@ -60,13 +60,7 @@ class TierListsRepository {
   }
 
   Future<List<TierList>> searchTierLists(String query) async {
-    final searchResults = await _remoteTierListsApi.searchTierLists(query: query);
-
-    for (final tierList in searchResults) {
-      await _localTierListsApi.saveTierList(tierList);
-    }
-
-    return searchResults;
+    return await _remoteTierListsApi.searchTierLists(query: query);
   }
 
   void dispose() => _localTierListsApi.close();

@@ -33,3 +33,12 @@ final class TierListsOverviewTierListDeleted extends TierListsOverviewEvent {
 final class TierListsOverviewUndoDeletionRequested extends TierListsOverviewEvent {
   const TierListsOverviewUndoDeletionRequested();
 }
+
+final class TierListsOverviewQueryUpdated extends TierListsOverviewEvent {
+  final String newQuery;
+
+  const TierListsOverviewQueryUpdated(this.newQuery);
+
+  @override
+  List<Object> get props => [newQuery];
+}

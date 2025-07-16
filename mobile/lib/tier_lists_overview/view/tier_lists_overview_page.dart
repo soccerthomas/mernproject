@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,17 +23,40 @@ class TierListsOverviewPage extends StatelessWidget {
   }
 }
 
-class TierListsOverviewView extends StatelessWidget {
+class TierListsOverviewView extends StatefulWidget {
   const TierListsOverviewView({super.key});
+
+  @override
+  State<TierListsOverviewView> createState() => _TierListsOverviewViewState();
+}
+
+class _TierListsOverviewViewState extends State<TierListsOverviewView> {
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Tierlists'),
-        actions: [
-          const AddTierListButton()
-        ],
+        title: TextFormField(
+          onChanged: (query) {
+            if (_debounce?.isActive ?? false) _debounce!.cancel();
+            _debounce = Timer(const Duration(milliseconds: 500), () {
+              context.read<TierListsOverviewBloc>().add(
+                TierListsOverviewQueryUpdated(query),
+              );
+            });
+          },
+          decoration: const InputDecoration(
+            hintText: 'Search Tier Lists...',
+          ),
+        ),
+        actions: [const AddTierListButton()],
       ),
       body: MultiBlocListener(
         listeners: [
@@ -78,16 +103,23 @@ class TierListsOverviewView extends StatelessWidget {
         ],
         child: BlocBuilder<TierListsOverviewBloc, TierListsOverviewState>(
           builder: (context, state) {
-            if (state.tierLists.isEmpty) {
+            final bool isSearching = state.query.trim().isNotEmpty;
+            final List<TierList> activeList = isSearching
+                ? state.searchResults ?? []
+                : state.tierLists;
+
+            if (activeList.isEmpty) {
               if (state.status == TierListsOverviewStatus.loading) {
-                return const Center(child: CupertinoActivityIndicator(),);
+                return const Center(child: CupertinoActivityIndicator());
               } else if (state.status != TierListsOverviewStatus.success) {
                 return const SizedBox();
               } else {
                 return Center(
                   child: Text(
-                    'Create your first tier list',
-                    style: Theme.of(context).textTheme.bodySmall,
+                    isSearching
+                        ? 'No results found'
+                        : 'Create your first tier list',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                 );
               }
@@ -95,19 +127,21 @@ class TierListsOverviewView extends StatelessWidget {
 
             return CupertinoScrollbar(
               child: ListView.builder(
-                itemCount: state.tierLists.length,
+                itemCount: activeList.length,
                 itemBuilder: (_, index) {
-                  final tierList = state.tierLists.elementAt(index);
+                  final tierList = activeList.elementAt(index);
                   return TierListListTile(
                     tierList: tierList,
                     onDismissed: (_) {
                       context.read<TierListsOverviewBloc>().add(
-                        TierListsOverviewTierListDeleted(tierList)
+                        TierListsOverviewTierListDeleted(tierList),
                       );
                     },
                     onTap: () {
-                      Navigator.of(context).push(TierListEditorPage.route(tierList.id));
-                    }
+                      Navigator.of(
+                        context,
+                      ).push(TierListEditorPage.route(tierList.id));
+                    },
                   );
                 },
               ),

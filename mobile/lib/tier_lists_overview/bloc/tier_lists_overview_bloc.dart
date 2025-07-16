@@ -16,6 +16,7 @@ class TierListsOverviewBloc
     on<TierListsOverviewTierListAdded>(_onTierListAdded);
     on<TierListsOverviewTierListDeleted>(_onTierListDeleted);
     on<TierListsOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
+    on<TierListsOverviewQueryUpdated>(_onQueryUpdated);
   }
 
   Future<void> _onSubscriptionRequested(
@@ -67,5 +68,24 @@ class TierListsOverviewBloc
 
     emit(state.copyWith(lastDeletedTierList: () => null));
     await _tierListsRepository.saveTierList(tierList);
+  }
+
+  Future<void> _onQueryUpdated(
+    TierListsOverviewQueryUpdated event,
+    Emitter<TierListsOverviewState> emit,
+  ) async {
+    emit(state.copyWith(query: () => event.newQuery));
+
+    if (event.newQuery.trim().isEmpty) {
+      return emit(state.copyWith(searchResults: () => null));
+    }
+
+    emit(state.copyWith(status: () => TierListsOverviewStatus.loading));
+    try {
+      final searchResults = await _tierListsRepository.searchTierLists(event.newQuery);
+      emit(state.copyWith(searchResults: () => searchResults, status: () => TierListsOverviewStatus.success));
+    } catch (_) {
+      emit(state.copyWith(status: () => TierListsOverviewStatus.failure));
+    }
   }
 }

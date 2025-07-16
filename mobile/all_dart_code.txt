@@ -1,183 +1,3 @@
-// Flutter web plugin registrant file.
-//
-// Generated file. Do not edit.
-//
-
-// @dart = 2.13
-// ignore_for_file: type=lint
-
-import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
-import 'package:shared_preferences_web/shared_preferences_web.dart';
-import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-
-void registerPlugins([final Registrar? pluginRegistrar]) {
-  final Registrar registrar = pluginRegistrar ?? webPluginRegistrar;
-  FlutterSecureStorageWeb.registerWith(registrar);
-  SharedPreferencesPlugin.registerWith(registrar);
-  registrar.registerMessageHandler();
-}
-//
-// Generated file. Do not edit.
-// This file is generated from template in file `flutter_tools/lib/src/flutter_plugins.dart`.
-//
-
-// @dart = 3.8
-
-import 'dart:io'; // flutter_ignore: dart_io_import.
-import 'package:path_provider_android/path_provider_android.dart';
-import 'package:shared_preferences_android/shared_preferences_android.dart';
-import 'package:sqflite_android/sqflite_android.dart';
-import 'package:path_provider_foundation/path_provider_foundation.dart';
-import 'package:shared_preferences_foundation/shared_preferences_foundation.dart';
-import 'package:sqflite_darwin/sqflite_darwin.dart';
-import 'package:path_provider_linux/path_provider_linux.dart';
-import 'package:shared_preferences_linux/shared_preferences_linux.dart';
-import 'package:path_provider_foundation/path_provider_foundation.dart';
-import 'package:shared_preferences_foundation/shared_preferences_foundation.dart';
-import 'package:sqflite_darwin/sqflite_darwin.dart';
-import 'package:flutter_secure_storage_windows/flutter_secure_storage_windows.dart';
-import 'package:path_provider_windows/path_provider_windows.dart';
-import 'package:shared_preferences_windows/shared_preferences_windows.dart';
-
-@pragma('vm:entry-point')
-class _PluginRegistrant {
-
-  @pragma('vm:entry-point')
-  static void register() {
-    if (Platform.isAndroid) {
-      try {
-        PathProviderAndroid.registerWith();
-      } catch (err) {
-        print(
-          '`path_provider_android` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SharedPreferencesAndroid.registerWith();
-      } catch (err) {
-        print(
-          '`shared_preferences_android` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SqfliteAndroid.registerWith();
-      } catch (err) {
-        print(
-          '`sqflite_android` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-    } else if (Platform.isIOS) {
-      try {
-        PathProviderFoundation.registerWith();
-      } catch (err) {
-        print(
-          '`path_provider_foundation` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SharedPreferencesFoundation.registerWith();
-      } catch (err) {
-        print(
-          '`shared_preferences_foundation` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SqfliteDarwin.registerWith();
-      } catch (err) {
-        print(
-          '`sqflite_darwin` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-    } else if (Platform.isLinux) {
-      try {
-        PathProviderLinux.registerWith();
-      } catch (err) {
-        print(
-          '`path_provider_linux` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SharedPreferencesLinux.registerWith();
-      } catch (err) {
-        print(
-          '`shared_preferences_linux` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-    } else if (Platform.isMacOS) {
-      try {
-        PathProviderFoundation.registerWith();
-      } catch (err) {
-        print(
-          '`path_provider_foundation` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SharedPreferencesFoundation.registerWith();
-      } catch (err) {
-        print(
-          '`shared_preferences_foundation` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SqfliteDarwin.registerWith();
-      } catch (err) {
-        print(
-          '`sqflite_darwin` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-    } else if (Platform.isWindows) {
-      try {
-        FlutterSecureStorageWindows.registerWith();
-      } catch (err) {
-        print(
-          '`flutter_secure_storage_windows` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        PathProviderWindows.registerWith();
-      } catch (err) {
-        print(
-          '`path_provider_windows` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-      try {
-        SharedPreferencesWindows.registerWith();
-      } catch (err) {
-        print(
-          '`shared_preferences_windows` threw an error: $err. '
-          'The app may not function as expected until you remove this plugin from pubspec.yaml'
-        );
-      }
-
-    }
-  }
-}
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -1947,15 +1767,73 @@ class SplashPage extends StatelessWidget {
 
 class TierMasterTheme {
   static ThemeData get theme {
+    const backgroundColor = Color(0xFF1E293B);
+    const surfaceColor = Color(0xFF334155);
+    const primaryColor = Color(0xFF6366F1);
+    const textColor = Colors.white;
+    const secondaryTextColor = Color(0xFFCBD5E1);
+
     return ThemeData(
       brightness: Brightness.dark,
-      colorScheme: ColorScheme.fromSeed(
-        brightness: Brightness.dark,
-        seedColor: const Color(0xFF4B5563), 
+      scaffoldBackgroundColor: backgroundColor,
+      colorScheme: ColorScheme.dark(
+        primary: primaryColor,
+        secondary: primaryColor,
+        background: backgroundColor,
+        surface: surfaceColor,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: surfaceColor,
+        elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          color: textColor,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        iconTheme: IconThemeData(color: textColor),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: primaryColor,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: primaryColor,
+          textStyle: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: surfaceColor,
+        hintStyle: TextStyle(color: secondaryTextColor),
+        labelStyle: const TextStyle(color: textColor),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide.none,
+        ),
+        suffixIconColor: secondaryTextColor,
+      ),
+      cardColor: surfaceColor,
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: textColor),
+        titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: textColor),
+        titleMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: textColor),
+        bodyLarge: TextStyle(fontSize: 16, color: secondaryTextColor),
+        bodyMedium: TextStyle(fontSize: 14, color: secondaryTextColor),
       ),
     );
   }
-}import 'package:bloc/bloc.dart';
+}
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'add_tier_list_state.dart';
@@ -2025,6 +1903,7 @@ class TierListsOverviewBloc
     on<TierListsOverviewTierListAdded>(_onTierListAdded);
     on<TierListsOverviewTierListDeleted>(_onTierListDeleted);
     on<TierListsOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
+    on<TierListsOverviewQueryUpdated>(_onQueryUpdated);
   }
 
   Future<void> _onSubscriptionRequested(
@@ -2048,15 +1927,15 @@ class TierListsOverviewBloc
 
   void _onTierListAdded(
     TierListsOverviewTierListAdded event,
-    Emitter<TierListsOverviewState> emit
+    Emitter<TierListsOverviewState> emit,
   ) {
     _tierListsRepository.saveTierList(
       TierList(
         title: event.name,
         description: event.description,
         tiers: defaultTiers,
-        stagingArea: const StagingArea(items: [])
-      )
+        stagingArea: const StagingArea(items: []),
+      ),
     );
   }
 
@@ -2073,8 +1952,16 @@ class TierListsOverviewBloc
     Emitter<TierListsOverviewState> emit,
   ) async {
     final tierList = state.lastDeletedTierList!;
+
     emit(state.copyWith(lastDeletedTierList: () => null));
     await _tierListsRepository.saveTierList(tierList);
+  }
+
+  Future<void> _onQueryUpdated(
+    TierListsOverviewQueryUpdated event,
+    Emitter<TierListsOverviewState> emit,
+  ) async {
+    emit(state.copyWith(query: () => event.newQuery));
   }
 }
 part of 'tier_lists_overview_bloc.dart';
@@ -2111,6 +1998,15 @@ final class TierListsOverviewTierListDeleted extends TierListsOverviewEvent {
 
 final class TierListsOverviewUndoDeletionRequested extends TierListsOverviewEvent {
   const TierListsOverviewUndoDeletionRequested();
+}
+
+final class TierListsOverviewQueryUpdated extends TierListsOverviewEvent {
+  final String newQuery;
+
+  const TierListsOverviewQueryUpdated(this.newQuery);
+
+  @override
+  List<Object> get props => [newQuery];
 }part of 'tier_lists_overview_bloc.dart';
 
 enum TierListsOverviewStatus { initial, loading, success, failure }
@@ -2119,11 +2015,13 @@ final class TierListsOverviewState extends Equatable {
   final TierListsOverviewStatus status;
   final List<TierList> tierLists;
   final TierList? lastDeletedTierList;
+  final String query;
 
   const TierListsOverviewState({
     this.status = TierListsOverviewStatus.initial,
     this.tierLists = const [],
     this.lastDeletedTierList,
+    this.query = ''
   });
 
   // copyWith uses functions as parameters so that state members can be set as null
@@ -2131,6 +2029,7 @@ final class TierListsOverviewState extends Equatable {
     TierListsOverviewStatus Function()? status,
     List<TierList> Function()? tierLists,
     TierList? Function()? lastDeletedTierList,
+    String Function()? query
   }) {
     return TierListsOverviewState(
       status: status == null ? this.status : status(),
@@ -2138,11 +2037,12 @@ final class TierListsOverviewState extends Equatable {
       lastDeletedTierList: lastDeletedTierList == null
           ? this.lastDeletedTierList
           : lastDeletedTierList(),
+      query: query == null ? this.query : query()
     );
   }
 
   @override
-  List<Object?> get props => [status, tierLists, lastDeletedTierList];
+  List<Object?> get props => [status, tierLists, lastDeletedTierList, query];
 }
 export 'view/tier_lists_overview_page.dart';import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -3710,7 +3610,7 @@ class HttpTierListsApi implements RemoteTierListsApi {
     if (token == null) throw Exception('User not authenticated');
 
     final response = await http.put(
-      Uri.parse('$_baseUrl/api/tierlist/${tierListJson['id']}'),
+      Uri.parse('$_baseUrl/api/tierlist/${tierListJson['_id']}'),
       headers: {
         'Content-Type': 'application/json',
         'x-auth-token': token
@@ -3793,6 +3693,12 @@ class LocalStorageTierListsApi extends LocalTierListsApi {
       _tierListStreamController.add(tierLists);
       return _setValue(kTierListsCollectionKey, json.encode(tierLists));
     }
+  }
+
+  @override
+  Future<void> replaceAllTierLists(List<TierList> tierLists) {
+    _tierListStreamController.add(tierLists);
+    return _setValue(kTierListsCollectionKey, json.encode(tierLists));
   }
 
   @override
@@ -3903,6 +3809,8 @@ abstract class LocalTierListsApi {
   Future<void> saveTierList(TierList tierList);
 
   Future<void> deleteTierList(String id);
+
+  Future<void> replaceAllTierLists(List<TierList> tierLists);
 
   Future<void> close();
 }
@@ -4135,7 +4043,7 @@ class Tier extends ListRow {
   @override
   JsonMap toJson() {
     final json = _$TierToJson(this);
-    json.remove('id');
+    json.remove('_id');
     return {...json, 'type': 'tier'};
   }
 }
@@ -4148,7 +4056,7 @@ part of 'tier.dart';
 // **************************************************************************
 
 Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
-  id: json['id'] as String?,
+  id: json['_id'] as String?,
   name: json['name'] as String,
   color: const ColorConverter().fromJson((json['color'] as num).toInt()),
   items: (json['items'] as List<dynamic>)
@@ -4157,7 +4065,7 @@ Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
 );
 
 Map<String, dynamic> _$TierToJson(Tier instance) => <String, dynamic>{
-  'id': instance.id,
+  '_id': instance.id,
   'name': instance.name,
   'color': const ColorConverter().toJson(instance.color),
   'items': instance.items,
@@ -4177,7 +4085,9 @@ class TierItem extends Equatable {
   @JsonKey(includeToJson: false)
   final String id;
 
+  @JsonKey(name: 'image')
   final String? imageUrl;
+
   final String name;
   final String description;
   final List<Tag> tags;
@@ -4225,14 +4135,14 @@ TierItem _$TierItemFromJson(Map<String, dynamic> json) => TierItem(
   id: json['id'] as String?,
   name: json['name'] as String,
   description: json['description'] as String? ?? '',
-  imageUrl: json['imageUrl'] as String?,
+  imageUrl: json['image'] as String?,
   tags: (json['tags'] as List<dynamic>)
       .map((e) => Tag.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
 Map<String, dynamic> _$TierItemToJson(TierItem instance) => <String, dynamic>{
-  'imageUrl': instance.imageUrl,
+  'image': instance.imageUrl,
   'name': instance.name,
   'description': instance.description,
   'tags': instance.tags,
@@ -4330,7 +4240,7 @@ part of 'tier_list.dart';
 // **************************************************************************
 
 TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
-  id: json['id'] as String?,
+  id: json['_id'] as String?,
   title: json['title'] as String,
   description: json['description'] as String? ?? '',
   tiers: (json['categories'] as List<dynamic>)
@@ -4340,6 +4250,7 @@ TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
 );
 
 Map<String, dynamic> _$TierListToJson(TierList instance) => <String, dynamic>{
+  '_id': instance.id,
   'title': instance.title,
   'description': instance.description,
   'categories': instance.tiers,
@@ -4422,9 +4333,7 @@ class TierListsRepository {
   Future<void> refreshTierLists() async {
     final remoteTierLists = await _remoteTierListsApi.searchTierLists();
 
-    for (final tierList in remoteTierLists) {
-      await _localTierListsApi.saveTierList(tierList);
-    }
+    await _localTierListsApi.replaceAllTierLists(remoteTierLists);
   }
 
   Stream<TierList> getTierList(String id) => _localTierListsApi.getTierList(id);
@@ -4441,7 +4350,6 @@ class TierListsRepository {
     tierListJson['user'] = userJson;
 
     final newTierList = await _remoteTierListsApi.saveTierList(tierListJson);
-    await _localTierListsApi.deleteTierList(tierList.id);
     await _localTierListsApi.saveTierList(newTierList);
   }
 
@@ -4461,8 +4369,8 @@ class TierListsRepository {
   }
 
   Future<void> deleteTierList(String id) async {
-    await _remoteTierListsApi.deleteTierList(id);
     await _localTierListsApi.deleteTierList(id);
+    await _remoteTierListsApi.deleteTierList(id);
   }
 
   Future<List<TierList>> searchTierLists(String query) async {
@@ -4478,33 +4386,4 @@ class TierListsRepository {
   void dispose() => _localTierListsApi.close();
 }
 export 'package:tier_lists_api/tier_lists_api.dart';
-export 'src/tier_lists_repository.dart';// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
-import 'package:mobile/main.dart';
-
-void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
-}
+export 'src/tier_lists_repository.dart';
