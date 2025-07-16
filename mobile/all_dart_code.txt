@@ -1,0 +1,4510 @@
+// Flutter web plugin registrant file.
+//
+// Generated file. Do not edit.
+//
+
+// @dart = 2.13
+// ignore_for_file: type=lint
+
+import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
+import 'package:shared_preferences_web/shared_preferences_web.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+
+void registerPlugins([final Registrar? pluginRegistrar]) {
+  final Registrar registrar = pluginRegistrar ?? webPluginRegistrar;
+  FlutterSecureStorageWeb.registerWith(registrar);
+  SharedPreferencesPlugin.registerWith(registrar);
+  registrar.registerMessageHandler();
+}
+//
+// Generated file. Do not edit.
+// This file is generated from template in file `flutter_tools/lib/src/flutter_plugins.dart`.
+//
+
+// @dart = 3.8
+
+import 'dart:io'; // flutter_ignore: dart_io_import.
+import 'package:path_provider_android/path_provider_android.dart';
+import 'package:shared_preferences_android/shared_preferences_android.dart';
+import 'package:sqflite_android/sqflite_android.dart';
+import 'package:path_provider_foundation/path_provider_foundation.dart';
+import 'package:shared_preferences_foundation/shared_preferences_foundation.dart';
+import 'package:sqflite_darwin/sqflite_darwin.dart';
+import 'package:path_provider_linux/path_provider_linux.dart';
+import 'package:shared_preferences_linux/shared_preferences_linux.dart';
+import 'package:path_provider_foundation/path_provider_foundation.dart';
+import 'package:shared_preferences_foundation/shared_preferences_foundation.dart';
+import 'package:sqflite_darwin/sqflite_darwin.dart';
+import 'package:flutter_secure_storage_windows/flutter_secure_storage_windows.dart';
+import 'package:path_provider_windows/path_provider_windows.dart';
+import 'package:shared_preferences_windows/shared_preferences_windows.dart';
+
+@pragma('vm:entry-point')
+class _PluginRegistrant {
+
+  @pragma('vm:entry-point')
+  static void register() {
+    if (Platform.isAndroid) {
+      try {
+        PathProviderAndroid.registerWith();
+      } catch (err) {
+        print(
+          '`path_provider_android` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SharedPreferencesAndroid.registerWith();
+      } catch (err) {
+        print(
+          '`shared_preferences_android` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SqfliteAndroid.registerWith();
+      } catch (err) {
+        print(
+          '`sqflite_android` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+    } else if (Platform.isIOS) {
+      try {
+        PathProviderFoundation.registerWith();
+      } catch (err) {
+        print(
+          '`path_provider_foundation` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SharedPreferencesFoundation.registerWith();
+      } catch (err) {
+        print(
+          '`shared_preferences_foundation` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SqfliteDarwin.registerWith();
+      } catch (err) {
+        print(
+          '`sqflite_darwin` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+    } else if (Platform.isLinux) {
+      try {
+        PathProviderLinux.registerWith();
+      } catch (err) {
+        print(
+          '`path_provider_linux` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SharedPreferencesLinux.registerWith();
+      } catch (err) {
+        print(
+          '`shared_preferences_linux` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+    } else if (Platform.isMacOS) {
+      try {
+        PathProviderFoundation.registerWith();
+      } catch (err) {
+        print(
+          '`path_provider_foundation` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SharedPreferencesFoundation.registerWith();
+      } catch (err) {
+        print(
+          '`shared_preferences_foundation` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SqfliteDarwin.registerWith();
+      } catch (err) {
+        print(
+          '`sqflite_darwin` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+    } else if (Platform.isWindows) {
+      try {
+        FlutterSecureStorageWindows.registerWith();
+      } catch (err) {
+        print(
+          '`flutter_secure_storage_windows` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        PathProviderWindows.registerWith();
+      } catch (err) {
+        print(
+          '`path_provider_windows` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        SharedPreferencesWindows.registerWith();
+      } catch (err) {
+        print(
+          '`shared_preferences_windows` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+    }
+  }
+}
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/authentication/authentication.dart';
+import 'package:mobile/home/home.dart';
+import 'package:mobile/login/login.dart';
+import 'package:mobile/splash/splash.dart';
+import 'package:mobile/theme/theme.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+class App extends StatelessWidget {
+  final LocalTierListsApi localTierListsApi;
+  final RemoteTierListsApi remoteTierListsApi;
+
+  const App({
+    super.key,
+    required this.localTierListsApi,
+    required this.remoteTierListsApi,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (_) => AuthenticationRepository(),
+          dispose: (repository) => repository.dispose(),
+        ),
+        RepositoryProvider(
+          create: (_) => TierListsRepository(
+            localTierListsApi: localTierListsApi,
+            remoteTierListsApi: remoteTierListsApi,
+          ),
+          dispose: (repository) => repository.dispose(),
+        ),
+      ],
+      child: BlocProvider(
+        lazy: false,
+        create: (context) =>
+            AuthenticationBloc(
+              authenticationRepository: context
+                  .read<AuthenticationRepository>(),
+            )..add(
+              AuthenticationSubscriptionRequested(),
+            ), // .. is cascade syntax: calls .add() but returns from AuthenticationBloc() instead
+        child: const AppView(),
+      ),
+    );
+  }
+}
+
+class AppView extends StatefulWidget {
+  const AppView({super.key});
+
+  @override
+  State<AppView> createState() => _AppViewState();
+}
+
+class _AppViewState extends State<AppView> {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
+  NavigatorState get _navigator => _navigatorKey.currentState!;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      navigatorKey: _navigatorKey,
+      theme: TierMasterTheme.theme,
+      builder: (context, child) {
+        return BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            switch (state.status) {
+              case AuthenticationStatus.authenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  HomePage.route(),
+                  (route) => false,
+                );
+              case AuthenticationStatus.unauthenticated:
+                _navigator.pushAndRemoveUntil<void>(
+                  LoginPage.route(),
+                  (route) => false,
+                );
+              case AuthenticationStatus.unknown:
+                break;
+            }
+          },
+          child: child,
+        );
+      },
+      onGenerateRoute: (_) => SplashPage.route(),
+    );
+  }
+}
+export 'bloc/authentication_bloc.dart';import 'dart:async';
+
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
+part 'authentication_event.dart';
+part 'authentication_state.dart';
+
+class AuthenticationBloc
+    extends Bloc<AuthenticationEvent, AuthenticationState> {
+  final AuthenticationRepository _authenticationRepository;
+
+  AuthenticationBloc({
+    required AuthenticationRepository authenticationRepository,
+  }) : _authenticationRepository = authenticationRepository,
+       super(const AuthenticationState.unknown()) {
+    on<AuthenticationSubscriptionRequested>(_onSubscriptionRequested);
+    on<AuthenticationLogoutPressed>(_onLogoutPressed);
+  }
+
+  Future<void> _onSubscriptionRequested(
+    AuthenticationSubscriptionRequested event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    return emit.onEach(
+      _authenticationRepository.status,
+      onData: (status) async {
+        switch (status) {
+          case AuthenticationStatus.unauthenticated:
+            return emit(const AuthenticationState.unauthenticated());
+          case AuthenticationStatus.authenticated:
+            return emit(const AuthenticationState.authenticated());
+          case AuthenticationStatus.unknown:
+            return emit(const AuthenticationState.unknown());
+        }
+      },
+      onError: addError,
+    );
+  }
+
+  void _onLogoutPressed(
+    AuthenticationLogoutPressed event,
+    Emitter<AuthenticationState> emit,
+  ) {
+    _authenticationRepository.logOut();
+  }
+}
+part of 'authentication_bloc.dart';
+
+sealed class AuthenticationEvent {
+  const AuthenticationEvent();
+}
+
+final class AuthenticationSubscriptionRequested extends AuthenticationEvent {}
+
+final class AuthenticationLogoutPressed extends AuthenticationEvent {}part of 'authentication_bloc.dart';
+
+class AuthenticationState extends Equatable {
+  final AuthenticationStatus status;
+
+  const AuthenticationState._({
+    this.status = AuthenticationStatus.unknown,
+  });
+
+  const AuthenticationState.unknown() : this._();
+
+  const AuthenticationState.authenticated()
+    : this._(status: AuthenticationStatus.authenticated);
+
+  const AuthenticationState.unauthenticated()
+    : this._(status: AuthenticationStatus.unauthenticated);
+
+  @override
+  List<Object> get props => [status];
+}   import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
+part 'home_state.dart';
+
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit() : super(const HomeState());
+
+  void setTab(HomeTab tab) => emit(HomeState(tab: tab));
+}part of 'home_cubit.dart';
+
+enum HomeTab { tierLists, settings }
+
+final class HomeState extends Equatable {
+  final HomeTab tab;
+  
+  const HomeState({
+    this.tab = HomeTab.tierLists,
+  });
+
+  @override
+  List<Object> get props => [tab];
+}export 'view/home_page.dart';import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/home/cubit/home_cubit.dart';
+import 'package:mobile/tier_lists_overview/tier_lists_overview.dart';
+import 'package:mobile/settings/settings.dart';
+
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute(builder: (_) => const HomePage());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => HomeCubit(),
+      child: const HomeView(),
+    );
+  }
+}
+
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedTab = context.select((HomeCubit cubit) => cubit.state.tab);
+
+    return Scaffold(
+      body: IndexedStack(
+        index: selectedTab.index,
+        children: const [TierListsOverviewPage(), SettingsPage()],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _HomeTabButton(
+              groupValue: selectedTab,
+              value: HomeTab.tierLists,
+              icon: const Icon(Icons.list_rounded),
+            ),
+            _HomeTabButton(
+              groupValue: selectedTab,
+              value: HomeTab.settings,
+              icon: const Icon(Icons.settings),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeTabButton extends StatelessWidget {
+  final HomeTab groupValue;
+  final HomeTab value;
+  final Widget icon;
+  
+  const _HomeTabButton({
+    required this.groupValue,
+    required this.value,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () => context.read<HomeCubit>().setTab(value),
+      iconSize: 32,
+      color: groupValue != value
+          ? null
+          : Theme.of(context).colorScheme.secondary,
+      icon: icon,
+    );
+  }
+}import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+part 'item_details_state.dart';
+part 'item_details_event.dart';
+
+class ItemDetailsBloc extends Bloc<ItemDetailsEvent, ItemDetailsState> {
+  final TierListEditorBloc _editorBloc;
+  final String? _tierRowId;
+
+  ItemDetailsBloc({
+    required TierListEditorBloc editorBloc,
+    TierItem? initialItem,
+    String? tierRowId,
+  }) : _editorBloc = editorBloc,
+       _tierRowId = tierRowId,
+       super(
+         ItemDetailsState(
+           isEditing: initialItem == null,
+           initialItem: initialItem,
+           title: initialItem?.name ?? '',
+           description: initialItem?.description ?? '',
+           imageUrl: initialItem?.imageUrl,
+           tags: initialItem?.tags ?? []
+         ),
+       ) {
+    on<ItemDetailsTitleChanged>(_onTitleChanged);
+    on<ItemDetailsDescriptionChanged>(_onDescriptionChanged);
+    on<ItemDetailsImageUrlChanged>(_onImageUrlChanged);
+    on<ItemDetailsTagsChanged>(_onTagsChanged);
+    on<ItemDetailsEditModeToggled>(_onEditModeToggled);
+    on<ItemDetailsSubmitted>(_onSubmitted);
+  }
+
+  void _onTitleChanged(
+    ItemDetailsTitleChanged event,
+    Emitter<ItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(title: event.newTitle));
+  }
+
+  void _onDescriptionChanged(
+    ItemDetailsDescriptionChanged event,
+    Emitter<ItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(description: event.newDescription));
+  }
+
+  void _onImageUrlChanged(
+    ItemDetailsImageUrlChanged event,
+    Emitter<ItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(imageUrl: event.newUrl));
+  }
+
+  void _onTagsChanged(
+    ItemDetailsTagsChanged event,
+    Emitter<ItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(tags: event.newTags));
+  }
+
+  void _onEditModeToggled(
+    ItemDetailsEditModeToggled event,
+    Emitter<ItemDetailsState> emit,
+  ) {
+    emit(state.copyWith(isEditing: event.isEditing));
+  }
+
+  void _onSubmitted(
+    ItemDetailsSubmitted event,
+    Emitter<ItemDetailsState> emit,
+  ) {
+    if (!state.isValid) return;
+
+    final newItem = TierItem(
+      id: state.initialItem?.id,
+      name: state.title,
+      description: state.description,
+      imageUrl: state.imageUrl,
+      tags: state.tags!,
+    );
+
+    if (state.isNew) {
+      _editorBloc.add(TierListEditorItemAddedToStaging(newItem));
+    } else {
+      _editorBloc.add(
+        TierListEditorItemUpdated(updatedItem: newItem, rowId: _tierRowId!),
+      );
+    }
+
+    emit(state.copyWith(initialItem: newItem, status: ItemDetailsStatus.success));
+  }
+}part of 'item_details_bloc.dart';
+
+sealed class ItemDetailsEvent extends Equatable {
+  const ItemDetailsEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class ItemDetailsTitleChanged extends ItemDetailsEvent {
+  final String newTitle;
+  
+  const ItemDetailsTitleChanged(this.newTitle);
+
+  @override
+  List<Object?> get props => [newTitle];
+}
+
+final class ItemDetailsDescriptionChanged extends ItemDetailsEvent {
+  final String newDescription;
+
+  const ItemDetailsDescriptionChanged(this.newDescription);
+
+  @override
+  List<Object?> get props => [newDescription];
+}
+
+final class ItemDetailsImageUrlChanged extends ItemDetailsEvent {
+  final String newUrl;
+
+  const ItemDetailsImageUrlChanged(this.newUrl);
+
+  @override
+  List<Object?> get props => [newUrl];
+}
+
+final class ItemDetailsTagsChanged extends ItemDetailsEvent {
+  final List<Tag> newTags;
+
+  const ItemDetailsTagsChanged(this.newTags);
+
+  @override
+  List<Object?> get props => [newTags];
+}
+
+final class ItemDetailsEditModeToggled extends ItemDetailsEvent {
+  final bool isEditing;
+
+  const ItemDetailsEditModeToggled(this.isEditing);
+
+  @override
+  List<Object?> get props => [isEditing];
+}
+
+final class ItemDetailsSubmitted extends ItemDetailsEvent {
+  const ItemDetailsSubmitted();
+}part of 'item_details_bloc.dart';
+
+enum ItemDetailsStatus { initial, loading, success, failure }
+
+final class ItemDetailsState extends Equatable {
+  final ItemDetailsStatus status;
+  final TierItem? initialItem;
+  final bool isEditing;
+  final String title;
+  final String description;
+  final String? imageUrl;
+  final List<Tag>? tags;
+
+  const ItemDetailsState({
+    this.status = ItemDetailsStatus.initial,
+    this.initialItem,
+    required this.isEditing,
+    required this.title,
+    this.description = '',
+    this.imageUrl,
+    this.tags = const []
+  });
+
+  bool get isValid => title.trim().isNotEmpty;
+  bool get isNew => initialItem == null;
+
+  ItemDetailsState copyWith({
+    ItemDetailsStatus? status,
+    TierItem? initialItem,
+    bool? isEditing,
+    String? title,
+    String? description,
+    String? imageUrl,
+    List<Tag>? tags,
+  }) {
+    return ItemDetailsState(
+      status: status ?? this.status,
+      initialItem: initialItem ?? this.initialItem,
+      isEditing: isEditing ?? this.isEditing,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
+      tags: tags ?? this.tags
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    status,
+    initialItem,
+    isEditing,
+    title,
+    description,
+    imageUrl,
+    tags
+  ];
+}import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/item_details/bloc/item_details_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import '../widgets/item_details_navigation_button.dart';
+import '../widgets/tags_widget.dart';
+
+class ItemDetailsPage extends StatelessWidget {
+  final String? _itemId;
+  final String _rowId;
+
+  const ItemDetailsPage({
+    super.key,
+    required String? itemId,
+    required String rowId,
+  }) : _itemId = itemId,
+       _rowId = rowId;
+
+  static Route<void> route({
+    required String? itemId,
+    required String rowId,
+    required TierListEditorBloc editorBloc,
+  }) {
+    return MaterialPageRoute(
+      builder: (context) => BlocProvider.value(
+        value: editorBloc,
+        child: ItemDetailsPage(itemId: itemId, rowId: rowId),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final editorBloc = context.read<TierListEditorBloc>();
+    final tierList = editorBloc.state.tierList!;
+    final row = _rowId == 'staging'
+        ? tierList.stagingArea
+        : tierList.tiers.firstWhere((tier) => tier.id == _rowId);
+    final item = _itemId == null
+        ? null
+        : row.items.firstWhere((item) => item.id == _itemId);
+
+    return BlocProvider(
+      create: (context) => ItemDetailsBloc(
+        editorBloc: editorBloc,
+        initialItem: item,
+        tierRowId: _rowId,
+      ),
+      child: BlocBuilder<ItemDetailsBloc, ItemDetailsState>(
+        builder: (context, state) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(_rowId == 'staging' ? '' : row.name),
+              backgroundColor: row.color,
+              actions: [
+                ItemDetailsNavigationButton(
+                  direction: NavigationDirection.left,
+                  rowId: _rowId,
+                  itemId: _itemId,
+                ),
+                ItemDetailsNavigationButton(
+                  direction: NavigationDirection.right,
+                  rowId: _rowId,
+                  itemId: _itemId,
+                ),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                if (state.isEditing) {
+                  context.read<ItemDetailsBloc>().add(
+                    const ItemDetailsSubmitted(),
+                  );
+                }
+
+                context.read<ItemDetailsBloc>().add(
+                  ItemDetailsEditModeToggled(!state.isEditing),
+                );
+              },
+              child: Icon(state.isEditing ? Icons.check : Icons.edit),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Align(
+                alignment: const Alignment(0, -1 / 3),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    state.isEditing
+                        ? TextFormField(
+                            initialValue: state.title,
+                            onChanged: (value) {
+                              context.read<ItemDetailsBloc>().add(
+                                ItemDetailsTitleChanged(value),
+                              );
+                            },
+                          )
+                        : Text(state.title),
+                    const SizedBox(height: 24),
+                    if (! state.isEditing && state.imageUrl != null)
+                      Column(
+                        children: [
+                          CachedNetworkImage(imageUrl: state.imageUrl!),
+                          SizedBox(height: state.isEditing ? 12 : 24),
+                        ],
+                      ),
+                    if (state.isEditing)
+                      Column(
+                        children: [
+                          TextFormField(
+                            initialValue: state.imageUrl,
+                            onChanged: (value) {
+                              context.read<ItemDetailsBloc>().add(
+                                ItemDetailsImageUrlChanged(value),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+                      ),
+                    TagsWidget(tags: state.tags!, isEditing: state.isEditing),
+                    const SizedBox(height: 24),
+                    if (state.isEditing)
+                      TextFormField(
+                        initialValue: state.description,
+                        onChanged: (value) {
+                          context.read<ItemDetailsBloc>().add(
+                            ItemDetailsDescriptionChanged(value),
+                          );
+                        },
+                      )
+                    else
+                      Text(state.description),
+                    if (state.isEditing && !state.isNew)
+                      Column(
+                        children: [
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () {
+                              context.read<TierListEditorBloc>().add(
+                                TierListEditorItemDeleted(
+                                  item: state.initialItem!,
+                                  row: row,
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'Delete Item',
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/item_details/bloc/item_details_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+class EditTagDialog extends StatefulWidget {
+  final Tag? _tag;
+  final List<Tag> _tags;
+
+  const EditTagDialog({super.key, required Tag? tag, required List<Tag> tags})
+    : _tag = tag,
+      _tags = tags;
+
+  @override
+  State<EditTagDialog> createState() => _EditTagDialogState();
+}
+
+class _EditTagDialogState extends State<EditTagDialog> {
+  late final TextEditingController _textController;
+  late bool _isButtonDisabled;
+  late TagType _selectedType;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _selectedType = widget._tag == null ? TagType.neutral : widget._tag!.type;
+    _textController = TextEditingController(text: widget._tag?.text ?? '');
+    _isButtonDisabled = _textController.text.isEmpty;
+
+    _textController.addListener(() {
+      setState(() {
+        _isButtonDisabled = _textController.text.isEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget._tag == null ? 'Create Tag' : 'Edit Tag'),
+      content: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _createChoiceChip(TagType.positive),
+                _createChoiceChip(TagType.neutral),
+                _createChoiceChip(TagType.negative),
+              ],
+            ),
+            const SizedBox(height: 16),
+            TextFormField(controller: _textController),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: _isButtonDisabled
+              ? null
+              : () {
+                  final newTag = Tag(
+                    id: widget._tag?.id,
+                    text: _textController.text,
+                    type: _selectedType,
+                  );
+
+                  final newTags = widget._tag == null
+                      ? (widget._tags.toList()..add(newTag))
+                      : widget._tags
+                            .toList()
+                            .map(
+                              (tag) => tag.id == widget._tag!.id ? newTag : tag,
+                            )
+                            .toList();
+
+                  context.read<ItemDetailsBloc>().add(
+                    ItemDetailsTagsChanged(newTags),
+                  );
+
+                  Navigator.of(context).pop();
+                },
+          child: const Text('Submit'),
+        ),
+      ],
+    );
+  }
+
+  Widget _createChoiceChip(TagType type) {
+    late final String label;
+    if (type == TagType.positive) {
+      label = '+';
+    } else if (type == TagType.negative) {
+      label = '-';
+    } else {
+      label = 'o';
+    }
+
+    return ChoiceChip(
+      padding: const EdgeInsets.all(8),
+      label: Text(label),
+      selected: type == _selectedType,
+      selectedColor: kColorMap[type],
+      onSelected: (_) {
+        setState(() {
+          _selectedType = type;
+        });
+      },
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import '../view/item_details_page.dart';
+
+enum NavigationDirection { left, right }
+
+class ItemDetailsNavigationButton extends StatelessWidget {
+  final NavigationDirection _direction;
+  final String _rowId;
+  final String? _itemId;
+
+  const ItemDetailsNavigationButton({
+    super.key,
+    required NavigationDirection direction,
+    required String rowId,
+    required String? itemId,
+  }) : _direction = direction,
+       _rowId = rowId,
+       _itemId = itemId;
+
+  int get _directionOffset => _direction == NavigationDirection.left ? -1 : 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        final editorBloc = context.read<TierListEditorBloc>();
+        final tierList = editorBloc.state.tierList!;
+        final row = _rowId == 'staging'
+            ? tierList.stagingArea
+            : tierList.tiers.firstWhere((tier) => tier.id == _rowId);
+
+        if (row.items.isEmpty) return;
+
+        final itemIndex = _itemId == null
+            ? -1
+            : row.items.indexWhere((item) => item.id == _itemId);
+
+        Navigator.of(context).pushReplacement(
+          ItemDetailsPage.route(
+            itemId:
+                row.items[_itemId == null
+                    ? 0
+                    : (itemIndex + _directionOffset + row.items.length) %
+                          row.items.length].id,
+            rowId: _rowId,
+            editorBloc: editorBloc,
+          ),
+        );
+      },
+      icon: Icon(
+        _direction == NavigationDirection.left
+            ? Icons.arrow_left
+            : Icons.arrow_right,
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/item_details/bloc/item_details_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart'
+    show Tag, TagType;
+import 'edit_tag_dialog.dart';
+import 'tag_chip_widget.dart';
+
+class TagsWidget extends StatelessWidget {
+  final List<Tag> _tags;
+  final bool _isEditing;
+
+  const TagsWidget({
+    super.key,
+    required List<Tag> tags,
+    required bool isEditing,
+  }) : _tags = tags,
+       _isEditing = isEditing;
+
+  @override
+  Widget build(BuildContext context) {
+    const spacing = 8.0;
+    const runSpacing = 4.0;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: spacing,
+          runSpacing: runSpacing,
+          children: _tags
+              .where((tag) => tag.type == TagType.positive)
+              .map(
+                (tag) => TagChipWidget(
+                  tag: tag,
+                  tags: _tags,
+                  isEditing: _isEditing,
+                ),
+              )
+              .toList(),
+        ),
+        const SizedBox(height: spacing),
+        Wrap(
+          spacing: spacing,
+          runSpacing: runSpacing,
+          children: _tags
+              .where((tag) => tag.type == TagType.neutral)
+              .map(
+                (tag) =>
+                    TagChipWidget(tag: tag, tags: _tags, isEditing: _isEditing),
+              )
+              .toList(),
+        ),
+        const SizedBox(height: spacing),
+        Wrap(
+          spacing: spacing,
+          runSpacing: runSpacing,
+          children: _tags
+              .where((tag) => tag.type == TagType.negative)
+              .map(
+                (tag) =>
+                    TagChipWidget(tag: tag, tags: _tags, isEditing: _isEditing),
+              )
+              .toList(),
+        ),
+        const SizedBox(height: spacing),
+        if (_isEditing)
+          TextButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<ItemDetailsBloc>(),
+                  child: EditTagDialog(tag: null, tags: _tags),
+                ),
+              );
+            },
+            child: const Text('Add Tag'),
+          ),
+      ],
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/item_details/bloc/item_details_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+import 'edit_tag_dialog.dart';
+
+class TagChipWidget extends StatelessWidget {
+  final Tag _tag;
+  final List<Tag> _tags;
+  final bool _isEditing;
+
+  const TagChipWidget({
+    super.key,
+    required Tag tag,
+    required List<Tag> tags,
+    required bool isEditing,
+  }) : _tag = tag,
+       _tags = tags,
+       _isEditing = isEditing;
+
+  static const Map<TagType, IconData> _iconMap = {
+    TagType.positive: Icons.add,
+    TagType.neutral: Icons.circle_outlined,
+    TagType.negative: Icons.remove
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _isEditing
+          ? () {
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<ItemDetailsBloc>(),
+                  child: EditTagDialog(tag: _tag, tags: _tags),
+                ),
+              );
+            }
+          : null,
+      child: Chip(
+        label: Text(_tag.text),
+        avatar: Icon(_iconMap[_tag.type], color: kColorMap[_tag.type],),
+        side: BorderSide(color: kColorMap[_tag.type]!),
+        onDeleted: _isEditing
+            ? () {
+                context.read<ItemDetailsBloc>().add(
+                  ItemDetailsTagsChanged(
+                    _tags.where((tag) => tag.id != _tag.id).toList(),
+                  ),
+                );
+              }
+            : null,
+      ),
+    );
+  }
+}
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
+import 'package:mobile/login_register/bloc/login_register_bloc.dart';
+import 'package:mobile/login_register/models/username.dart';
+import 'package:mobile/login_register/models/password.dart';
+import 'package:formz/formz.dart';
+
+class LoginBloc extends LoginRegisterBloc {
+  LoginBloc({required super.authenticationRepository}) {
+    on<LoginRegisterUsernameChanged>(_onUsernameChanged);
+    on<LoginRegisterPasswordChanged>(_onPasswordChanged);
+    on<LoginRegisterSubmitted>(_onSubmitted);
+  }
+
+  void _onUsernameChanged(
+    LoginRegisterUsernameChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final username = Username.dirty(event.username);
+    emit(
+      state.copyWith(
+        username: username,
+        isValid: Formz.validate([state.password, username]),
+      ),
+    );
+  }
+
+  void _onPasswordChanged(
+    LoginRegisterPasswordChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final password = Password.dirty(event.password);
+    emit(
+      state.copyWith(
+        password: password,
+        isValid: Formz.validate([password, state.username]),
+      ),
+    );
+  }
+
+  Future<void> _onSubmitted(
+    LoginRegisterSubmitted event,
+    Emitter<LoginRegisterState> emit,
+  ) async {
+    if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+      try {
+        await authenticationRepository.logIn(
+          username: state.username.value,
+          password: state.password.value,
+        );
+        emit(state.copyWith(status: FormzSubmissionStatus.success));
+      } on LogInFailure catch (e) {
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            errorMessage: e.message,
+          ),
+        );
+      } catch (_) {
+        emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      }
+    }
+  }
+}
+export 'view/login_page.dart';import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/login/bloc/login_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:mobile/login_register/bloc/login_register_bloc.dart';
+import 'package:mobile/login_register/models/password.dart';
+import 'package:mobile/register/view/register_page.dart';
+
+class LoginForm extends StatelessWidget {
+  const LoginForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginBloc, LoginRegisterState>(
+      listener: (context, state) {
+        if (state.status.isFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Authentication Failure'),
+              ),
+            );
+        }
+      },
+      child: Align(
+        alignment: const Alignment(0, -1 / 3),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _UsernameInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _PasswordInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _LoginButton(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _registerButton(context)
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UsernameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final displayError = context.select(
+      (LoginBloc bloc) => bloc.state.username.displayError,
+    );
+
+    return TextField(
+      key: const Key('loginForm_usernameInput_textField'),
+      onChanged: (username) {
+        context.read<LoginBloc>().add(LoginRegisterUsernameChanged(username));
+      },
+      decoration: InputDecoration(
+        labelText: 'username',
+        errorText: displayError != null ? 'invalid username' : null,
+      ),
+    );
+  }
+}
+
+class _PasswordInput extends StatelessWidget {
+  String? getErrorText(PasswordValidationError? error) {
+    switch (error) {
+      case PasswordValidationError.empty:
+        return 'Password cannot be empty';
+      case PasswordValidationError.tooShort:
+        return 'Password must be at least 8 characters';
+      default:
+        return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayError = context.select(
+      (LoginBloc bloc) => bloc.state.password.displayError,
+    );
+
+    return TextField(
+      key: const Key('registerForm_passwordInput_textField'),
+      onChanged: (password) {
+        context.read<LoginBloc>().add(LoginRegisterPasswordChanged(password));
+      },
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'password',
+        errorText: displayError != null ? getErrorText(displayError) : null,
+      ),
+    );
+  }
+}
+
+class _LoginButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isInProgressOrSuccess = context.select(
+      (LoginBloc bloc) => bloc.state.status.isInProgressOrSuccess,
+    );
+
+    if (isInProgressOrSuccess) return const CircularProgressIndicator();
+
+    final isValid = context.select((LoginBloc bloc) => bloc.state.isValid);
+
+    return ElevatedButton(
+      key: const Key('loginForm_continue_raisedButton'),
+      onPressed: isValid
+          ? () => context.read<LoginBloc>().add(const LoginRegisterSubmitted())
+          : null,
+      child: const Text('Login'),
+    );
+  }
+}
+
+Widget _registerButton(BuildContext context) => TextButton(
+  onPressed: () {
+    Navigator.of(context).push(RegisterPage.route());
+  }, 
+  child: const Text('Create an account')
+);
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/login/bloc/login_bloc.dart';
+import 'package:mobile/login/view/login_form.dart';
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const LoginPage());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sign in')),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: BlocProvider(
+          create: (context) => LoginBloc(
+            authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+          child: const LoginForm(),
+        ),
+      ),
+    );
+  }
+}export 'login_form.dart';
+export 'login_page.dart';import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:equatable/equatable.dart';
+import 'package:mobile/login_register/models/confirm_password.dart';
+import '../models/username.dart';
+import '../models/password.dart';
+import '../models/email.dart';
+
+part 'login_register_event.dart';
+part 'login_register_state.dart';
+
+abstract class LoginRegisterBloc extends Bloc<LoginRegisterEvent, LoginRegisterState> {
+  final AuthenticationRepository authenticationRepository;
+
+  LoginRegisterBloc({required this.authenticationRepository})
+    : super(const LoginRegisterState());
+}part of 'login_register_bloc.dart';
+
+sealed class LoginRegisterEvent extends Equatable {
+  const LoginRegisterEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+final class LoginRegisterUsernameChanged extends LoginRegisterEvent {
+  final String username;
+  
+  const LoginRegisterUsernameChanged(this.username);
+
+  @override
+  List<Object> get props => [username];
+}
+
+final class LoginRegisterEmailChanged extends LoginRegisterEvent {
+  final String email;
+  
+  const LoginRegisterEmailChanged(this.email);
+
+  @override
+  List<Object> get props => [email];
+}
+
+final class LoginRegisterPasswordChanged extends LoginRegisterEvent {
+  final String password;
+  
+  const LoginRegisterPasswordChanged(this.password);
+
+  @override
+  List<Object> get props => [password];
+}
+
+final class LoginRegisterConfirmPasswordChanged extends LoginRegisterEvent {
+  final String confirmPassword;
+  
+  const LoginRegisterConfirmPasswordChanged(this.confirmPassword);
+
+  @override
+  List<Object> get props => [confirmPassword];
+}
+
+final class LoginRegisterSubmitted extends LoginRegisterEvent {
+  const LoginRegisterSubmitted();
+}part of 'login_register_bloc.dart';
+
+final class LoginRegisterState extends Equatable {
+  final FormzSubmissionStatus status;
+  final Username username;
+  final Email email;
+  final Password password;
+  final ConfirmPassword confirmPassword;
+  final bool isValid;
+  final String? errorMessage;
+
+  const LoginRegisterState({
+    this.status = FormzSubmissionStatus.initial,
+    this.username = const Username.pure(),
+    this.email = const Email.pure(),
+    this.password = const Password.pure(),
+    this.confirmPassword = const ConfirmPassword.pure(),
+    this.isValid = false,
+    this.errorMessage,
+  });
+
+  LoginRegisterState copyWith({
+    FormzSubmissionStatus? status,
+    Username? username,
+    Email? email,
+    Password? password,
+    ConfirmPassword? confirmPassword,
+    bool? isValid,
+    String? errorMessage,
+  }) {
+    return LoginRegisterState(
+      status: status ?? this.status,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      isValid: isValid ?? this.isValid,
+      errorMessage: errorMessage,
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    status,
+    username,
+    email,
+    password,
+    confirmPassword,
+    isValid,
+    errorMessage
+  ];
+}
+import 'package:formz/formz.dart';
+
+enum ConfirmedPasswordValidationError { empty, mismatch }
+
+class ConfirmedPassword extends FormzInput<String, ConfirmedPasswordValidationError> {
+  final String password;
+
+  const ConfirmedPassword.pure({this.password = ''}) : super.pure('');
+  const ConfirmedPassword.dirty({required this.password, String value = ''}) : super.dirty(value);
+
+  @override
+  ConfirmedPasswordValidationError? validator(String value) {
+    if (value.isEmpty) return ConfirmedPasswordValidationError.empty;
+    return password == value ? null : ConfirmedPasswordValidationError.mismatch;
+  }
+}
+import 'package:formz/formz.dart';
+
+enum ConfirmPasswordValidationError { empty, mismatch }
+
+class ConfirmPassword extends FormzInput<String, ConfirmPasswordValidationError> {
+  final String password;
+
+  const ConfirmPassword.pure() : password = '', super.pure('');
+  const ConfirmPassword.dirty({this.password = '', String value = ''}) : super.dirty(value);
+
+  @override
+  ConfirmPasswordValidationError? validator(String value) {
+    if (value.isEmpty) return ConfirmPasswordValidationError.empty;
+    return null;
+  }
+}import 'package:email_validator/email_validator.dart';
+import 'package:formz/formz.dart';
+
+enum EmailValidationError { empty, invalid }
+
+class Email extends FormzInput<String, EmailValidationError> {
+  const Email.pure() : super.pure('');
+  const Email.dirty([super.value = '']) : super.dirty();
+
+  @override
+  EmailValidationError? validator(String value) {
+    if (value.isEmpty) return EmailValidationError.empty;
+    if (!EmailValidator.validate(value)) return EmailValidationError.invalid;
+    return null;
+  }
+}import 'package:formz/formz.dart';
+
+enum PasswordValidationError { empty, tooShort }
+
+class Password extends FormzInput<String, PasswordValidationError> {
+  const Password.pure() : super.pure('');
+  const Password.dirty([super.value = '']) : super.dirty();
+
+  @override
+  PasswordValidationError? validator(String value) {
+    if (value.isEmpty) return PasswordValidationError.empty;
+    if (value.length < 8) return PasswordValidationError.tooShort;
+    return null;
+  }
+}import 'package:formz/formz.dart';
+
+enum UsernameValidationError { empty }
+
+class Username extends FormzInput<String, UsernameValidationError> {
+  const Username.pure() : super.pure('');
+  const Username.dirty([super.value = '']) : super.dirty();
+
+  @override
+  UsernameValidationError? validator(String value) {
+    if (value.isEmpty) return UsernameValidationError.empty;
+    return null;
+  }
+}import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:local_storage_tier_lists_api/local_storage_tier_lists_api.dart';
+import 'package:http_tier_lists_api/http_tier_lists_api.dart';
+import 'app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
+  
+  final localTierListsApi = LocalStorageTierListsApi(
+    plugin: await SharedPreferences.getInstance(),
+  );
+
+  final remoteTierListsApi = HttpTierListsApi();
+
+  runApp(App(localTierListsApi: localTierListsApi, remoteTierListsApi: remoteTierListsApi));
+}
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
+import 'package:mobile/login_register/bloc/login_register_bloc.dart';
+import 'package:mobile/login_register/models/confirm_password.dart';
+import 'package:mobile/login_register/models/username.dart';
+import 'package:mobile/login_register/models/password.dart';
+import 'package:mobile/login_register/models/email.dart';
+import 'package:formz/formz.dart';
+
+class RegisterBloc extends LoginRegisterBloc {
+  RegisterBloc({required super.authenticationRepository}) {
+    on<LoginRegisterUsernameChanged>(_onUsernameChanged);
+    on<LoginRegisterPasswordChanged>(_onPasswordChanged);
+    on<LoginRegisterEmailChanged>(_onEmailChanged);
+    on<LoginRegisterConfirmPasswordChanged>(_onConfirmPasswordChanged);
+    on<LoginRegisterSubmitted>(_onSubmitted);
+  }
+
+  void _onUsernameChanged(
+    LoginRegisterUsernameChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final username = Username.dirty(event.username);
+    emit(
+      state.copyWith(
+        username: username,
+        isValid: Formz.validate([
+          username,
+          state.email,
+          state.password,
+          state.confirmPassword,
+        ]),
+      ),
+    );
+  }
+
+  void _onEmailChanged(
+    LoginRegisterEmailChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final email = Email.dirty(event.email);
+    emit(
+      state.copyWith(
+        email: email,
+        isValid: Formz.validate([
+          state.username,
+          email,
+          state.password,
+          state.confirmPassword,
+        ]),
+      ),
+    );
+  }
+
+  void _onPasswordChanged(
+    LoginRegisterPasswordChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final password = Password.dirty(event.password);
+    final confirmPassword = ConfirmPassword.dirty(
+      password: password.value,
+      value: state.confirmPassword.value
+    );
+    emit(
+      state.copyWith(
+        password: password,
+        confirmPassword: confirmPassword,
+        isValid: Formz.validate([
+          state.username,
+          state.email,
+          password,
+          confirmPassword,
+        ]),
+      ),
+    );
+  }
+
+  void _onConfirmPasswordChanged(
+    LoginRegisterConfirmPasswordChanged event,
+    Emitter<LoginRegisterState> emit,
+  ) {
+    final confirmPassword = ConfirmPassword.dirty(
+      value: event.confirmPassword,
+      password: state.password.value,
+    );
+    emit(
+      state.copyWith(
+        confirmPassword: confirmPassword,
+        isValid: Formz.validate([
+          state.username,
+          state.email,
+          state.password,
+          confirmPassword,
+        ]),
+      ),
+    );
+  }
+
+  Future<void> _onSubmitted(
+    LoginRegisterSubmitted event,
+    Emitter<LoginRegisterState> emit,
+  ) async {
+    if (state.isValid) {
+      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+      try {
+        await authenticationRepository.register(
+          username: state.username.value,
+          email: state.email.value,
+          password: state.password.value,
+        );
+        emit(state.copyWith(status: FormzSubmissionStatus.success));
+      } on RegisterFailure catch (e) {
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            errorMessage: e.message,
+          ),
+        );
+      } catch (_) {
+        emit(state.copyWith(status: FormzSubmissionStatus.failure));
+      }
+    }
+  }
+}
+export 'view/register_page.dart';import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:mobile/login_register/bloc/login_register_bloc.dart';
+import 'package:mobile/login_register/models/confirm_password.dart';
+import 'package:mobile/login_register/models/password.dart';
+import 'package:mobile/register/bloc/register_bloc.dart';
+
+class RegisterForm extends StatelessWidget {
+  const RegisterForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<RegisterBloc, LoginRegisterState>(
+      listener: (context, state) {
+        if (state.status.isFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text(state.errorMessage ?? 'Registration Failure')),
+            );
+        } else if (state.status.isSuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(content: Text('Registration Successful'))
+            );
+          Navigator.of(context).pop();
+        }
+      },
+      child: Align(
+        alignment: const Alignment(0, -1 / 3),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _UsernameInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _EmailInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _PasswordInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _ConfirmPasswordInput(),
+            const Padding(padding: EdgeInsets.all(12)),
+            _RegisterButton(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UsernameInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final displayError = context.select(
+      (RegisterBloc bloc) => bloc.state.username.displayError,
+    );
+
+    return TextField(
+      key: const Key('registerForm_usernameInput_textField'),
+      onChanged: (username) {
+        context.read<RegisterBloc>().add(LoginRegisterUsernameChanged(username));
+      },
+      decoration: InputDecoration(
+        labelText: 'username',
+        errorText: displayError != null ? 'invalid username' : null,
+      ),
+    );
+  }
+}
+
+class _EmailInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final displayError = context.select(
+      (RegisterBloc bloc) => bloc.state.email.displayError,
+    );
+
+    return TextField(
+      key: const Key('registerForm_emailInput_textField'),
+      onChanged: (email) {
+        context.read<RegisterBloc>().add(LoginRegisterEmailChanged(email));
+      },
+      decoration: InputDecoration(
+        labelText: 'email',
+        errorText: displayError == null ? null : 'invalid email',
+      ),
+    );
+  }
+}
+
+class _PasswordInput extends StatelessWidget {
+  String? getErrorText(PasswordValidationError? displayError) {
+    switch (displayError) {
+      case PasswordValidationError.empty:
+        return 'Password cannot be empty';
+      case PasswordValidationError.tooShort:
+        return 'Password must be at least 8 characters';
+      default:
+        return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayError = context.select(
+      (RegisterBloc bloc) => bloc.state.password.displayError,
+    );
+
+    return TextField(
+      key: const Key('registerForm_passwordInput_textField'),
+      onChanged: (password) {
+        context.read<RegisterBloc>().add(LoginRegisterPasswordChanged(password));
+      },
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'password',
+        errorText: displayError != null ? getErrorText(displayError) : null,
+      ),
+    );
+  }
+}
+
+class _ConfirmPasswordInput extends StatelessWidget {
+  String? getErrorText(ConfirmPasswordValidationError? displayError) {
+    switch (displayError) {
+      case ConfirmPasswordValidationError.empty:
+        return 'Please confirm your password';
+      case ConfirmPasswordValidationError.mismatch:
+        return 'Passwords must match';
+      default:
+        return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final displayError = context.select(
+      (RegisterBloc bloc) => bloc.state.confirmPassword.displayError,
+    );
+
+    return TextField(
+      key: const Key('registerForm_confirmPasswordInput_textField'),
+      onChanged: (password) {
+        context.read<RegisterBloc>().add(LoginRegisterConfirmPasswordChanged(password));
+      },
+      obscureText: true,
+      decoration: InputDecoration(
+        labelText: 'confirm password',
+        errorText: displayError != null ? getErrorText(displayError) : null,
+      ),
+    );
+  }
+}
+
+class _RegisterButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final isInProgressOrSuccess = context.select(
+      (RegisterBloc bloc) => bloc.state.status.isInProgressOrSuccess,
+    );
+
+    if (isInProgressOrSuccess) { 
+      return const CircularProgressIndicator();
+    } 
+
+    final isValid = context.select((RegisterBloc bloc) => bloc.state.isValid);
+
+    return ElevatedButton(
+      key: const Key('registerForm_continue_raisedButton'),
+      onPressed: isValid
+          ? () =>
+                context.read<RegisterBloc>().add(const LoginRegisterSubmitted())
+          : null,
+      child: const Text('Register'),
+    );
+  }
+}
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/register/bloc/register_bloc.dart';
+
+import 'register_form.dart';
+
+class RegisterPage extends StatelessWidget {
+  const RegisterPage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute(builder: (_) => const RegisterPage());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Sign up'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: BlocProvider(
+          create: (context) => RegisterBloc(
+            authenticationRepository: context.read<AuthenticationRepository>(),
+          ),
+          child: const RegisterForm(),
+        ),
+      ),
+    );
+  }
+}
+export 'view/settings_page.dart';import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/authentication/bloc/authentication_bloc.dart';
+
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Settings')),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            context.read<AuthenticationBloc>().add(
+              AuthenticationLogoutPressed()
+            );
+          },
+          child: const Text('Log out')
+        ),
+      ),
+    );
+  }
+}
+export 'view/splash_page.dart';import 'package:flutter/material.dart';
+
+class SplashPage extends StatelessWidget {
+  const SplashPage({super.key});
+
+  static Route<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const SplashPage());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Image.asset('assets/images/TierListLogo.png')),
+    );
+  }
+}import 'package:flutter/material.dart';
+
+class TierMasterTheme {
+  static ThemeData get theme {
+    return ThemeData(
+      brightness: Brightness.dark,
+      colorScheme: ColorScheme.fromSeed(
+        brightness: Brightness.dark,
+        seedColor: const Color(0xFF4B5563), 
+      ),
+    );
+  }
+}import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+
+part 'add_tier_list_state.dart';
+
+class AddTierListCubit extends Cubit<AddTierListState> {
+  AddTierListCubit() : super(const AddTierListState());
+
+  void onNameChanged(String name) {
+    emit(state.copyWith(
+      name: name,
+    ));
+  }
+
+  void onDescriptionChanged(String description) {
+    emit(state.copyWith(description: description));
+  }
+
+  void submit() {
+    emit(state.copyWith(status: AddTierListStatus.success));
+  }
+}part of 'add_tier_list_cubit.dart';
+
+enum AddTierListStatus { initial, submitting, success, failure }
+
+class AddTierListState extends Equatable {
+  final AddTierListStatus status;
+  final String name;
+  final String description;
+
+  const AddTierListState({
+    this.status = AddTierListStatus.initial,
+    this.name = '',
+    this.description = '',
+  });
+
+  bool get isValid => name.trim().isNotEmpty;
+
+  AddTierListState copyWith({
+    AddTierListStatus? status,
+    String? name,
+    String? description,
+  }) {
+    return AddTierListState(
+      status: status ?? this.status,
+      name: name ?? this.name,
+      description: description ?? this.description,
+    );
+  }
+
+  @override
+  List<Object> get props => [status, name, description];
+}import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+part 'tier_lists_overview_event.dart';
+part 'tier_lists_overview_state.dart';
+
+class TierListsOverviewBloc
+    extends Bloc<TierListsOverviewEvent, TierListsOverviewState> {
+  final TierListsRepository _tierListsRepository;
+
+  TierListsOverviewBloc({required TierListsRepository tierListsRepository})
+    : _tierListsRepository = tierListsRepository,
+      super(const TierListsOverviewState()) {
+    on<TierListsOverviewSubscriptionRequested>(_onSubscriptionRequested);
+    on<TierListsOverviewTierListAdded>(_onTierListAdded);
+    on<TierListsOverviewTierListDeleted>(_onTierListDeleted);
+    on<TierListsOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
+  }
+
+  Future<void> _onSubscriptionRequested(
+    TierListsOverviewSubscriptionRequested event,
+    Emitter<TierListsOverviewState> emit,
+  ) async {
+    emit(state.copyWith(status: () => TierListsOverviewStatus.loading));
+
+    _tierListsRepository.refreshTierLists();
+
+    await emit.forEach<List<TierList>>(
+      _tierListsRepository.getTierLists(), // subscribe to stream
+      onData: (tierLists) => state.copyWith(
+        status: () => TierListsOverviewStatus.success,
+        tierLists: () => tierLists,
+      ),
+      onError: (_, _) =>
+          state.copyWith(status: () => TierListsOverviewStatus.failure),
+    );
+  }
+
+  void _onTierListAdded(
+    TierListsOverviewTierListAdded event,
+    Emitter<TierListsOverviewState> emit
+  ) {
+    _tierListsRepository.saveTierList(
+      TierList(
+        title: event.name,
+        description: event.description,
+        tiers: defaultTiers,
+        stagingArea: const StagingArea(items: [])
+      )
+    );
+  }
+
+  Future<void> _onTierListDeleted(
+    TierListsOverviewTierListDeleted event,
+    Emitter<TierListsOverviewState> emit,
+  ) async {
+    emit(state.copyWith(lastDeletedTierList: () => event.tierList));
+    await _tierListsRepository.deleteTierList(event.tierList.id);
+  }
+
+  Future<void> _onUndoDeletionRequested(
+    TierListsOverviewUndoDeletionRequested event,
+    Emitter<TierListsOverviewState> emit,
+  ) async {
+    final tierList = state.lastDeletedTierList!;
+    emit(state.copyWith(lastDeletedTierList: () => null));
+    await _tierListsRepository.saveTierList(tierList);
+  }
+}
+part of 'tier_lists_overview_bloc.dart';
+
+sealed class TierListsOverviewEvent extends Equatable {
+  const TierListsOverviewEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+final class TierListsOverviewSubscriptionRequested extends TierListsOverviewEvent {
+  const TierListsOverviewSubscriptionRequested();
+}
+
+final class TierListsOverviewTierListAdded extends TierListsOverviewEvent {
+  final String name;
+  final String description;
+
+  const TierListsOverviewTierListAdded({
+    required this.name,
+    required this.description
+  });
+}
+
+final class TierListsOverviewTierListDeleted extends TierListsOverviewEvent {
+  final TierList tierList;
+
+  const TierListsOverviewTierListDeleted(this.tierList);
+
+  @override
+  List<Object> get props => [tierList];
+}
+
+final class TierListsOverviewUndoDeletionRequested extends TierListsOverviewEvent {
+  const TierListsOverviewUndoDeletionRequested();
+}part of 'tier_lists_overview_bloc.dart';
+
+enum TierListsOverviewStatus { initial, loading, success, failure }
+
+final class TierListsOverviewState extends Equatable {
+  final TierListsOverviewStatus status;
+  final List<TierList> tierLists;
+  final TierList? lastDeletedTierList;
+
+  const TierListsOverviewState({
+    this.status = TierListsOverviewStatus.initial,
+    this.tierLists = const [],
+    this.lastDeletedTierList,
+  });
+
+  // copyWith uses functions as parameters so that state members can be set as null
+  TierListsOverviewState copyWith({
+    TierListsOverviewStatus Function()? status,
+    List<TierList> Function()? tierLists,
+    TierList? Function()? lastDeletedTierList,
+  }) {
+    return TierListsOverviewState(
+      status: status == null ? this.status : status(),
+      tierLists: tierLists == null ? this.tierLists : tierLists(),
+      lastDeletedTierList: lastDeletedTierList == null
+          ? this.lastDeletedTierList
+          : lastDeletedTierList(),
+    );
+  }
+
+  @override
+  List<Object?> get props => [status, tierLists, lastDeletedTierList];
+}
+export 'view/tier_lists_overview_page.dart';import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/view/tier_list_editor_page.dart';
+import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
+import 'package:mobile/tier_lists_overview/widgets/tier_list_list_tile.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+import '../widgets/add_tier_list_button.dart';
+
+class TierListsOverviewPage extends StatelessWidget {
+  const TierListsOverviewPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => TierListsOverviewBloc(
+        tierListsRepository: context.read<TierListsRepository>(),
+      )..add(const TierListsOverviewSubscriptionRequested()),
+      child: const TierListsOverviewView(),
+    );
+  }
+}
+
+class TierListsOverviewView extends StatelessWidget {
+  const TierListsOverviewView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Your Tierlists'),
+        actions: [
+          const AddTierListButton()
+        ],
+      ),
+      body: MultiBlocListener(
+        listeners: [
+          BlocListener<TierListsOverviewBloc, TierListsOverviewState>(
+            listenWhen: (previous, current) =>
+                previous.status != current.status,
+            listener: (context, state) {
+              if (state.status == TierListsOverviewStatus.failure) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    const SnackBar(content: Text('Error Loading Tier Lists')),
+                  );
+              }
+            },
+          ),
+          BlocListener<TierListsOverviewBloc, TierListsOverviewState>(
+            listenWhen: (previous, current) =>
+                previous.lastDeletedTierList != current.lastDeletedTierList &&
+                current.lastDeletedTierList != null,
+            listener: (context, state) {
+              final deletedTierList = state.lastDeletedTierList!;
+              final messenger = ScaffoldMessenger.of(context);
+              messenger
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      'Deleted Tier List: ${deletedTierList.title}',
+                    ),
+                    action: SnackBarAction(
+                      label: 'Undo',
+                      onPressed: () {
+                        messenger.hideCurrentSnackBar();
+                        context.read<TierListsOverviewBloc>().add(
+                          const TierListsOverviewUndoDeletionRequested(),
+                        );
+                      },
+                    ),
+                  ),
+                );
+            },
+          ),
+        ],
+        child: BlocBuilder<TierListsOverviewBloc, TierListsOverviewState>(
+          builder: (context, state) {
+            if (state.tierLists.isEmpty) {
+              if (state.status == TierListsOverviewStatus.loading) {
+                return const Center(child: CupertinoActivityIndicator(),);
+              } else if (state.status != TierListsOverviewStatus.success) {
+                return const SizedBox();
+              } else {
+                return Center(
+                  child: Text(
+                    'Create your first tier list',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                );
+              }
+            }
+
+            return CupertinoScrollbar(
+              child: ListView.builder(
+                itemCount: state.tierLists.length,
+                itemBuilder: (_, index) {
+                  final tierList = state.tierLists.elementAt(index);
+                  return TierListListTile(
+                    tierList: tierList,
+                    onDismissed: (_) {
+                      context.read<TierListsOverviewBloc>().add(
+                        TierListsOverviewTierListDeleted(tierList)
+                      );
+                    },
+                    onTap: () {
+                      Navigator.of(context).push(TierListEditorPage.route(tierList.id));
+                    }
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
+import 'package:mobile/tier_lists_overview/widgets/add_tier_list_dialog.dart';
+
+class AddTierListButton extends StatelessWidget {
+  const AddTierListButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.add),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (dialogContext) => BlocProvider.value(
+            value: context.read<TierListsOverviewBloc>(),
+            child: const AddTierListDialog(),
+          )
+        );
+      },
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_lists_overview/add_tier_list/cubit/add_tier_list_cubit.dart';
+import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
+
+class AddTierListDialog extends StatelessWidget {
+  const AddTierListDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => AddTierListCubit(),
+      child: Builder(
+        builder: (context) {
+          return BlocListener<AddTierListCubit, AddTierListState>(
+            listener: (context, state) {
+              if (state.status == AddTierListStatus.success) {
+                context.read<TierListsOverviewBloc>().add(
+                  TierListsOverviewTierListAdded(
+                    name: state.name,
+                    description: state.description,
+                  ),
+                );
+                Navigator.of(context).pop();
+              }
+            },
+            child: AlertDialog(
+              title: const Text('Add New Tier List'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('Title'),
+                  TextFormField(
+                    onChanged: (title) {
+                      context.read<AddTierListCubit>().onNameChanged(title);
+                    },
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('Description'),
+                  TextFormField(
+                    onChanged: (description) {
+                      context.read<AddTierListCubit>().onDescriptionChanged(
+                        description,
+                      );
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                BlocBuilder<AddTierListCubit, AddTierListState>(
+                  builder: (context, state) => ElevatedButton(
+                    onPressed: state.isValid
+                        ? () => context.read<AddTierListCubit>().submit()
+                        : null,
+                    child: const Text('Add'),
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+class TierListListTile extends StatelessWidget {
+  final TierList tierList;
+  final DismissDirectionCallback? onDismissed;
+  final VoidCallback? onTap;
+
+  const TierListListTile({
+    super.key,
+    required this.tierList,
+    this.onDismissed,
+    this.onTap
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: Key('tierListListTile_dismissible_${tierList.id}'),
+      onDismissed: onDismissed,
+      direction: DismissDirection.endToStart,
+      background: Container(
+        alignment: Alignment.centerRight,
+        color: Theme.of(context).colorScheme.error,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: const Icon(
+          Icons.delete,
+          color: Colors.black
+        ),
+      ),
+      child: ListTile(
+        onTap: onTap,
+        title: Text(
+          tierList.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          tierList.description,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ),
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+part 'tier_list_editor_event.dart';
+part 'tier_list_editor_state.dart';
+
+class TierListEditorBloc
+    extends Bloc<TierListEditorEvent, TierListEditorState> {
+  final TierListsRepository _tierListsRepository;
+  final String _tierListId;
+
+  TierListEditorBloc({
+    required TierListsRepository tierListsRepository,
+    required String tierListId,
+  }) : _tierListsRepository = tierListsRepository,
+       _tierListId = tierListId,
+       super(const TierListEditorState()) {
+    on<TierListEditorSubscriptionRequested>(_onSubscriptionRequested);
+    on<TierListEditorTierListRenamed>(_onTierListRenamed);
+    on<TierListEditorTierAdded>(_onTierAdded);
+    on<TierListEditorTierDeleted>(_onTierDeleted);
+    on<TierListEditorTierRenamed>(_onTierRenamed);
+    on<TierListEditorTierColorChanged>(_onTierColorChanged);
+    on<TierListEditorUndoTierDeletionRequested>(_undoTierDeletionRequested);
+    on<TierListEditorItemAddedToStaging>(_onItemAddedToStaging);
+    on<TierListEditorItemDeleted>(_onItemDeleted);
+    on<TierListEditorItemUpdated>(_onItemUpdated);
+    on<TierListEditorItemMoved>(_onItemMoved);
+  }
+
+  Future<void> _onSubscriptionRequested(
+    TierListEditorSubscriptionRequested event,
+    Emitter<TierListEditorState> emit,
+  ) async {
+    emit(state.copyWith(status: () => TierListEditorStatus.loading));
+
+    await emit.forEach(
+      _tierListsRepository.getTierList(_tierListId),
+      onData: (tierList) => state.copyWith(
+        status: () => TierListEditorStatus.success,
+        tierList: () => tierList,
+        originalTitle: () => tierList.title,
+      ),
+      onError: (_, _) =>
+          state.copyWith(status: () => TierListEditorStatus.failure),
+    );
+  }
+
+  void _onTierListRenamed(
+    TierListEditorTierListRenamed event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    emit(state.copyWith(originalTitle: () => event.newTitle));
+    final newTierList = state.tierList!.copyWith(title: event.newTitle);
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onTierAdded(
+    TierListEditorTierAdded event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newTierList = state.tierList!.copyWith(
+      tiers: [
+        ...state.tierList!.tiers,
+        Tier(
+          name: 'New Tier',
+          color: Colors.grey,
+          items: [],
+        ),
+      ],
+    );
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onTierDeleted(
+    TierListEditorTierDeleted event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final deletedTierIndex = state.tierList!.tiers.indexWhere(
+      (tier) => tier.id == event.tier.id,
+    );
+    emit(
+      state.copyWith(
+        lastDeletedTier: () => event.tier.copyWith(items: []),
+        lastDeletedTierIndex: () => deletedTierIndex,
+      ),
+    );
+
+    final newStagingArea = state.tierList!.stagingArea.copyWith(
+      items: state.tierList!.stagingArea.items + event.tier.items,
+    );
+
+    final newTierList = state.tierList!.copyWith(
+      tiers: List<Tier>.from(state.tierList!.tiers)..removeAt(deletedTierIndex),
+      stagingArea: newStagingArea
+    );
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onTierRenamed(
+    TierListEditorTierRenamed event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newTiers = state.tierList!.tiers
+        .map(
+          (tier) => tier.id == event.tierId
+              ? tier.copyWith(name: event.newName)
+              : tier,
+        )
+        .toList();
+    final newTierList = state.tierList!.copyWith(tiers: newTiers);
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onTierColorChanged(
+    TierListEditorTierColorChanged event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newTiers = state.tierList!.tiers
+        .map(
+          (tier) => tier.id == event.tierId
+              ? tier.copyWith(color: event.newColor)
+              : tier,
+        )
+        .toList();
+    final newTierList = state.tierList!.copyWith(tiers: newTiers);
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _undoTierDeletionRequested(
+    TierListEditorUndoTierDeletionRequested event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newTiers = List<Tier>.from(state.tierList!.tiers);
+    newTiers.insert(state.lastDeletedTierIndex!, state.lastDeletedTier!);
+    final newTierList = state.tierList!.copyWith(tiers: newTiers);
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onItemAddedToStaging(
+    TierListEditorItemAddedToStaging event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newStagingItems = List<TierItem>.from(
+      state.tierList!.stagingArea.items,
+    );
+    newStagingItems.add(event.item);
+    final newStagingArea = state.tierList!.stagingArea.copyWith(
+      items: newStagingItems,
+    );
+    final newTierList = state.tierList!.copyWith(stagingArea: newStagingArea);
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onItemDeleted(
+    TierListEditorItemDeleted event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newTiers = state.tierList!.tiers.map((tier) {
+      if (tier.id == event.row.id) {
+        final newItems = tier.items
+            .where((item) => item.id != event.item.id)
+            .toList();
+        return tier.copyWith(items: newItems);
+      } else {
+        return tier;
+      }
+    }).toList();
+
+    final newStagingArea = event.row.id == 'staging'
+        ? state.tierList!.stagingArea.copyWith(
+            items: state.tierList!.stagingArea.items
+                .where((item) => item.id != event.item.id)
+                .toList(),
+          )
+        : state.tierList!.stagingArea;
+
+    final newTierList = state.tierList!.copyWith(
+      tiers: newTiers,
+      stagingArea: newStagingArea,
+    );
+
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onItemUpdated(
+    TierListEditorItemUpdated event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final newTiers = state.tierList!.tiers
+        .map(
+          (tier) => tier.id == event.rowId
+              ? tier.copyWith(
+                  items: tier.items
+                      .map(
+                        (item) => item.id == event.updatedItem.id
+                            ? event.updatedItem
+                            : item,
+                      )
+                      .toList(),
+                )
+              : tier,
+        )
+        .toList();
+
+    final newStagingArea = event.rowId == 'staging'
+        ? state.tierList!.stagingArea.copyWith(
+            items: state.tierList!.stagingArea.items
+                .map(
+                  (item) => item.id == event.updatedItem.id
+                      ? event.updatedItem
+                      : item,
+                )
+                .toList(),
+          )
+        : state.tierList!.stagingArea;
+
+    final newTierList = state.tierList!.copyWith(
+      tiers: newTiers,
+      stagingArea: newStagingArea,
+    );
+
+    _tierListsRepository.updateTierList(newTierList);
+  }
+
+  void _onItemMoved(
+    TierListEditorItemMoved event,
+    Emitter<TierListEditorState> emit,
+  ) {
+    final itemToMove = event.sourceTierId == 'staging'
+        ? state.tierList!.stagingArea.items[event.oldIndex]
+        : state.tierList!.tiers
+              .firstWhere((tier) => tier.id == event.sourceTierId)
+              .items[event.oldIndex];
+
+    final newTiers = state.tierList!.tiers.map((tier) {
+      if (tier.id == event.sourceTierId) {
+        final newItems = List<TierItem>.from(tier.items);
+        newItems.removeAt(event.oldIndex);
+        tier = tier.copyWith(items: newItems);
+      }
+      if (tier.id == event.destinationTierId) {
+        final newItems = List<TierItem>.from(tier.items);
+        newItems.insert(event.newIndex, itemToMove);
+        tier = tier.copyWith(items: newItems);
+      }
+      return tier;
+    }).toList();
+
+    final newStagingItems = List<TierItem>.from(
+      state.tierList!.stagingArea.items,
+    );
+    if (event.sourceTierId == 'staging') {
+      newStagingItems.removeAt(event.oldIndex);
+    }
+    if (event.destinationTierId == 'staging') {
+      newStagingItems.insert(event.newIndex, itemToMove);
+    }
+
+    final newTierList = state.tierList!.copyWith(
+      tiers: newTiers,
+      stagingArea: state.tierList!.stagingArea.copyWith(items: newStagingItems),
+    );
+
+    _tierListsRepository.updateTierList(newTierList);
+  }
+}
+part of 'tier_list_editor_bloc.dart';
+
+sealed class TierListEditorEvent extends Equatable {
+  const TierListEditorEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class TierListEditorSubscriptionRequested extends TierListEditorEvent {
+  const TierListEditorSubscriptionRequested();
+}
+
+final class TierListEditorTierListRenamed extends TierListEditorEvent {
+  final String newTitle;
+
+  const TierListEditorTierListRenamed(this.newTitle);
+
+  @override
+  List<Object?> get props => [newTitle];
+}
+
+final class TierListEditorTierAdded extends TierListEditorEvent {
+  const TierListEditorTierAdded();
+}
+
+final class TierListEditorTierDeleted extends TierListEditorEvent {
+  final Tier tier;
+
+  const TierListEditorTierDeleted(this.tier);
+
+  @override
+  List<Object?> get props => [tier];
+}
+
+final class TierListEditorTierRenamed extends TierListEditorEvent {
+  final String tierId;
+  final String newName;
+
+  const TierListEditorTierRenamed({
+    required this.tierId,
+    required this.newName,
+  });
+
+  @override
+  List<Object?> get props => [tierId, newName];
+}
+
+final class TierListEditorTierColorChanged extends TierListEditorEvent {
+  final String tierId;
+  final Color newColor;
+
+  const TierListEditorTierColorChanged({
+    required this.tierId,
+    required this.newColor,
+  });
+
+  @override
+  List<Object?> get props => [tierId, newColor];
+}
+
+final class TierListEditorUndoTierDeletionRequested
+    extends TierListEditorEvent {
+  const TierListEditorUndoTierDeletionRequested();
+}
+
+final class TierListEditorItemAddedToStaging extends TierListEditorEvent {
+  final TierItem item;
+
+  const TierListEditorItemAddedToStaging(this.item);
+
+  @override
+  List<Object?> get props => [item];
+}
+
+final class TierListEditorItemDeleted extends TierListEditorEvent {
+  final TierItem item;
+  final ListRow row;
+
+  const TierListEditorItemDeleted({required this.item, required this.row});
+
+  @override
+  List<Object?> get props => [item, row];
+}
+
+final class TierListEditorItemUpdated extends TierListEditorEvent {
+  final TierItem updatedItem;
+  final String rowId;
+
+  const TierListEditorItemUpdated({required this.updatedItem, required this.rowId});
+
+  @override
+  List<Object?> get props => [updatedItem, rowId];
+}
+
+final class TierListEditorItemMoved extends TierListEditorEvent {
+  final String sourceTierId;
+  final int oldIndex;
+  final String destinationTierId;
+  final int newIndex;
+
+  const TierListEditorItemMoved({
+    required this.sourceTierId,
+    required this.oldIndex,
+    required this.destinationTierId,
+    required this.newIndex,
+  });
+
+  @override
+  List<Object?> get props => [
+    sourceTierId,
+    oldIndex,
+    destinationTierId,
+    newIndex,
+  ];
+}
+part of 'tier_list_editor_bloc.dart';
+
+enum TierListEditorStatus { initial, loading, success, failure }
+
+final class TierListEditorState extends Equatable {
+  final TierListEditorStatus status;
+  final TierList? tierList;
+  final String? originalTitle;
+  final Tier? lastDeletedTier;
+  final int? lastDeletedTierIndex;
+  final TierItem? lastMovedItem;
+  final String? moveMessage;
+
+  const TierListEditorState({
+    this.status = TierListEditorStatus.initial,
+    this.tierList,
+    this.originalTitle,
+    this.lastDeletedTier,
+    this.lastDeletedTierIndex,
+    this.lastMovedItem,
+    this.moveMessage,
+  });
+
+  TierListEditorState copyWith({
+    TierListEditorStatus Function()? status,
+    TierList? Function()? tierList,
+    String? Function()? originalTitle,
+    Tier? Function()? lastDeletedTier,
+    int? Function()? lastDeletedTierIndex,
+    TierItem? Function()? lastMovedItem,
+    String? Function()? moveMessage,
+  }) {
+    return TierListEditorState(
+      status: status == null ? this.status : status(),
+      tierList: tierList == null ? this.tierList : tierList(),
+      originalTitle: originalTitle == null
+          ? this.originalTitle
+          : originalTitle(),
+      lastDeletedTier: lastDeletedTier == null
+          ? this.lastDeletedTier
+          : lastDeletedTier(),
+      lastDeletedTierIndex: lastDeletedTierIndex == null
+          ? this.lastDeletedTierIndex
+          : lastDeletedTierIndex(),
+      lastMovedItem: lastMovedItem == null
+          ? this.lastMovedItem
+          : lastMovedItem(),
+      moveMessage: moveMessage == null ? this.moveMessage : moveMessage(),
+    );
+  }
+
+  @override
+  List<Object?> get props => [
+    status,
+    tierList,
+    originalTitle,
+    lastDeletedTier,
+    lastDeletedTierIndex,
+    lastMovedItem,
+    moveMessage,
+  ];
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'color_picker_state.dart';
+
+class ColorPickerCubit extends Cubit<ColorPickerState> {
+  ColorPickerCubit(Color initialColor)
+    : super(ColorPickerState(initialColor));
+
+  void changeColor(Color color) {
+    emit(ColorPickerState(color));
+  }
+}
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+
+class ColorPickerState extends Equatable {
+  final Color selectedColor;
+
+  const ColorPickerState(this.selectedColor);
+
+  @override
+  List<Object?> get props => [selectedColor];
+}import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart';
+
+import '../widgets/tier_list_editor_options_button.dart';
+import '../widgets/tier_row_widget.dart';
+
+class TierListEditorPage extends StatelessWidget {
+  final String tierListId;
+
+  const TierListEditorPage(this.tierListId, {super.key});
+
+  static Route<void> route(String tierListId) {
+    return MaterialPageRoute(
+      builder: (context) => TierListEditorPage(tierListId),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => TierListEditorBloc(
+        tierListsRepository: context.read<TierListsRepository>(),
+        tierListId: tierListId,
+      )..add(const TierListEditorSubscriptionRequested()),
+      child: const TierListEditorView(),
+    );
+  }
+}
+
+class TierListEditorView extends StatelessWidget {
+  const TierListEditorView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<TierListEditorBloc, TierListEditorState>(
+      listenWhen: (previous, current) =>
+          previous.lastDeletedTier != current.lastDeletedTier &&
+          current.lastDeletedTier != null,
+      listener: (context, state) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text('Deleted Tier ${state.lastDeletedTier!.name}'),
+              action: SnackBarAction(
+                label: 'Undo', 
+                onPressed: () {
+                  context.read<TierListEditorBloc>().add(
+                    const TierListEditorUndoTierDeletionRequested()
+                  );
+                }
+              ),
+            )
+          );
+      },
+      child: BlocBuilder<TierListEditorBloc, TierListEditorState>(
+        builder: (context, state) {
+          if (state.status == TierListEditorStatus.loading) {
+            return const Center(child: CupertinoActivityIndicator());
+          } else if (state.status != TierListEditorStatus.success) {
+            return const Center(child: Text('Error loading tier list'));
+          }
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(state.originalTitle!),
+              actions: [const TierListEditorOptionsButton()],
+            ),
+            body: Center(
+              child: ListView.builder(
+                itemCount: state.tierList!.tiers.length + 1,
+                itemBuilder: (_, index) {
+                  return TierRowWidget(
+                    rowId: index == state.tierList!.tiers.length
+                        ? state.tierList!.stagingArea.id
+                        : state.tierList!.tiers[index].id,
+                  );
+                },
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:mobile/tier_list_editor/color_picker_cubit/color_picker_cubit.dart';
+import 'package:mobile/tier_list_editor/color_picker_cubit/color_picker_state.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show Tier;
+
+class ColorPickerDialog extends StatelessWidget {
+  final Tier tier;
+  
+  const ColorPickerDialog(this.tier, {super.key});
+
+  static const List<Color> _colorChoices = [
+    Colors.red, Colors.pink, Colors.purple, Colors.deepPurple,
+    Colors.indigo, Colors.blue, Colors.lightBlue, Colors.cyan,
+    Colors.teal, Colors.green, Colors.lightGreen, Colors.lime,
+    Colors.yellow, Colors.amber, Colors.orange, Colors.deepOrange,
+    Colors.brown, Colors.grey, Colors.blueGrey, Colors.black, 
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => ColorPickerCubit(tier.color),
+      child: BlocBuilder<ColorPickerCubit, ColorPickerState>(
+        builder: (context, state) => AlertDialog(
+          title: const Text('Choose Tier Color'),
+          content: BlockPicker(
+            pickerColor: state.selectedColor, 
+            availableColors: _colorChoices,
+            onColorChanged: (color) {
+              context.read<ColorPickerCubit>().changeColor(color);
+              context.read<TierListEditorBloc>().add(
+                TierListEditorTierColorChanged(tierId: tier.id, newColor: color)
+              );
+              Navigator.of(context).pop();
+            }
+          ),
+        ),
+      ),
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show Tier;
+import 'rename_tier_dialog.dart';
+import 'color_picker_dialog.dart';
+
+class EditTierModal extends StatelessWidget {
+  final String _tierId;
+
+  const EditTierModal(String tierId, {super.key}) : _tierId = tierId;
+
+  @override
+  Widget build(BuildContext context) {
+    final tier = context
+        .read<TierListEditorBloc>()
+        .state
+        .tierList!
+        .tiers
+        .firstWhere((tier) => tier.id == _tierId);
+
+    return Container(
+      height: 250,
+      color: tier.color,
+      child: Column(
+        children: [
+          Text(tier.name),
+          ListTile(
+            leading: const Icon(Icons.edit),
+            title: const Text('Rename Tier'),
+            onTap: () {
+              Navigator.of(context).pop();
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<TierListEditorBloc>(),
+                  child: RenameTierDialog(tier),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.palette),
+            title: const Text('Change Tier Color'),
+            onTap: () {
+              Navigator.of(context).pop();
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<TierListEditorBloc>(),
+                  child: ColorPickerDialog(tier),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.delete),
+            title: const Text('Delete Tier'),
+            onTap: () {
+              Navigator.of(context).pop();
+              showDialog(
+                context: context,
+                builder: (_) => BlocProvider.value(
+                  value: context.read<TierListEditorBloc>(),
+                  child: DeleteTierDialog(tier),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DeleteTierDialog extends StatelessWidget {
+  final Tier tier;
+
+  const DeleteTierDialog(this.tier, {super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Are you sure you want to delete ${tier.name}?'),
+      content: const Text('All tier items will be moved to staging.'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            context.read<TierListEditorBloc>().add(
+              TierListEditorTierDeleted(tier),
+            );
+            Navigator.pop(context);
+          },
+          child: const Text('Delete'),
+        ),
+      ],
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart'
+    show ListRow, TierItem;
+
+class MoveItemSheet extends StatefulWidget {
+  final TierItem _item;
+  final String _sourceRowId;
+
+  const MoveItemSheet({
+    super.key,
+    required TierItem item,
+    required String sourceRowId,
+  }) : _item = item,
+       _sourceRowId = sourceRowId;
+
+  @override
+  State<MoveItemSheet> createState() => _MoveItemSheetState();
+}
+
+class _MoveItemSheetState extends State<MoveItemSheet> {
+  ListRow? _selectedRow;
+
+  @override
+  Widget build(BuildContext context) {
+    final editorState = context.watch<TierListEditorBloc>().state;
+    final availableRows = [
+      ...editorState.tierList!.tiers,
+      editorState.tierList!.stagingArea,
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Text('Move Item', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 16),
+          Text(
+            _selectedRow == null
+                ? 'Select a destination tier'
+                : 'Move "${widget._item.name}" to position:',
+          ),
+          const SizedBox(height: 24),
+          if (_selectedRow == null)
+            _rowSelection(availableRows)
+          else
+            _positionSelection(_selectedRow!, availableRows),
+        ],
+      ),
+    );
+  }
+
+  Widget _rowSelection(List<ListRow> availableRows) {
+    return SizedBox(
+      height: 200,
+      child: ListView.builder(
+        itemCount: availableRows.length,
+        itemBuilder: (_, index) => ListTile(
+          title: Text(availableRows[index].name),
+          tileColor: availableRows[index].color,
+          onTap: () {
+            setState(() {
+              _selectedRow = availableRows[index];
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _positionSelection(
+    ListRow destinationRow,
+    List<ListRow> availableRows,
+  ) {
+    return SizedBox(
+      height: 32,
+      child: ListView.builder(
+        itemCount:
+            destinationRow.items.length +
+            (destinationRow.id == widget._sourceRowId ? 0 : 1),
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (_, index) => GestureDetector(
+          onTap: () {
+            final oldIndex = availableRows
+                .firstWhere((row) => row.id == widget._sourceRowId)
+                .items
+                .indexWhere((item) => item.id == widget._item.id);
+
+            context.read<TierListEditorBloc>().add(
+              TierListEditorItemMoved(
+                sourceTierId: widget._sourceRowId,
+                oldIndex: oldIndex,
+                destinationTierId: destinationRow.id,
+                newIndex: index,
+              ),
+            );
+
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            width: 32,
+            height: 32,
+            margin: const EdgeInsets.only(right: 8),
+            color: destinationRow.color,
+            child: Center(child: Text((index + 1).toString())),
+          ),
+        ),
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show Tier;
+
+class RenameTierDialog extends StatefulWidget {
+  final Tier tier;
+
+  const RenameTierDialog(this.tier, {super.key});
+
+  @override
+  State<RenameTierDialog> createState() => _RenameTierListDialogState();
+}
+
+class _RenameTierListDialogState extends State<RenameTierDialog> {
+  late final TextEditingController _textController;
+  bool _isButtonDisabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _textController = TextEditingController(text: widget.tier.name);
+
+    _textController.addListener(() {
+      setState(() {
+        _isButtonDisabled = _textController.text.isEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Rename Tier'),
+      content: TextFormField(controller: _textController),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: _isButtonDisabled
+              ? null
+              : () {
+                  context.read<TierListEditorBloc>().add(
+                    TierListEditorTierRenamed(
+                      tierId: widget.tier.id,
+                      newName: _textController.text,
+                    ),
+                  );
+                  Navigator.of(context).pop();
+                },
+          child: const Text('Submit'),
+        ),
+      ],
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+
+class RenameTierListDialog extends StatefulWidget {
+  const RenameTierListDialog({super.key});
+
+  @override
+  State<RenameTierListDialog> createState() => _RenameTierListDialogState();
+}
+
+class _RenameTierListDialogState extends State<RenameTierListDialog> {
+  late final TextEditingController _textController;
+  bool _isButtonDisabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final initialText = context
+        .read<TierListEditorBloc>()
+        .state
+        .tierList!
+        .title;
+    _textController = TextEditingController(text: initialText);
+
+    _textController.addListener(() {
+      setState(() {
+        _isButtonDisabled = _textController.text.isEmpty;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Rename Tier List'),
+      content: TextFormField(controller: _textController),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: _isButtonDisabled
+              ? null
+              : () {
+                  context.read<TierListEditorBloc>().add(
+                    TierListEditorTierListRenamed(_textController.text),
+                  );
+                  Navigator.of(context).pop();
+                },
+          child: const Text('Submit'),
+        ),
+      ],
+    );
+  }
+}
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/item_details/view/item_details_page.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show TierItem;
+
+import 'move_item_sheet.dart';
+
+class TierItemTile extends StatelessWidget {
+  final String? _itemId;
+  final String _rowId;
+
+  const TierItemTile({
+    super.key,
+    required String? itemId,
+    required String rowId,
+  }) : _itemId = itemId,
+       _rowId = rowId;
+
+  @override
+  Widget build(BuildContext context) {
+    final editorBloc = context.read<TierListEditorBloc>();
+    final tierList = editorBloc.state.tierList!;
+
+    late final TierItem? item;
+    if (_itemId == null) {
+      item = null;
+    } else if (_rowId == 'staging') {
+      item = tierList.stagingArea.items.firstWhere(
+        (item) => item.id == _itemId,
+      );
+    } else {
+      item = tierList.tiers
+          .firstWhere((tier) => tier.id == _rowId)
+          .items
+          .firstWhere((item) => item.id == _itemId);
+    }
+
+    late final Widget child;
+    if (_itemId == null) {
+      child = const Center(child: Icon(Icons.add, size: 48));
+    } else if (item!.imageUrl == null || item.imageUrl!.isEmpty) {
+      child = Center(child: Text(item.name, textAlign: TextAlign.center));
+    } else {
+      child = CachedNetworkImage(
+        imageUrl: item.imageUrl!,
+        fit: BoxFit.contain,
+        placeholder: (context, url) =>
+            const Center(child: CircularProgressIndicator()),
+        errorWidget: (context, url, error) => const Icon(Icons.error),
+      );
+    }
+
+    const tileSize = 150.0;
+    return SizedBox(
+      width: tileSize,
+      height: tileSize,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            ItemDetailsPage.route(
+              itemId: _itemId,
+              rowId: _rowId,
+              editorBloc: editorBloc,
+            ),
+          );
+        },
+        onLongPress: () {
+          if (_itemId == null) return;
+
+          showModalBottomSheet(
+            context: context,
+            builder: (_) => BlocProvider.value(
+              value: context.read<TierListEditorBloc>(),
+              child: MoveItemSheet(item: item!, sourceRowId: _rowId),
+            ),
+          );
+        },
+        child: Card(child: child),
+      ),
+    );
+  }
+}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+
+import 'rename_tier_list_dialog.dart';
+
+enum TierListEditorOption { renameTierlist, addTier }
+
+class TierListEditorOptionsButton extends StatelessWidget {
+  const TierListEditorOptionsButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<TierListEditorOption>(
+      icon: const Icon(Icons.more_horiz),
+      onSelected: (options) {
+        switch (options) {
+          case TierListEditorOption.renameTierlist:
+            showDialog(
+              context: context, 
+              builder: (_) => BlocProvider.value(
+                value: context.read<TierListEditorBloc>(),
+                child: const RenameTierListDialog()
+              )
+            );
+            break;
+          case TierListEditorOption.addTier:
+            context.read<TierListEditorBloc>().add(
+              const TierListEditorTierAdded(),
+            );
+            break;
+        }
+      },
+      itemBuilder: (context) => [
+        const PopupMenuItem(
+          value: TierListEditorOption.renameTierlist,
+          child: Text('Rename Tier List'),
+        ),
+        const PopupMenuItem(
+          value: TierListEditorOption.addTier,
+          child: Text('Add Tier'),
+        ),
+      ],
+    );
+  }
+}import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/tier_list_editor/bloc/tier_list_editor_bloc.dart';
+import 'edit_tier_modal.dart';
+import 'tier_item_tile.dart';
+
+class TierRowWidget extends StatelessWidget {
+  final String _rowId;
+
+  const TierRowWidget({super.key, required String rowId}) : _rowId = rowId;
+
+  @override
+  Widget build(BuildContext context) {
+    final stagingOffset = _rowId == 'staging' ? 1 : 0;
+    final editorBloc = context.read<TierListEditorBloc>();
+    final tierList = editorBloc.state.tierList!;
+    final row = _rowId == 'staging'
+        ? tierList.stagingArea
+        : tierList.tiers.firstWhere((tier) => tier.id == _rowId);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _rowId == 'staging'
+            ? const SizedBox(height: 36)
+            : SizedBox(
+                width: 42,
+                height: 24,
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (_) => BlocProvider.value(
+                        value: editorBloc,
+                        child: EditTierModal(_rowId),
+                      ),
+                    );
+                  },
+                  child: Text(row.name),
+                ),
+              ),
+        Container(
+          height: 180,
+          color: row.color,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: row.items.length + stagingOffset,
+            itemBuilder: (context, index) {
+              if (index == 0 && row.id == 'staging') {
+                return TierItemTile(itemId: null, rowId: _rowId);
+              }
+
+              return TierItemTile(
+                itemId: row.items[index - stagingOffset].id,
+                rowId: _rowId,
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+export 'src/authentication_repository.dart';import 'dart:async';
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show User;
+
+enum AuthenticationStatus { unknown, authenticated, unauthenticated }
+
+class LogInFailure implements Exception {
+  final String message;
+  const LogInFailure([this.message = 'An unknown exception occurred.']);
+}
+
+class RegisterFailure implements Exception {
+  final String message;
+  const RegisterFailure([this.message = 'An unknown exception occured.']);
+}
+
+class AuthenticationRepository {
+  final _controller = StreamController<AuthenticationStatus>();
+  final _secureStorage = const FlutterSecureStorage();
+  static final _baseUrl = dotenv.env['BASE_URL'];
+
+  Stream<AuthenticationStatus> get status async* {
+    try {
+      final String? userToken = await _secureStorage.read(key: 'auth_token');
+      if (userToken == null) {
+        yield AuthenticationStatus.unauthenticated;
+      } else {
+        final response = await http.post(
+          Uri.parse('$_baseUrl/api/auth/tokenVerify'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'token': userToken}),
+        );
+
+        if (response.statusCode == 200) {
+          final body = jsonDecode(response.body);
+          final isValid = body['isValid'] as bool;
+          yield isValid
+              ? AuthenticationStatus.authenticated
+              : AuthenticationStatus.unauthenticated;
+        } else {
+          print('tokenVerify endpoint status code is not 200');
+          yield AuthenticationStatus.unauthenticated;
+        }
+      }
+    } catch (e) {
+      print(e);
+      yield AuthenticationStatus.unauthenticated;
+    }
+    yield* _controller.stream;
+  }
+
+  Future<void> logIn({
+    required String username,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'username': username, 'password': password}),
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body);
+      final token = body['token'] as String?;
+      final userJson = body['user'] as Map<String, dynamic>?;
+
+      if (token == null) {
+        throw const LogInFailure('Server response did not contain a token.');
+      }
+      if (userJson == null) {
+        throw const LogInFailure('Server response did not contain a user.');
+      }
+
+      await _secureStorage.write(key: 'auth_token', value: token);
+
+      final user = User.fromJson(userJson);
+      await _secureStorage.write(key: 'user', value: jsonEncode(user.toJson()));
+
+      _controller.add(AuthenticationStatus.authenticated);
+    } else if (response.statusCode == 401) {
+      throw const LogInFailure('Invalid username or password.');
+    } else {
+      throw const LogInFailure();
+    }
+    // _controller.add(AuthenticationStatus.authenticated);
+  }
+
+  void logOut() async {
+    await _secureStorage.delete(key: 'auth_token');
+    _controller.add(AuthenticationStatus.unauthenticated);
+  }
+
+  Future<void> register({
+    required String username,
+    required String email,
+    required String password,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/register'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'username': username,
+        'email': email,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode >= 400) {
+      throw const RegisterFailure();
+    }
+  }
+
+  void dispose() => _controller.close();
+}
+export 'src/http_tier_lists_api.dart';import 'dart:convert';
+import 'package:tier_lists_api/tier_lists_api.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+class HttpTierListsApi implements RemoteTierListsApi {
+  static final _baseUrl = dotenv.env['BASE_URL'];
+  final _secureStorage = const FlutterSecureStorage();
+
+  @override
+  Future<List<TierList>> searchTierLists({String query = ''}) async {
+    final token = await _secureStorage.read(key: 'auth_token');
+    if (token == null) throw Exception('User not authenticated');
+
+    final response = await http.get(
+      Uri.parse('$_baseUrl/api/tierlist/search?title=$query'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token
+      }
+    );
+
+    if (response.statusCode == 200) {
+      final body = jsonDecode(response.body) as List;
+      return body.map((json) => TierList.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to search tier lists');
+    }
+  }
+
+  @override
+  Future<TierList> saveTierList(Map<String, dynamic> tierListJson) async {
+    final token = await _secureStorage.read(key: 'auth_token');
+    if (token == null) throw Exception('User not authenticated');
+
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/tierlist/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token
+      },
+      body: jsonEncode(tierListJson)
+    );
+
+    if (response.statusCode >= 400) {
+      print(response.body);
+      throw Exception('Failed to save tier list');
+    }
+
+    final newTierListJson = jsonDecode(response.body);
+    return TierList.fromJson(newTierListJson);
+  }
+
+  @override
+  Future<void> updateTierList(Map<String, dynamic> tierListJson) async {
+    final token = await _secureStorage.read(key: 'auth_token');
+    if (token == null) throw Exception('User not authenticated');
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/api/tierlist/${tierListJson['id']}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token
+      },
+      body: jsonEncode(tierListJson)
+    );
+
+    if (response.statusCode >= 400) {
+      print(response.body);
+      throw Exception('Failed to update tier list');
+    }
+  }
+
+  @override
+  Future<void> deleteTierList(String id) async {
+    final token = await _secureStorage.read(key: 'auth_token');
+    if (token == null) throw Exception('User not authenticated');
+
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/api/tierlist/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token
+      }
+    );
+
+    if (response.statusCode >= 400) {
+      print(response.body);
+      throw Exception('Failed to delete tier list');
+    }
+  }
+}export 'src/local_storage_tier_lists_api.dart';import 'dart:async';
+import 'dart:convert';
+import 'package:tier_lists_api/tier_lists_api.dart';
+import 'package:rxdart/subjects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class LocalStorageTierListsApi extends LocalTierListsApi {
+  final SharedPreferences _plugin;
+  static const kTierListsCollectionKey = '__tier_lists_collection_key__';
+  late final _tierListStreamController = BehaviorSubject<List<TierList>>.seeded(
+    const [],
+  ); // BehaviorSubject is like a normal stream controller but it caches its latest item
+
+  LocalStorageTierListsApi({required SharedPreferences plugin})
+    : _plugin = plugin {
+    _init();
+  }
+
+  String? _getValue(String key) => _plugin.getString(key);
+
+  Future<void> _setValue(String key, String value) =>
+      _plugin.setString(key, value);
+
+  void _init() {
+    final tierListsJson = _getValue(kTierListsCollectionKey);
+    if (tierListsJson == null) {
+      _tierListStreamController.add(const []);
+      return;
+    }
+
+    final tierLists =
+        List<Map<dynamic, dynamic>>.from(json.decode(tierListsJson))
+            .map(
+              (jsonMap) =>
+                  TierList.fromJson(Map<String, dynamic>.from(jsonMap)),
+            )
+            .toList();
+    _tierListStreamController.add(tierLists);
+  }
+
+  @override
+  Future<void> deleteTierList(String id) {
+    final tierLists = [..._tierListStreamController.value];
+    final tierListIndex = tierLists.indexWhere((t) => t.id == id);
+    if (tierListIndex == -1) {
+      throw TierListNotFoundException();
+    } else {
+      tierLists.removeAt(tierListIndex);
+      _tierListStreamController.add(tierLists);
+      return _setValue(kTierListsCollectionKey, json.encode(tierLists));
+    }
+  }
+
+  @override
+  Stream<List<TierList>> getTierLists() =>
+      _tierListStreamController.asBroadcastStream();
+
+  @override
+  Stream<TierList> getTierList(String id) {
+    return _tierListStreamController.stream.map((tierLists) {
+      try {
+        return tierLists.firstWhere((tierList) => tierList.id == id);
+      } catch (e) {
+        throw TierListNotFoundException();
+      }
+    });
+  }
+
+  @override
+  Future<void> saveTierList(TierList tierList) {
+    final tierLists = [..._tierListStreamController.value];
+    final tierListIndex = tierLists.indexWhere((t) => t.id == tierList.id);
+    if (tierListIndex >= 0) {
+      tierLists[tierListIndex] = tierList;
+    } else {
+      tierLists.add(tierList);
+    }
+
+    _tierListStreamController.add(tierLists);
+    return _setValue(kTierListsCollectionKey, json.encode(tierLists));
+  }
+
+  @override
+  Future<void> close() {
+    return _tierListStreamController.close();
+  }
+}
+// @dart=3.6
+// ignore_for_file: directives_ordering
+// build_runner >=2.4.16
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:build_runner_core/build_runner_core.dart' as _i1;
+import 'package:json_serializable/builder.dart' as _i2;
+import 'package:source_gen/builder.dart' as _i3;
+import 'dart:isolate' as _i4;
+import 'package:build_runner/src/build_script_generate/build_process_state.dart'
+    as _i5;
+import 'package:build_runner/build_runner.dart' as _i6;
+import 'dart:io' as _i7;
+
+final _builders = <_i1.BuilderApplication>[
+  _i1.apply(
+    r'json_serializable:json_serializable',
+    [_i2.jsonSerializable],
+    _i1.toDependentsOf(r'json_serializable'),
+    hideOutput: true,
+    appliesBuilders: const [r'source_gen:combining_builder'],
+  ),
+  _i1.apply(
+    r'source_gen:combining_builder',
+    [_i3.combiningBuilder],
+    _i1.toNoneByDefault(),
+    hideOutput: false,
+    appliesBuilders: const [r'source_gen:part_cleanup'],
+  ),
+  _i1.applyPostProcess(
+    r'source_gen:part_cleanup',
+    _i3.partCleanup,
+  ),
+];
+void main(
+  List<String> args, [
+  _i4.SendPort? sendPort,
+]) async {
+  await _i5.buildProcessState.receive(sendPort);
+  _i5.buildProcessState.isolateExitCode = await _i6.run(
+    args,
+    _builders,
+  );
+  _i7.exitCode = _i5.buildProcessState.isolateExitCode!;
+  await _i5.buildProcessState.send(sendPort);
+}
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+/// A custom converter for the Color class.
+/// This tells json_serializable how to convert a Color object to and from an integer.
+class ColorConverter implements JsonConverter<Color, int> {
+  const ColorConverter();
+
+  // Converts an integer from JSON to a Color object.
+  @override
+  Color fromJson(int json) {
+    return Color(json);
+  }
+
+  // Converts a Color object to an integer for JSON.
+  @override
+  int toJson(Color object) {
+    return object.toARGB32();
+  }
+}import 'models/tier_list.dart';
+
+abstract class LocalTierListsApi {
+  Stream<List<TierList>> getTierLists();
+
+  Stream<TierList> getTierList(String id);
+
+  Future<void> saveTierList(TierList tierList);
+
+  Future<void> deleteTierList(String id);
+
+  Future<void> close();
+}
+
+class TierListNotFoundException implements Exception {}/// The type definition for a JSON-serializable [Map].
+typedef JsonMap = Map<String, dynamic>;import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tier_lists_api/src/helpers/color_converter.dart';
+import 'tier_item.dart';
+import 'json_map.dart';
+import 'tier.dart';
+import 'staging_area.dart';
+
+@JsonSerializable()
+abstract class ListRow extends Equatable {
+  @JsonKey(name: '_id')
+  final String id;
+
+  final String name;
+
+  @ColorConverter()
+  final Color color;
+
+  final List<TierItem> items;
+
+  const ListRow({
+    required this.id,
+    required this.name,
+    required this.color,
+    required this.items
+  });
+
+  factory ListRow.fromJson(JsonMap json) {
+    switch (json['type'] as String) {
+      case 'tier':
+        return Tier.fromJson(json);
+      case 'staging_area':
+        return StagingArea.fromJson(json);
+      default:
+        throw UnimplementedError('Unknown ListRow type: ${json['type']}');
+    }
+  }
+
+  JsonMap toJson();
+
+  @override
+  List<Object> get props => [id, name, color, items];
+}export 'json_map.dart';
+export 'staging_area.dart';
+export 'list_row.dart';
+export 'tag.dart';
+export 'tier_item.dart';
+export 'tier_list.dart';
+export 'tier.dart';
+export 'user.dart';import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'json_map.dart';
+import 'tier_item.dart';
+import 'list_row.dart';
+
+part 'staging_area.g.dart';
+
+@immutable
+@JsonSerializable()
+class StagingArea extends ListRow {
+  const StagingArea({required super.items})
+    : super(id: 'staging', name: 'Staging Area', color: Colors.grey);
+
+  StagingArea copyWith({List<TierItem>? items}) {
+    return StagingArea(items: items ?? List.from(this.items));
+  }
+
+  factory StagingArea.fromJson(JsonMap json) => _$StagingAreaFromJson(json);
+
+  @override
+  JsonMap toJson() {
+    final json = _$StagingAreaToJson(this);
+    return {...json, 'type': 'staging_area'};
+  }
+
+  @override
+  List<Object> get props => [items];
+}
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'staging_area.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+StagingArea _$StagingAreaFromJson(Map<String, dynamic> json) => StagingArea(
+  items: (json['items'] as List<dynamic>)
+      .map((e) => TierItem.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$StagingAreaToJson(StagingArea instance) =>
+    <String, dynamic>{'items': instance.items};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
+import 'json_map.dart';
+import 'package:flutter/material.dart';
+
+part 'tag.g.dart';
+
+enum TagType { positive, neutral, negative }
+
+const Map<TagType, Color> kColorMap = {
+    TagType.positive: Colors.green,
+    TagType.neutral: Colors.grey,
+    TagType.negative: Colors.red,
+  };
+
+@immutable
+@JsonSerializable()
+class Tag extends Equatable {
+  final TagType type;
+  final String text;
+
+  @JsonKey(includeToJson: false)
+  final String id;
+
+  Tag({
+    required this.type,
+    required this.text,
+    String? id,
+  }) : id = id ?? const Uuid().v4();
+
+  Tag copyWith({
+    TagType? type,
+    String? text
+  }) {
+    return Tag(
+      id: id,
+      type: type ?? this.type,
+      text: text ?? this.text,
+    );
+  }
+
+  static Tag fromJson(JsonMap json) => _$TagFromJson(json);
+
+  JsonMap toJson() => _$TagToJson(this);
+
+  @override
+  List<Object> get props => [type, text, id];
+}// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tag.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
+  type: $enumDecode(_$TagTypeEnumMap, json['type']),
+  text: json['text'] as String,
+  id: json['id'] as String?,
+);
+
+Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
+  'type': _$TagTypeEnumMap[instance.type]!,
+  'text': instance.text,
+};
+
+const _$TagTypeEnumMap = {
+  TagType.positive: 'positive',
+  TagType.neutral: 'neutral',
+  TagType.negative: 'negative',
+};
+import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:tier_lists_api/src/helpers/color_converter.dart';
+import 'package:uuid/uuid.dart';
+import 'json_map.dart';
+import 'tier_item.dart';
+import 'list_row.dart';
+
+part 'tier.g.dart';
+
+@immutable
+@JsonSerializable()
+class Tier extends ListRow {
+  Tier({
+    String? id,
+    required super.name,
+    required super.color,
+    required super.items,
+  }) : super(
+    id: id ?? const Uuid().v4(),
+  );
+
+  Tier copyWith({
+    String? id,
+    String? name,
+    Color? color,
+    List<TierItem>? items,
+  }) {
+    return Tier(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      color: color ?? this.color,
+      items: items ?? List.from(this.items),
+    );
+  }
+
+  factory Tier.fromJson(JsonMap json) {
+    final dynamic colorJson = json['color'];
+    late final int colorValue;
+
+    if (colorJson is String) {
+      colorValue = int.parse(colorJson);
+    } else if (colorJson is num) {
+      colorValue = colorJson.toInt();
+    } else {
+      throw FormatException('Unexpected type for color: ${colorJson.runtimeType}');
+    }
+
+    return Tier(
+      id: json['_id'] as String?,
+      name: json['name'] as String,
+      color: Color(colorValue),
+      items: (json['items'] as List<dynamic>)
+          .map((itemJson) => TierItem.fromJson(itemJson as Map<String, dynamic>)).toList()
+    );
+  }
+
+  @override
+  JsonMap toJson() {
+    final json = _$TierToJson(this);
+    json.remove('id');
+    return {...json, 'type': 'tier'};
+  }
+}
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tier.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
+  id: json['id'] as String?,
+  name: json['name'] as String,
+  color: const ColorConverter().fromJson((json['color'] as num).toInt()),
+  items: (json['items'] as List<dynamic>)
+      .map((e) => TierItem.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$TierToJson(Tier instance) => <String, dynamic>{
+  'id': instance.id,
+  'name': instance.name,
+  'color': const ColorConverter().toJson(instance.color),
+  'items': instance.items,
+};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
+import 'json_map.dart';
+import 'tag.dart';
+
+part 'tier_item.g.dart';
+
+@immutable
+@JsonSerializable()
+class TierItem extends Equatable {
+  @JsonKey(includeToJson: false)
+  final String id;
+
+  final String? imageUrl;
+  final String name;
+  final String description;
+  final List<Tag> tags;
+
+  TierItem({
+    String? id,
+    required this.name,
+    this.description = '',
+    this.imageUrl,
+    required this.tags
+  }) : id = id ?? const Uuid().v4();
+
+  TierItem copyWith({
+    String? id,
+    String? thumbnailUrl,
+    String? imageUrl,
+    String? name,
+    String? description,
+    List<Tag>? tags,
+  }) {
+    return TierItem(
+      id: id ?? this.id,
+      imageUrl: imageUrl ?? this.imageUrl,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      tags: tags ?? List.from(this.tags)
+    );
+  }
+
+  static TierItem fromJson(JsonMap json) => _$TierItemFromJson(json);
+
+  JsonMap toJson() => _$TierItemToJson(this);
+
+  @override
+  List<Object?> get props => [imageUrl, name, description, tags, id];
+} // GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tier_item.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TierItem _$TierItemFromJson(Map<String, dynamic> json) => TierItem(
+  id: json['id'] as String?,
+  name: json['name'] as String,
+  description: json['description'] as String? ?? '',
+  imageUrl: json['imageUrl'] as String?,
+  tags: (json['tags'] as List<dynamic>)
+      .map((e) => Tag.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
+
+Map<String, dynamic> _$TierItemToJson(TierItem instance) => <String, dynamic>{
+  'imageUrl': instance.imageUrl,
+  'name': instance.name,
+  'description': instance.description,
+  'tags': instance.tags,
+};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
+import 'tier.dart';
+import 'tag.dart';
+import 'tier_item.dart';
+import 'staging_area.dart';
+import 'json_map.dart';
+import 'package:flutter/material.dart';
+
+part 'tier_list.g.dart';
+
+List<Tier> defaultTiers = [
+  Tier(name: 'S', color: const Color(0xFFEF4444), items: []),
+  Tier(name: 'A', color: const Color(0xFFF97316), items: []),
+  Tier(name: 'B', color: const Color(0xFFEAB308), items: []),
+  Tier(name: 'C', color: const Color(0xFF22C55E), items: []),
+  Tier(name: 'D', color: const Color(0xFF3B82F6), items: []),
+];
+
+@immutable
+@JsonSerializable()
+class TierList extends Equatable {
+  @JsonKey(name: '_id')
+  final String id;
+
+  final String title;
+  final String description;
+
+  @JsonKey(name: 'categories')
+  final List<Tier> tiers;
+
+  @JsonKey(
+    name: 'unassignedItems',
+    fromJson: _stagingAreaFromUnassignedItems,
+    toJson: _unassignedItemsFromStagingArea,
+  )
+  final StagingArea stagingArea;
+
+  TierList({
+    String? id,
+    required this.title,
+    this.description = '',
+    required this.tiers,
+    required this.stagingArea,
+  }) : id = id ?? const Uuid().v4();
+
+  TierList copyWith({
+    String? id,
+    String? title,
+    String? description,
+    List<Tier>? tiers,
+    List<Tag>? tags,
+    StagingArea? stagingArea,
+  }) {
+    return TierList(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      tiers: tiers ?? List.from(this.tiers),
+      stagingArea: stagingArea ?? this.stagingArea,
+    );
+  }
+
+  static TierList fromJson(JsonMap json) => _$TierListFromJson(json);
+
+  JsonMap toJson() => _$TierListToJson(this);
+
+  @override
+  List<Object> get props => [id, title, description, tiers, stagingArea];
+}
+
+StagingArea _stagingAreaFromUnassignedItems(List<dynamic> itemsJson) {
+  final items = itemsJson
+      .map((itemJson) => TierItem.fromJson(itemJson as Map<String, dynamic>))
+      .toList();
+  return StagingArea(items: items);
+}
+
+List<Map<String, dynamic>> _unassignedItemsFromStagingArea(
+  StagingArea stagingArea,
+) {
+  return stagingArea.items.map((item) => item.toJson()).toList();
+}
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'tier_list.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
+  id: json['id'] as String?,
+  title: json['title'] as String,
+  description: json['description'] as String? ?? '',
+  tiers: (json['categories'] as List<dynamic>)
+      .map((e) => Tier.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  stagingArea: _stagingAreaFromUnassignedItems(json['unassignedItems'] as List),
+);
+
+Map<String, dynamic> _$TierListToJson(TierList instance) => <String, dynamic>{
+  'title': instance.title,
+  'description': instance.description,
+  'categories': instance.tiers,
+  'unassignedItems': _unassignedItemsFromStagingArea(instance.stagingArea),
+};
+import 'package:equatable/equatable.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:meta/meta.dart';
+import 'json_map.dart';
+
+part 'user.g.dart';
+
+@immutable
+@JsonSerializable()
+class User extends Equatable {
+  final String id;
+  final String username;
+  final String email;
+
+  const User({
+    required this.id,
+    required this.username,
+    required this.email,
+  });
+
+  static User fromJson(JsonMap json) => _$UserFromJson(json);
+  JsonMap toJson() => _$UserToJson(this);
+
+  @override
+  List<Object> get props => [id, username, email];
+}// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'user.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+User _$UserFromJson(Map<String, dynamic> json) => User(
+  id: json['id'] as String,
+  username: json['username'] as String,
+  email: json['email'] as String,
+);
+
+Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
+  'id': instance.id,
+  'username': instance.username,
+  'email': instance.email,
+};
+import 'models/tier_list.dart';
+
+abstract class RemoteTierListsApi {
+  Future<List<TierList>> searchTierLists({String query});
+
+  Future<TierList> saveTierList(Map<String, dynamic> tierListJson);
+
+  Future<void> updateTierList(Map<String, dynamic> tierListJson);
+
+  Future<void> deleteTierList(String id);
+}export 'src/models/models.dart';
+export 'src/local_tier_lists_api.dart';
+export 'src/remote_tier_lists_api.dart';import 'dart:convert';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:tier_lists_api/tier_lists_api.dart';
+
+class TierListsRepository {
+  final LocalTierListsApi _localTierListsApi;
+  final RemoteTierListsApi _remoteTierListsApi;
+  final _secureStorage = const FlutterSecureStorage();
+
+  const TierListsRepository({
+    required LocalTierListsApi localTierListsApi,
+    required RemoteTierListsApi remoteTierListsApi,
+  }) : _localTierListsApi = localTierListsApi,
+       _remoteTierListsApi = remoteTierListsApi;
+
+  Stream<List<TierList>> getTierLists() => _localTierListsApi.getTierLists();
+
+  Future<void> refreshTierLists() async {
+    final remoteTierLists = await _remoteTierListsApi.searchTierLists();
+
+    for (final tierList in remoteTierLists) {
+      await _localTierListsApi.saveTierList(tierList);
+    }
+  }
+
+  Stream<TierList> getTierList(String id) => _localTierListsApi.getTierList(id);
+
+  Future<void> saveTierList(TierList tierList) async {
+    final tierListJson = tierList.toJson();
+
+    final userString = await _secureStorage.read(key: 'user');
+    if (userString == null) {
+      throw Exception('Could not find user data to save tier list.');
+    }
+
+    final userJson = jsonDecode(userString);
+    tierListJson['user'] = userJson;
+
+    final newTierList = await _remoteTierListsApi.saveTierList(tierListJson);
+    await _localTierListsApi.deleteTierList(tierList.id);
+    await _localTierListsApi.saveTierList(newTierList);
+  }
+
+  Future<void> updateTierList(TierList tierList) async {
+    final tierListJson = tierList.toJson();
+
+    final userString = await _secureStorage.read(key: 'user');
+    if (userString == null) {
+      throw Exception('Could not find user data to update tier list.');
+    }
+
+    final userJson = jsonDecode(userString);
+    tierListJson['user'] = userJson;
+
+    await _remoteTierListsApi.updateTierList(tierListJson);
+    await _localTierListsApi.saveTierList(tierList);
+  }
+
+  Future<void> deleteTierList(String id) async {
+    await _remoteTierListsApi.deleteTierList(id);
+    await _localTierListsApi.deleteTierList(id);
+  }
+
+  Future<List<TierList>> searchTierLists(String query) async {
+    final searchResults = await _remoteTierListsApi.searchTierLists(query: query);
+
+    for (final tierList in searchResults) {
+      await _localTierListsApi.saveTierList(tierList);
+    }
+
+    return searchResults;
+  }
+
+  void dispose() => _localTierListsApi.close();
+}
+export 'package:tier_lists_api/tier_lists_api.dart';
+export 'src/tier_lists_repository.dart';// This is a basic Flutter widget test.
+//
+// To perform an interaction with a widget in your test, use the WidgetTester
+// utility in the flutter_test package. For example, you can send tap and scroll
+// gestures. You can also use WidgetTester to find child widgets in the widget
+// tree, read text, and verify that the values of widget properties are correct.
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'package:mobile/main.dart';
+
+void main() {
+  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // Build our app and trigger a frame.
+    await tester.pumpWidget(const MyApp());
+
+    // Verify that our counter starts at 0.
+    expect(find.text('0'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
+
+    // Tap the '+' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pump();
+
+    // Verify that our counter has incremented.
+    expect(find.text('0'), findsNothing);
+    expect(find.text('1'), findsOneWidget);
+  });
+}

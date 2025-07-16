@@ -7,7 +7,7 @@ part of 'tier.dart';
 // **************************************************************************
 
 Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
-  id: json['id'] as String?,
+  id: json['_id'] as String?,
   name: json['name'] as String,
   color: const ColorConverter().fromJson((json['color'] as num).toInt()),
   items: (json['items'] as List<dynamic>)
@@ -16,7 +16,7 @@ Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
 );
 
 Map<String, dynamic> _$TierToJson(Tier instance) => <String, dynamic>{
-  'id': instance.id,
+  '_id': instance.id,
   'name': instance.name,
   'color': const ColorConverter().toJson(instance.color),
   'items': instance.items,

@@ -9,6 +9,8 @@ abstract class LocalTierListsApi {
 
   Future<void> deleteTierList(String id);
 
+  Future<void> replaceAllTierLists(List<TierList> tierLists);
+
   Future<void> close();
 }
 

@@ -11,17 +11,17 @@ import 'package:flutter/material.dart';
 part 'tier_list.g.dart';
 
 List<Tier> defaultTiers = [
-  Tier(id: 's', name: 'S', color: const Color(0xFFEF4444), items: []),
-  Tier(id: 'a', name: 'A', color: const Color(0xFFF97316), items: []),
-  Tier(id: 'b', name: 'B', color: const Color(0xFFEAB308), items: []),
-  Tier(id: 'c', name: 'C', color: const Color(0xFF22C55E), items: []),
-  Tier(id: 'd', name: 'D', color: const Color(0xFF3B82F6), items: []),
+  Tier(name: 'S', color: const Color(0xFFEF4444), items: []),
+  Tier(name: 'A', color: const Color(0xFFF97316), items: []),
+  Tier(name: 'B', color: const Color(0xFFEAB308), items: []),
+  Tier(name: 'C', color: const Color(0xFF22C55E), items: []),
+  Tier(name: 'D', color: const Color(0xFF3B82F6), items: []),
 ];
 
 @immutable
 @JsonSerializable()
 class TierList extends Equatable {
-  @JsonKey(includeToJson: false)
+  @JsonKey(name: '_id')
   final String id;
 
   final String title;

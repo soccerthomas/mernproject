@@ -7,7 +7,7 @@ part of 'tier_list.dart';
 // **************************************************************************
 
 TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
-  id: json['id'] as String?,
+  id: json['_id'] as String?,
   title: json['title'] as String,
   description: json['description'] as String? ?? '',
   tiers: (json['categories'] as List<dynamic>)
@@ -17,6 +17,7 @@ TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
 );
 
 Map<String, dynamic> _$TierListToJson(TierList instance) => <String, dynamic>{
+  '_id': instance.id,
   'title': instance.title,
   'description': instance.description,
   'categories': instance.tiers,

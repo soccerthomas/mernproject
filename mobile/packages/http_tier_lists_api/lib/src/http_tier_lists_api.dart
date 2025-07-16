@@ -30,7 +30,7 @@ class HttpTierListsApi implements RemoteTierListsApi {
   }
 
   @override
-  Future<void> saveTierList(Map<String, dynamic> tierListJson) async {
+  Future<TierList> saveTierList(Map<String, dynamic> tierListJson) async {
     final token = await _secureStorage.read(key: 'auth_token');
     if (token == null) throw Exception('User not authenticated');
 
@@ -47,6 +47,9 @@ class HttpTierListsApi implements RemoteTierListsApi {
       print(response.body);
       throw Exception('Failed to save tier list');
     }
+
+    final newTierListJson = jsonDecode(response.body);
+    return TierList.fromJson(newTierListJson);
   }
 
   @override
@@ -83,6 +86,7 @@ class HttpTierListsApi implements RemoteTierListsApi {
     );
 
     if (response.statusCode >= 400) {
+      print(response.body);
       throw Exception('Failed to delete tier list');
     }
   }

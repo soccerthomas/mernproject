@@ -34,7 +34,26 @@ class Tier extends ListRow {
     );
   }
 
-  factory Tier.fromJson(JsonMap json) => _$TierFromJson(json);
+  factory Tier.fromJson(JsonMap json) {
+    final dynamic colorJson = json['color'];
+    late final int colorValue;
+
+    if (colorJson is String) {
+      colorValue = int.parse(colorJson);
+    } else if (colorJson is num) {
+      colorValue = colorJson.toInt();
+    } else {
+      throw FormatException('Unexpected type for color: ${colorJson.runtimeType}');
+    }
+
+    return Tier(
+      id: json['_id'] as String?,
+      name: json['name'] as String,
+      color: Color(colorValue),
+      items: (json['items'] as List<dynamic>)
+          .map((itemJson) => TierItem.fromJson(itemJson as Map<String, dynamic>)).toList()
+    );
+  }
 
   @override
   JsonMap toJson() {

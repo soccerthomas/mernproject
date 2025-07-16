@@ -39,15 +39,15 @@ class TierListsOverviewBloc
 
   void _onTierListAdded(
     TierListsOverviewTierListAdded event,
-    Emitter<TierListsOverviewState> emit
+    Emitter<TierListsOverviewState> emit,
   ) {
     _tierListsRepository.saveTierList(
       TierList(
         title: event.name,
         description: event.description,
         tiers: defaultTiers,
-        stagingArea: const StagingArea(items: [])
-      )
+        stagingArea: const StagingArea(items: []),
+      ),
     );
   }
 
@@ -64,6 +64,7 @@ class TierListsOverviewBloc
     Emitter<TierListsOverviewState> emit,
   ) async {
     final tierList = state.lastDeletedTierList!;
+
     emit(state.copyWith(lastDeletedTierList: () => null));
     await _tierListsRepository.saveTierList(tierList);
   }

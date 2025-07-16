@@ -52,6 +52,12 @@ class LocalStorageTierListsApi extends LocalTierListsApi {
   }
 
   @override
+  Future<void> replaceAllTierLists(List<TierList> tierLists) {
+    _tierListStreamController.add(tierLists);
+    return _setValue(kTierListsCollectionKey, json.encode(tierLists));
+  }
+
+  @override
   Stream<List<TierList>> getTierLists() =>
       _tierListStreamController.asBroadcastStream();
 

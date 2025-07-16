@@ -19,9 +19,7 @@ class TierListsRepository {
   Future<void> refreshTierLists() async {
     final remoteTierLists = await _remoteTierListsApi.searchTierLists();
 
-    for (final tierList in remoteTierLists) {
-      await _localTierListsApi.saveTierList(tierList);
-    }
+    await _localTierListsApi.replaceAllTierLists(remoteTierLists);
   }
 
   Stream<TierList> getTierList(String id) => _localTierListsApi.getTierList(id);
@@ -37,8 +35,8 @@ class TierListsRepository {
     final userJson = jsonDecode(userString);
     tierListJson['user'] = userJson;
 
-    await _remoteTierListsApi.saveTierList(tierListJson);
-    await _localTierListsApi.saveTierList(tierList);
+    final newTierList = await _remoteTierListsApi.saveTierList(tierListJson);
+    await _localTierListsApi.saveTierList(newTierList);
   }
 
   Future<void> updateTierList(TierList tierList) async {
@@ -57,8 +55,8 @@ class TierListsRepository {
   }
 
   Future<void> deleteTierList(String id) async {
-    await _remoteTierListsApi.deleteTierList(id);
     await _localTierListsApi.deleteTierList(id);
+    await _remoteTierListsApi.deleteTierList(id);
   }
 
   Future<List<TierList>> searchTierLists(String query) async {
