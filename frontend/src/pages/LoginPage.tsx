@@ -3,8 +3,6 @@ import TierListLogo from "../images/TierListLogo.png";
 import LoginForm from "../components/LoginForm.tsx";
 
 function Login() {
-  console.log("CICD test");
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
