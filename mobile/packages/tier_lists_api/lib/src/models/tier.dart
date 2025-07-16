@@ -58,7 +58,7 @@ class Tier extends ListRow {
   @override
   JsonMap toJson() {
     final json = _$TierToJson(this);
-    json.remove('id');
+    json.remove('_id');
     return {...json, 'type': 'tier'};
   }
 }

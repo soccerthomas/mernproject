@@ -58,7 +58,7 @@ class HttpTierListsApi implements RemoteTierListsApi {
     if (token == null) throw Exception('User not authenticated');
 
     final response = await http.put(
-      Uri.parse('$_baseUrl/api/tierlist/${tierListJson['id']}'),
+      Uri.parse('$_baseUrl/api/tierlist/${tierListJson['_id']}'),
       headers: {
         'Content-Type': 'application/json',
         'x-auth-token': token

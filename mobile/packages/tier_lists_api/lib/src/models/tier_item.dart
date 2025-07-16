@@ -13,7 +13,9 @@ class TierItem extends Equatable {
   @JsonKey(includeToJson: false)
   final String id;
 
+  @JsonKey(name: 'image')
   final String? imageUrl;
+
   final String name;
   final String description;
   final List<Tag> tags;
