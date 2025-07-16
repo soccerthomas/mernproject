@@ -21,6 +21,8 @@ function Register() {
               <img className="h-8 w-auto" src={TierListLogo} alt="" />
             </a>
           </div>
+
+          {/*
           <div className="hidden lg:flex lg:gap-x-12">
             <a
               href="./login"
@@ -41,6 +43,8 @@ function Register() {
               Explore
             </a>
           </div>
+          */}
+
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
             <a
               href="./register"

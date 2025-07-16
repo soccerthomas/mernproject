@@ -44,6 +44,7 @@ function LoginForm({
         if (data.success && data.token) {
           localStorage.setItem("token", data.token);
           localStorage.setItem("userData", JSON.stringify(data.user));
+          localStorage.setItem("isValidUser", "true");
           navigate("/dashboard");
         } else {
           setError("Login Failed, Check you credentials");
