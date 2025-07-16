@@ -36,7 +36,7 @@ function RegisterForm({
 
   const navigate = useNavigate();
 
-  // Validation functions
+  // validation functions
   const validateUsername = (username: string): string => {
     if (username.length < 3) {
       return "Username must be at least 3 characters long";
@@ -75,7 +75,7 @@ function RegisterForm({
     return "";
   };
 
-  // Real-time validation on input change
+  // validation on input change
   const handleUsernameChange = (value: string) => {
     setUsername(value);
     const error = validateUsername(value);
