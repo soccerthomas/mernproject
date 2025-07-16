@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:tier_lists_repository/tier_lists_repository.dart' show User;
 
 enum AuthenticationStatus { unknown, authenticated, unauthenticated }
 
@@ -64,12 +65,20 @@ class AuthenticationRepository {
     if (response.statusCode == 200) {
       final body = jsonDecode(response.body);
       final token = body['token'] as String?;
+      final userJson = body['user'] as Map<String, dynamic>?;
 
       if (token == null) {
         throw const LogInFailure('Server response did not contain a token.');
       }
+      if (userJson == null) {
+        throw const LogInFailure('Server response did not contain a user.');
+      }
 
       await _secureStorage.write(key: 'auth_token', value: token);
+
+      final user = User.fromJson(userJson);
+      await _secureStorage.write(key: 'user', value: jsonEncode(user.toJson()));
+
       _controller.add(AuthenticationStatus.authenticated);
     } else if (response.statusCode == 401) {
       throw const LogInFailure('Invalid username or password.');

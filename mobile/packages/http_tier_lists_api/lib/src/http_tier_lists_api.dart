@@ -30,21 +30,42 @@ class HttpTierListsApi implements RemoteTierListsApi {
   }
 
   @override
-  Future<void> saveTierList(TierList tierList) async {
+  Future<void> saveTierList(Map<String, dynamic> tierListJson) async {
     final token = await _secureStorage.read(key: 'auth_token');
     if (token == null) throw Exception('User not authenticated');
 
     final response = await http.post(
-      Uri.parse('$_baseUrl/api/tierlist/${tierList.id}'),
+      Uri.parse('$_baseUrl/api/tierlist/'),
       headers: {
         'Content-Type': 'application/json',
         'x-auth-token': token
       },
-      body: jsonEncode(tierList.toJson())
+      body: jsonEncode(tierListJson)
     );
 
     if (response.statusCode >= 400) {
+      print(response.body);
       throw Exception('Failed to save tier list');
+    }
+  }
+
+  @override
+  Future<void> updateTierList(Map<String, dynamic> tierListJson) async {
+    final token = await _secureStorage.read(key: 'auth_token');
+    if (token == null) throw Exception('User not authenticated');
+
+    final response = await http.put(
+      Uri.parse('$_baseUrl/api/tierlist/${tierListJson['id']}'),
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-token': token
+      },
+      body: jsonEncode(tierListJson)
+    );
+
+    if (response.statusCode >= 400) {
+      print(response.body);
+      throw Exception('Failed to update tier list');
     }
   }
 

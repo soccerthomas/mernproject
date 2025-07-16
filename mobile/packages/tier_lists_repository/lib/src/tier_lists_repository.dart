@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tier_lists_api/tier_lists_api.dart';
 
 class TierListsRepository {
   final LocalTierListsApi _localTierListsApi;
   final RemoteTierListsApi _remoteTierListsApi;
+  final _secureStorage = const FlutterSecureStorage();
 
   const TierListsRepository({
     required LocalTierListsApi localTierListsApi,
@@ -23,7 +27,32 @@ class TierListsRepository {
   Stream<TierList> getTierList(String id) => _localTierListsApi.getTierList(id);
 
   Future<void> saveTierList(TierList tierList) async {
-    await _remoteTierListsApi.saveTierList(tierList);
+    final tierListJson = tierList.toJson();
+
+    final userString = await _secureStorage.read(key: 'user');
+    if (userString == null) {
+      throw Exception('Could not find user data to save tier list.');
+    }
+
+    final userJson = jsonDecode(userString);
+    tierListJson['user'] = userJson;
+
+    await _remoteTierListsApi.saveTierList(tierListJson);
+    await _localTierListsApi.saveTierList(tierList);
+  }
+
+  Future<void> updateTierList(TierList tierList) async {
+    final tierListJson = tierList.toJson();
+
+    final userString = await _secureStorage.read(key: 'user');
+    if (userString == null) {
+      throw Exception('Could not find user data to update tier list.');
+    }
+
+    final userJson = jsonDecode(userString);
+    tierListJson['user'] = userJson;
+
+    await _remoteTierListsApi.updateTierList(tierListJson);
     await _localTierListsApi.saveTierList(tierList);
   }
 

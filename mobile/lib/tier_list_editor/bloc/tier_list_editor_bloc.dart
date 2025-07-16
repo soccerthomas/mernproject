@@ -54,7 +54,7 @@ class TierListEditorBloc
   ) {
     emit(state.copyWith(originalTitle: () => event.newTitle));
     final newTierList = state.tierList!.copyWith(title: event.newTitle);
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onTierAdded(
@@ -71,7 +71,7 @@ class TierListEditorBloc
         ),
       ],
     );
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onTierDeleted(
@@ -96,7 +96,7 @@ class TierListEditorBloc
       tiers: List<Tier>.from(state.tierList!.tiers)..removeAt(deletedTierIndex),
       stagingArea: newStagingArea
     );
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onTierRenamed(
@@ -111,7 +111,7 @@ class TierListEditorBloc
         )
         .toList();
     final newTierList = state.tierList!.copyWith(tiers: newTiers);
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onTierColorChanged(
@@ -126,7 +126,7 @@ class TierListEditorBloc
         )
         .toList();
     final newTierList = state.tierList!.copyWith(tiers: newTiers);
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _undoTierDeletionRequested(
@@ -136,7 +136,7 @@ class TierListEditorBloc
     final newTiers = List<Tier>.from(state.tierList!.tiers);
     newTiers.insert(state.lastDeletedTierIndex!, state.lastDeletedTier!);
     final newTierList = state.tierList!.copyWith(tiers: newTiers);
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onItemAddedToStaging(
@@ -151,7 +151,7 @@ class TierListEditorBloc
       items: newStagingItems,
     );
     final newTierList = state.tierList!.copyWith(stagingArea: newStagingArea);
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onItemDeleted(
@@ -182,7 +182,7 @@ class TierListEditorBloc
       stagingArea: newStagingArea,
     );
 
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onItemUpdated(
@@ -222,7 +222,7 @@ class TierListEditorBloc
       stagingArea: newStagingArea,
     );
 
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 
   void _onItemMoved(
@@ -264,6 +264,6 @@ class TierListEditorBloc
       stagingArea: state.tierList!.stagingArea.copyWith(items: newStagingItems),
     );
 
-    _tierListsRepository.saveTierList(newTierList);
+    _tierListsRepository.updateTierList(newTierList);
   }
 }
