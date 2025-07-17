@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:mobile/login/view/login_page.dart';
 import 'package:pinput/pinput.dart';
 
 import '../bloc/email_verification_bloc.dart';
@@ -14,7 +13,9 @@ class EmailVerificationForm extends StatelessWidget {
     final email = context.read<EmailVerificationBloc>().email;
 
     return BlocListener<EmailVerificationBloc, EmailVerificationState>(
-      listenWhen: (previous, current) => previous.status != current.status,
+      listenWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.resendEmailStatus != current.resendEmailStatus,
       listener: (context, state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
@@ -32,6 +33,22 @@ class EmailVerificationForm extends StatelessWidget {
             );
           Navigator.of(context).pop();
         }
+
+        if (state.resendEmailStatus == ResendEmailStatus.success) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(content: Text('Email has been sent')),
+            );
+        } else if (state.resendEmailStatus == ResendEmailStatus.failure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Failed to send email'),
+              ),
+            );
+        }
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
@@ -45,22 +62,32 @@ class EmailVerificationForm extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 24),
+            Pinput(
+              length: 6,
+              onChanged: (code) {
+                context.read<EmailVerificationBloc>().add(
+                  EmailVerificationCodeChanged(code),
+                );
+              },
+              onCompleted: (_) {
+                context.read<EmailVerificationBloc>().add(
+                  const EmailVerificationSubmitted(),
+                );
+              },
+            ),
+            const SizedBox(height: 30),
             BlocBuilder<EmailVerificationBloc, EmailVerificationState>(
               builder: (context, state) {
-                return state.status.isInProgress
+                return state.status.isInProgressOrSuccess ||
+                        state.resendEmailStatus == ResendEmailStatus.sending
                     ? const CircularProgressIndicator()
-                    : Pinput(
-                        length: 6,
-                        onChanged: (code) {
+                    : TextButton(
+                        onPressed: () {
                           context.read<EmailVerificationBloc>().add(
-                            EmailVerificationCodeChanged(code),
+                            const EmailVerificationResendEmailRequested(),
                           );
                         },
-                        onCompleted: (_) {
-                          context.read<EmailVerificationBloc>().add(
-                            const EmailVerificationSubmitted(),
-                          );
-                        },
+                        child: const Text('Resend verification code'),
                       );
               },
             ),

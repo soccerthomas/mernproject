@@ -13,9 +13,11 @@ class EmailVerificationBloc
   final AuthenticationRepository _authenticationRepository;
   final String email;
 
-  EmailVerificationBloc({required AuthenticationRepository authenticationRepository, required this.email})
-    : _authenticationRepository = authenticationRepository,
-      super(const EmailVerificationState()) {
+  EmailVerificationBloc({
+    required AuthenticationRepository authenticationRepository,
+    required this.email,
+  }) : _authenticationRepository = authenticationRepository,
+       super(const EmailVerificationState()) {
     on<EmailVerificationCodeChanged>(_onCodeChanged);
     on<EmailVerificationSubmitted>(_onSubmitted);
     on<EmailVerificationResendEmailRequested>(_onResendRequested);
@@ -26,19 +28,19 @@ class EmailVerificationBloc
     Emitter<EmailVerificationState> emit,
   ) {
     final code = Code.dirty(event.code);
-    emit( 
-      state.copyWith(
-        code: code,
-        isValid: Formz.validate([code])
-      )
-    );
+    emit(state.copyWith(code: code, isValid: Formz.validate([code])));
   }
 
   Future<void> _onSubmitted(
     EmailVerificationSubmitted event,
     Emitter<EmailVerificationState> emit,
   ) async {
-    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
+    emit(
+      state.copyWith(
+        status: FormzSubmissionStatus.inProgress,
+        resendEmailStatus: ResendEmailStatus.initial,
+      ),
+    );
     try {
       await _authenticationRepository.verifyCode(
         email: email,
@@ -46,7 +48,12 @@ class EmailVerificationBloc
       );
       emit(state.copyWith(status: FormzSubmissionStatus.success));
     } catch (e) {
-      emit(state.copyWith(status: FormzSubmissionStatus.failure, errorMessage: e.toString()));
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -54,10 +61,22 @@ class EmailVerificationBloc
     EmailVerificationResendEmailRequested event,
     Emitter<EmailVerificationState> emit,
   ) async {
+    emit(
+      state.copyWith(
+        resendEmailStatus: ResendEmailStatus.sending,
+        status: FormzSubmissionStatus.initial,
+      ),
+    );
     try {
       await _authenticationRepository.resendVerificationEmail(email);
+      emit(state.copyWith(resendEmailStatus: ResendEmailStatus.success));
     } catch (e) {
-      emit(state.copyWith(errorMessage: e.toString()));
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          resendEmailStatus: ResendEmailStatus.failure,
+        ),
+      );
     }
   }
 }
