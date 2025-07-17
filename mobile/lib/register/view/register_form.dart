@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:mobile/email_verification/view/email_verification_page.dart';
 import 'package:mobile/login_register/bloc/login_register_bloc.dart';
 import 'package:mobile/login_register/models/confirm_password.dart';
 import 'package:mobile/login_register/models/password.dart';
@@ -12,20 +13,26 @@ class RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, LoginRegisterState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(state.errorMessage ?? 'Registration Failure')),
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Registration Failure'),
+              ),
             );
         } else if (state.status.isSuccess) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Registration Successful'))
+              const SnackBar(content: Text('Registration Successful')),
             );
           Navigator.of(context).pop();
+          Navigator.of(
+            context,
+          ).push(EmailVerificationPage.route(state.email.value));
         }
       },
       child: Align(
@@ -59,7 +66,9 @@ class _UsernameInput extends StatelessWidget {
     return TextField(
       key: const Key('registerForm_usernameInput_textField'),
       onChanged: (username) {
-        context.read<RegisterBloc>().add(LoginRegisterUsernameChanged(username));
+        context.read<RegisterBloc>().add(
+          LoginRegisterUsernameChanged(username),
+        );
       },
       decoration: InputDecoration(
         labelText: 'username',
@@ -110,7 +119,9 @@ class _PasswordInput extends StatelessWidget {
     return TextField(
       key: const Key('registerForm_passwordInput_textField'),
       onChanged: (password) {
-        context.read<RegisterBloc>().add(LoginRegisterPasswordChanged(password));
+        context.read<RegisterBloc>().add(
+          LoginRegisterPasswordChanged(password),
+        );
       },
       obscureText: true,
       decoration: InputDecoration(
@@ -142,7 +153,9 @@ class _ConfirmPasswordInput extends StatelessWidget {
     return TextField(
       key: const Key('registerForm_confirmPasswordInput_textField'),
       onChanged: (password) {
-        context.read<RegisterBloc>().add(LoginRegisterConfirmPasswordChanged(password));
+        context.read<RegisterBloc>().add(
+          LoginRegisterConfirmPasswordChanged(password),
+        );
       },
       obscureText: true,
       decoration: InputDecoration(
@@ -160,9 +173,9 @@ class _RegisterButton extends StatelessWidget {
       (RegisterBloc bloc) => bloc.state.status.isInProgressOrSuccess,
     );
 
-    if (isInProgressOrSuccess) { 
+    if (isInProgressOrSuccess) {
       return const CircularProgressIndicator();
-    } 
+    }
 
     final isValid = context.select((RegisterBloc bloc) => bloc.state.isValid);
 
