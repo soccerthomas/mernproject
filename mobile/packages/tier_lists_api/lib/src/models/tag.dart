@@ -18,6 +18,8 @@ const Map<TagType, Color> kColorMap = {
 @JsonSerializable()
 class Tag extends Equatable {
   final TagType type;
+
+  @JsonKey(name: 'name')
   final String text;
 
   @JsonKey(includeToJson: false)
