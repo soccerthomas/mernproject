@@ -33,25 +33,25 @@ class TierRowWidget extends StatelessWidget {
                         color: row.color.withAlpha(150),
                         borderRadius: const BorderRadius.only(topRight: Radius.circular(10))
                       ),
-                      child: Column(
-                        children: [
-                          const SizedBox(width: 100),
-                          InkWell(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (_) => BlocProvider.value(
-                                  value: editorBloc,
-                                  child: EditTierModal(_rowId),
-                                ),
-                              );
-                            },
-                            child: Padding(
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                              value: editorBloc,
+                              child: EditTierModal(_rowId),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            const SizedBox(width: 100),
+                            Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Text(row.name, style: Theme.of(context).textTheme.titleLarge),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                 ),
