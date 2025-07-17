@@ -11,6 +11,7 @@ class ConfirmPassword extends FormzInput<String, ConfirmPasswordValidationError>
   @override
   ConfirmPasswordValidationError? validator(String value) {
     if (value.isEmpty) return ConfirmPasswordValidationError.empty;
+    if (value != password) return ConfirmPasswordValidationError.mismatch;
     return null;
   }
 }
