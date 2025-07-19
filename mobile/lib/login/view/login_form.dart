@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/login/bloc/login_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:mobile/login_register/bloc/login_register_bloc.dart';
-import 'package:mobile/login_register/models/password.dart';
 import 'package:mobile/register/view/register_page.dart';
 
 class LoginForm extends StatelessWidget {
@@ -55,26 +54,14 @@ class _UsernameInput extends StatelessWidget {
       onChanged: (username) {
         context.read<LoginBloc>().add(LoginRegisterUsernameChanged(username));
       },
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'username',
-        errorText: displayError != null ? 'invalid username' : null,
       ),
     );
   }
 }
 
 class _PasswordInput extends StatelessWidget {
-  String? getErrorText(PasswordValidationError? error) {
-    switch (error) {
-      case PasswordValidationError.empty:
-        return 'Password cannot be empty';
-      case PasswordValidationError.tooShort:
-        return 'Password must be at least 8 characters';
-      default:
-        return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final displayError = context.select(
@@ -87,9 +74,8 @@ class _PasswordInput extends StatelessWidget {
         context.read<LoginBloc>().add(LoginRegisterPasswordChanged(password));
       },
       obscureText: true,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'password',
-        errorText: displayError != null ? getErrorText(displayError) : null,
       ),
     );
   }
@@ -104,13 +90,9 @@ class _LoginButton extends StatelessWidget {
 
     if (isInProgressOrSuccess) return const CircularProgressIndicator();
 
-    final isValid = context.select((LoginBloc bloc) => bloc.state.isValid);
-
     return ElevatedButton(
       key: const Key('loginForm_continue_raisedButton'),
-      onPressed: isValid
-          ? () => context.read<LoginBloc>().add(const LoginRegisterSubmitted())
-          : null,
+      onPressed: () => context.read<LoginBloc>().add(const LoginRegisterSubmitted()),
       child: const Text('Login'),
     );
   }

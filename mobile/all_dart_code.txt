@@ -166,7 +166,302 @@ class AuthenticationState extends Equatable {
 
   @override
   List<Object> get props => [status];
-}   import 'package:bloc/bloc.dart';
+}   import 'package:authentication_repository/authentication_repository.dart';
+import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:formz/formz.dart';
+import 'package:meta/meta.dart';
+import '../models/code.dart';
+
+part 'email_verification_event.dart';
+part 'email_verification_state.dart';
+
+class EmailVerificationBloc
+    extends Bloc<EmailVerificationEvent, EmailVerificationState> {
+  final AuthenticationRepository _authenticationRepository;
+  final String email;
+
+  EmailVerificationBloc({
+    required AuthenticationRepository authenticationRepository,
+    required this.email,
+  }) : _authenticationRepository = authenticationRepository,
+       super(const EmailVerificationState()) {
+    on<EmailVerificationCodeChanged>(_onCodeChanged);
+    on<EmailVerificationSubmitted>(_onSubmitted);
+    on<EmailVerificationResendEmailRequested>(_onResendRequested);
+  }
+
+  void _onCodeChanged(
+    EmailVerificationCodeChanged event,
+    Emitter<EmailVerificationState> emit,
+  ) {
+    final code = Code.dirty(event.code);
+    emit(state.copyWith(code: code, isValid: Formz.validate([code])));
+  }
+
+  Future<void> _onSubmitted(
+    EmailVerificationSubmitted event,
+    Emitter<EmailVerificationState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        status: FormzSubmissionStatus.inProgress,
+        resendEmailStatus: ResendEmailStatus.initial,
+      ),
+    );
+    try {
+      await _authenticationRepository.verifyCode(
+        email: email,
+        code: state.code.value,
+      );
+      emit(state.copyWith(status: FormzSubmissionStatus.success));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: FormzSubmissionStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _onResendRequested(
+    EmailVerificationResendEmailRequested event,
+    Emitter<EmailVerificationState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        resendEmailStatus: ResendEmailStatus.sending,
+        status: FormzSubmissionStatus.initial,
+      ),
+    );
+    try {
+      await _authenticationRepository.resendVerificationEmail(email);
+      emit(state.copyWith(resendEmailStatus: ResendEmailStatus.success));
+    } catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.toString(),
+          resendEmailStatus: ResendEmailStatus.failure,
+        ),
+      );
+    }
+  }
+}
+part of 'email_verification_bloc.dart';
+
+@immutable
+sealed class EmailVerificationEvent extends Equatable {
+  const EmailVerificationEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class EmailVerificationCodeChanged extends EmailVerificationEvent {
+  final String code;
+
+  const EmailVerificationCodeChanged(this.code);
+
+  @override
+  List<Object?> get props => [code];
+}
+
+final class EmailVerificationSubmitted extends EmailVerificationEvent {
+  const EmailVerificationSubmitted();
+}
+
+final class EmailVerificationResendEmailRequested extends EmailVerificationEvent {
+  const EmailVerificationResendEmailRequested();
+}
+part of 'email_verification_bloc.dart';
+
+enum ResendEmailStatus { initial, sending, success, failure }
+
+@immutable
+final class EmailVerificationState extends Equatable {
+  final FormzSubmissionStatus status;
+  final Code code;
+  final bool isValid;
+  final ResendEmailStatus resendEmailStatus;
+  final String? errorMessage;
+
+  const EmailVerificationState({
+    this.status = FormzSubmissionStatus.initial,
+    this.code = const Code.pure(),
+    this.isValid = false,
+    this.resendEmailStatus = ResendEmailStatus.initial,
+    this.errorMessage
+  });
+
+  EmailVerificationState copyWith({
+    FormzSubmissionStatus? status,
+    Code? code,
+    bool? isValid,
+    ResendEmailStatus? resendEmailStatus,
+    String? errorMessage,
+  }) {
+    return EmailVerificationState(
+      status: status ?? this.status,
+      code: code ?? this.code,
+      isValid: isValid ?? this.isValid,
+      resendEmailStatus: resendEmailStatus ?? this.resendEmailStatus,
+      errorMessage: errorMessage ?? this.errorMessage
+    );
+  }
+
+  @override
+  List<Object?> get props => [status, code, isValid, resendEmailStatus, errorMessage];
+}
+
+
+import 'package:formz/formz.dart';
+
+enum CodeValidationError { empty, nonNumeric }
+
+class Code extends FormzInput<String, CodeValidationError> {
+  const Code.pure() : super.pure('');
+  const Code.dirty([super.value = '']) : super.dirty();
+
+  @override
+  CodeValidationError? validator(String value) {
+    if (value.isEmpty) return CodeValidationError.empty;
+    if (int.tryParse(value) == null) return CodeValidationError.nonNumeric;
+    return null;
+  }
+}import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:pinput/pinput.dart';
+
+import '../bloc/email_verification_bloc.dart';
+
+class EmailVerificationForm extends StatelessWidget {
+  const EmailVerificationForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final email = context.read<EmailVerificationBloc>().email;
+
+    return BlocListener<EmailVerificationBloc, EmailVerificationState>(
+      listenWhen: (previous, current) =>
+          previous.status != current.status ||
+          previous.resendEmailStatus != current.resendEmailStatus,
+      listener: (context, state) {
+        if (state.status.isFailure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Verification Failure'),
+              ),
+            );
+        } else if (state.status.isSuccess) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(content: Text('Verification Successful')),
+            );
+          Navigator.of(context).pop();
+        }
+
+        if (state.resendEmailStatus == ResendEmailStatus.success) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              const SnackBar(content: Text('Email has been sent')),
+            );
+        } else if (state.resendEmailStatus == ResendEmailStatus.failure) {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Failed to send email'),
+              ),
+            );
+        }
+      },
+      child: Align(
+        alignment: const Alignment(0, -1 / 3),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('A verification code has been sent to $email'),
+            const SizedBox(height: 48),
+            Text(
+              'Enter Verification Code',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: 24),
+            Pinput(
+              length: 6,
+              onChanged: (code) {
+                context.read<EmailVerificationBloc>().add(
+                  EmailVerificationCodeChanged(code),
+                );
+              },
+              onCompleted: (_) {
+                context.read<EmailVerificationBloc>().add(
+                  const EmailVerificationSubmitted(),
+                );
+              },
+            ),
+            const SizedBox(height: 30),
+            BlocBuilder<EmailVerificationBloc, EmailVerificationState>(
+              builder: (context, state) {
+                return state.status.isInProgressOrSuccess ||
+                        state.resendEmailStatus == ResendEmailStatus.sending
+                    ? const CircularProgressIndicator()
+                    : TextButton(
+                        onPressed: () {
+                          context.read<EmailVerificationBloc>().add(
+                            const EmailVerificationResendEmailRequested(),
+                          );
+                        },
+                        child: const Text('Resend verification code'),
+                      );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/email_verification/bloc/email_verification_bloc.dart';
+
+import 'email_verification_form.dart';
+
+class EmailVerificationPage extends StatelessWidget {
+  final String _email;
+
+  const EmailVerificationPage(String email, {super.key}) : _email = email;
+
+  static Route<void> route(String email) {
+    return MaterialPageRoute(builder: (_) => EmailVerificationPage(email));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Enter Verification Code')),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: BlocProvider(
+          create: (context) => EmailVerificationBloc(
+            authenticationRepository: context.read<AuthenticationRepository>(),
+            email: _email,
+          ),
+          child: const EmailVerificationForm(),
+        ),
+      ),
+    );
+  }
+}
+import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 part 'home_state.dart';
@@ -1043,6 +1338,7 @@ class LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginRegisterState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
@@ -1299,22 +1595,6 @@ final class LoginRegisterState extends Equatable {
 }
 import 'package:formz/formz.dart';
 
-enum ConfirmedPasswordValidationError { empty, mismatch }
-
-class ConfirmedPassword extends FormzInput<String, ConfirmedPasswordValidationError> {
-  final String password;
-
-  const ConfirmedPassword.pure({this.password = ''}) : super.pure('');
-  const ConfirmedPassword.dirty({required this.password, String value = ''}) : super.dirty(value);
-
-  @override
-  ConfirmedPasswordValidationError? validator(String value) {
-    if (value.isEmpty) return ConfirmedPasswordValidationError.empty;
-    return password == value ? null : ConfirmedPasswordValidationError.mismatch;
-  }
-}
-import 'package:formz/formz.dart';
-
 enum ConfirmPasswordValidationError { empty, mismatch }
 
 class ConfirmPassword extends FormzInput<String, ConfirmPasswordValidationError> {
@@ -1326,6 +1606,7 @@ class ConfirmPassword extends FormzInput<String, ConfirmPasswordValidationError>
   @override
   ConfirmPasswordValidationError? validator(String value) {
     if (value.isEmpty) return ConfirmPasswordValidationError.empty;
+    if (value != password) return ConfirmPasswordValidationError.mismatch;
     return null;
   }
 }import 'package:email_validator/email_validator.dart';
@@ -1517,6 +1798,7 @@ class RegisterBloc extends LoginRegisterBloc {
 export 'view/register_page.dart';import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:mobile/email_verification/view/email_verification_page.dart';
 import 'package:mobile/login_register/bloc/login_register_bloc.dart';
 import 'package:mobile/login_register/models/confirm_password.dart';
 import 'package:mobile/login_register/models/password.dart';
@@ -1528,20 +1810,26 @@ class RegisterForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<RegisterBloc, LoginRegisterState>(
+      listenWhen: (previous, current) => previous.status != current.status,
       listener: (context, state) {
         if (state.status.isFailure) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              SnackBar(content: Text(state.errorMessage ?? 'Registration Failure')),
+              SnackBar(
+                content: Text(state.errorMessage ?? 'Registration Failure'),
+              ),
             );
         } else if (state.status.isSuccess) {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Registration Successful'))
+              const SnackBar(content: Text('Registration Successful')),
             );
           Navigator.of(context).pop();
+          Navigator.of(
+            context,
+          ).push(EmailVerificationPage.route(state.email.value));
         }
       },
       child: Align(
@@ -1575,7 +1863,9 @@ class _UsernameInput extends StatelessWidget {
     return TextField(
       key: const Key('registerForm_usernameInput_textField'),
       onChanged: (username) {
-        context.read<RegisterBloc>().add(LoginRegisterUsernameChanged(username));
+        context.read<RegisterBloc>().add(
+          LoginRegisterUsernameChanged(username),
+        );
       },
       decoration: InputDecoration(
         labelText: 'username',
@@ -1626,7 +1916,9 @@ class _PasswordInput extends StatelessWidget {
     return TextField(
       key: const Key('registerForm_passwordInput_textField'),
       onChanged: (password) {
-        context.read<RegisterBloc>().add(LoginRegisterPasswordChanged(password));
+        context.read<RegisterBloc>().add(
+          LoginRegisterPasswordChanged(password),
+        );
       },
       obscureText: true,
       decoration: InputDecoration(
@@ -1658,7 +1950,9 @@ class _ConfirmPasswordInput extends StatelessWidget {
     return TextField(
       key: const Key('registerForm_confirmPasswordInput_textField'),
       onChanged: (password) {
-        context.read<RegisterBloc>().add(LoginRegisterConfirmPasswordChanged(password));
+        context.read<RegisterBloc>().add(
+          LoginRegisterConfirmPasswordChanged(password),
+        );
       },
       obscureText: true,
       decoration: InputDecoration(
@@ -1676,9 +1970,9 @@ class _RegisterButton extends StatelessWidget {
       (RegisterBloc bloc) => bloc.state.status.isInProgressOrSuccess,
     );
 
-    if (isInProgressOrSuccess) { 
+    if (isInProgressOrSuccess) {
       return const CircularProgressIndicator();
-    } 
+    }
 
     final isValid = context.select((RegisterBloc bloc) => bloc.state.isValid);
 
@@ -1962,6 +2256,18 @@ class TierListsOverviewBloc
     Emitter<TierListsOverviewState> emit,
   ) async {
     emit(state.copyWith(query: () => event.newQuery));
+
+    if (event.newQuery.trim().isEmpty) {
+      return emit(state.copyWith(searchResults: () => null));
+    }
+
+    emit(state.copyWith(status: () => TierListsOverviewStatus.loading));
+    try {
+      final searchResults = await _tierListsRepository.searchTierLists(event.newQuery);
+      emit(state.copyWith(searchResults: () => searchResults, status: () => TierListsOverviewStatus.success));
+    } catch (_) {
+      emit(state.copyWith(status: () => TierListsOverviewStatus.failure));
+    }
   }
 }
 part of 'tier_lists_overview_bloc.dart';
@@ -2016,12 +2322,14 @@ final class TierListsOverviewState extends Equatable {
   final List<TierList> tierLists;
   final TierList? lastDeletedTierList;
   final String query;
+  final List<TierList>? searchResults;
 
   const TierListsOverviewState({
     this.status = TierListsOverviewStatus.initial,
     this.tierLists = const [],
     this.lastDeletedTierList,
-    this.query = ''
+    this.query = '',
+    this.searchResults,
   });
 
   // copyWith uses functions as parameters so that state members can be set as null
@@ -2029,7 +2337,8 @@ final class TierListsOverviewState extends Equatable {
     TierListsOverviewStatus Function()? status,
     List<TierList> Function()? tierLists,
     TierList? Function()? lastDeletedTierList,
-    String Function()? query
+    String Function()? query,
+    List<TierList>? Function()? searchResults,
   }) {
     return TierListsOverviewState(
       status: status == null ? this.status : status(),
@@ -2037,21 +2346,25 @@ final class TierListsOverviewState extends Equatable {
       lastDeletedTierList: lastDeletedTierList == null
           ? this.lastDeletedTierList
           : lastDeletedTierList(),
-      query: query == null ? this.query : query()
+      query: query == null ? this.query : query(),
+      searchResults: searchResults == null ? this.searchResults : searchResults(),
     );
   }
 
   @override
-  List<Object?> get props => [status, tierLists, lastDeletedTierList, query];
+  List<Object?> get props => [status, tierLists, lastDeletedTierList, query, searchResults];
 }
-export 'view/tier_lists_overview_page.dart';import 'package:flutter/cupertino.dart';
+export 'view/tier_lists_overview_page.dart';import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_list_editor/view/tier_list_editor_page.dart';
+import 'package:mobile/tier_lists_overview/add_tier_list/cubit/add_tier_list_cubit.dart';
 import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
+import 'package:mobile/tier_lists_overview/widgets/add_tier_list_dialog.dart';
 import 'package:mobile/tier_lists_overview/widgets/tier_list_list_tile.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
-import '../widgets/add_tier_list_button.dart';
 
 class TierListsOverviewPage extends StatelessWidget {
   const TierListsOverviewPage({super.key});
@@ -2067,23 +2380,63 @@ class TierListsOverviewPage extends StatelessWidget {
   }
 }
 
-class TierListsOverviewView extends StatelessWidget {
+class TierListsOverviewView extends StatefulWidget {
   const TierListsOverviewView({super.key});
+
+  @override
+  State<TierListsOverviewView> createState() => _TierListsOverviewViewState();
+}
+
+class _TierListsOverviewViewState extends State<TierListsOverviewView> {
+  Timer? _debounce;
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Tierlists'),
+        title: TextFormField(
+          onChanged: (query) {
+            _debounce?.cancel();
+            _debounce = Timer(const Duration(milliseconds: 500), () {
+              context.read<TierListsOverviewBloc>().add(
+                    TierListsOverviewQueryUpdated(query),
+                  );
+            });
+          },
+          decoration: const InputDecoration(
+            hintText: 'Search Tier Lists...',
+          ),
+        ),
         actions: [
-          const AddTierListButton()
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (_) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: context.read<TierListsOverviewBloc>(),
+                    ),
+                    BlocProvider(create: (_) => AddTierListCubit()),
+                  ],
+                  child: const AddTierListDialog(),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: MultiBlocListener(
         listeners: [
           BlocListener<TierListsOverviewBloc, TierListsOverviewState>(
-            listenWhen: (previous, current) =>
-                previous.status != current.status,
+            listenWhen: (p, c) => p.status != c.status,
             listener: (context, state) {
               if (state.status == TierListsOverviewStatus.failure) {
                 ScaffoldMessenger.of(context)
@@ -2095,26 +2448,24 @@ class TierListsOverviewView extends StatelessWidget {
             },
           ),
           BlocListener<TierListsOverviewBloc, TierListsOverviewState>(
-            listenWhen: (previous, current) =>
-                previous.lastDeletedTierList != current.lastDeletedTierList &&
-                current.lastDeletedTierList != null,
+            listenWhen: (p, c) =>
+                p.lastDeletedTierList != c.lastDeletedTierList &&
+                c.lastDeletedTierList != null,
             listener: (context, state) {
-              final deletedTierList = state.lastDeletedTierList!;
+              final deleted = state.lastDeletedTierList!;
               final messenger = ScaffoldMessenger.of(context);
               messenger
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
                   SnackBar(
-                    content: Text(
-                      'Deleted Tier List: ${deletedTierList.title}',
-                    ),
+                    content: Text('Deleted Tier List: ${deleted.title}'),
                     action: SnackBarAction(
                       label: 'Undo',
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
-                        context.read<TierListsOverviewBloc>().add(
-                          const TierListsOverviewUndoDeletionRequested(),
-                        );
+                        context
+                            .read<TierListsOverviewBloc>()
+                            .add(const TierListsOverviewUndoDeletionRequested());
                       },
                     ),
                   ),
@@ -2124,36 +2475,36 @@ class TierListsOverviewView extends StatelessWidget {
         ],
         child: BlocBuilder<TierListsOverviewBloc, TierListsOverviewState>(
           builder: (context, state) {
-            if (state.tierLists.isEmpty) {
+            final searching = state.query.trim().isNotEmpty;
+            final lists = searching ? (state.searchResults ?? []) : state.tierLists;
+
+            if (lists.isEmpty) {
               if (state.status == TierListsOverviewStatus.loading) {
-                return const Center(child: CupertinoActivityIndicator(),);
-              } else if (state.status != TierListsOverviewStatus.success) {
-                return const SizedBox();
-              } else {
-                return Center(
-                  child: Text(
-                    'Create your first tier list',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                );
+                return const Center(child: CupertinoActivityIndicator());
               }
+              if (state.status != TierListsOverviewStatus.success) {
+                return const SizedBox();
+              }
+              return Center(
+                child: Text(
+                  searching ? 'No results found' : 'Create your first tier list',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              );
             }
 
             return CupertinoScrollbar(
               child: ListView.builder(
-                itemCount: state.tierLists.length,
-                itemBuilder: (_, index) {
-                  final tierList = state.tierLists.elementAt(index);
+                itemCount: lists.length,
+                itemBuilder: (_, i) {
+                  final t = lists[i];
                   return TierListListTile(
-                    tierList: tierList,
-                    onDismissed: (_) {
-                      context.read<TierListsOverviewBloc>().add(
-                        TierListsOverviewTierListDeleted(tierList)
-                      );
-                    },
-                    onTap: () {
-                      Navigator.of(context).push(TierListEditorPage.route(tierList.id));
-                    }
+                    tierList: t,
+                    onDelete: () => context
+                        .read<TierListsOverviewBloc>()
+                        .add(TierListsOverviewTierListDeleted(t)),
+                    onTap: () => Navigator.of(context)
+                        .push(TierListEditorPage.route(t.id)),
                   );
                 },
               ),
@@ -2163,10 +2514,12 @@ class TierListsOverviewView extends StatelessWidget {
       ),
     );
   }
-}import 'package:flutter/material.dart';
+}
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
 import 'package:mobile/tier_lists_overview/widgets/add_tier_list_dialog.dart';
+import 'package:mobile/tier_lists_overview/add_tier_list/cubit/add_tier_list_cubit.dart';
 
 class AddTierListButton extends StatelessWidget {
   const AddTierListButton({super.key});
@@ -2176,17 +2529,23 @@ class AddTierListButton extends StatelessWidget {
     return IconButton(
       icon: const Icon(Icons.add),
       onPressed: () {
+        final overviewBloc = context.read<TierListsOverviewBloc>();
+
         showDialog(
           context: context,
-          builder: (dialogContext) => BlocProvider.value(
-            value: context.read<TierListsOverviewBloc>(),
+          builder: (dialogContext) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: overviewBloc),
+              BlocProvider(create: (_) => AddTierListCubit()),
+            ],
             child: const AddTierListDialog(),
-          )
+          ),
         );
       },
     );
   }
-}import 'package:flutter/material.dart';
+}
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile/tier_lists_overview/add_tier_list/cubit/add_tier_list_cubit.dart';
 import 'package:mobile/tier_lists_overview/bloc/tier_lists_overview_bloc.dart';
@@ -2196,57 +2555,47 @@ class AddTierListDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AddTierListCubit(),
-      child: Builder(
-        builder: (context) {
-          return BlocListener<AddTierListCubit, AddTierListState>(
-            listener: (context, state) {
-              if (state.status == AddTierListStatus.success) {
-                context.read<TierListsOverviewBloc>().add(
-                  TierListsOverviewTierListAdded(
-                    name: state.name,
-                    description: state.description,
-                  ),
-                );
-                Navigator.of(context).pop();
-              }
-            },
-            child: AlertDialog(
-              title: const Text('Add New Tier List'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Title'),
-                  TextFormField(
-                    onChanged: (title) {
-                      context.read<AddTierListCubit>().onNameChanged(title);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  const Text('Description'),
-                  TextFormField(
-                    onChanged: (description) {
-                      context.read<AddTierListCubit>().onDescriptionChanged(
-                        description,
-                      );
-                    },
-                  ),
-                ],
+    return BlocListener<AddTierListCubit, AddTierListState>(
+      listenWhen: (prev, curr) =>
+          prev.status != curr.status &&
+          curr.status == AddTierListStatus.success,
+      listener: (context, state) {
+        context.read<TierListsOverviewBloc>().add(
+              TierListsOverviewTierListAdded(
+                name: state.name,
+                description: state.description,
               ),
-              actions: [
-                BlocBuilder<AddTierListCubit, AddTierListState>(
-                  builder: (context, state) => ElevatedButton(
-                    onPressed: state.isValid
-                        ? () => context.read<AddTierListCubit>().submit()
-                        : null,
-                    child: const Text('Add'),
-                  ),
-                ),
-              ],
+            );
+        Navigator.of(context).pop();
+      },
+      child: AlertDialog(
+        title: const Text('Add New Tier List'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Title'),
+            TextFormField(
+              onChanged: (v) =>
+                  context.read<AddTierListCubit>().onNameChanged(v),
             ),
-          );
-        }
+            const SizedBox(height: 12),
+            const Text('Description'),
+            TextFormField(
+              onChanged: (v) =>
+                  context.read<AddTierListCubit>().onDescriptionChanged(v),
+            ),
+          ],
+        ),
+        actions: [
+          BlocBuilder<AddTierListCubit, AddTierListState>(
+            builder: (context, state) => ElevatedButton(
+              onPressed: state.isValid
+                  ? () => context.read<AddTierListCubit>().submit()
+                  : null,
+              child: const Text('Add'),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -2256,47 +2605,39 @@ import 'package:tier_lists_repository/tier_lists_repository.dart';
 
 class TierListListTile extends StatelessWidget {
   final TierList tierList;
-  final DismissDirectionCallback? onDismissed;
+  final VoidCallback? onDelete;
   final VoidCallback? onTap;
 
   const TierListListTile({
     super.key,
     required this.tierList,
-    this.onDismissed,
-    this.onTap
+    this.onDelete,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: Key('tierListListTile_dismissible_${tierList.id}'),
-      onDismissed: onDismissed,
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        color: Theme.of(context).colorScheme.error,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: const Icon(
-          Icons.delete,
-          color: Colors.black
-        ),
+    return ListTile(
+      onTap: onTap,
+      title: Text(
+        tierList.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
-      child: ListTile(
-        onTap: onTap,
-        title: Text(
-          tierList.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Text(
-          tierList.description,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      subtitle: Text(
+        tierList.description,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: onDelete,
+        color: Theme.of(context).colorScheme.error,
       ),
     );
   }
-}import 'package:flutter/material.dart';
+}
+import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tier_lists_repository/tier_lists_repository.dart';
@@ -2836,7 +3177,8 @@ class TierListEditorView extends StatelessWidget {
               title: Text(state.originalTitle!),
               actions: [const TierListEditorOptionsButton()],
             ),
-            body: Center(
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
               child: ListView.builder(
                 itemCount: state.tierList!.tiers.length + 1,
                 itemBuilder: (_, index) {
@@ -3035,6 +3377,7 @@ class _MoveItemSheetState extends State<MoveItemSheet> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
           Text('Move Item', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 16),
@@ -3045,7 +3388,7 @@ class _MoveItemSheetState extends State<MoveItemSheet> {
           ),
           const SizedBox(height: 24),
           if (_selectedRow == null)
-            _rowSelection(availableRows)
+            Expanded(child: _rowSelection(availableRows))
           else
             _positionSelection(_selectedRow!, availableRows),
         ],
@@ -3054,8 +3397,8 @@ class _MoveItemSheetState extends State<MoveItemSheet> {
   }
 
   Widget _rowSelection(List<ListRow> availableRows) {
-    return SizedBox(
-      height: 200,
+    return Material(
+      clipBehavior: Clip.hardEdge,
       child: ListView.builder(
         itemCount: availableRows.length,
         itemBuilder: (_, index) => ListTile(
@@ -3394,23 +3737,41 @@ class TierRowWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _rowId == 'staging'
-            ? const SizedBox(height: 36)
-            : SizedBox(
-                width: 42,
-                height: 24,
-                child: InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (_) => BlocProvider.value(
-                        value: editorBloc,
-                        child: EditTierModal(_rowId),
+            ? const SizedBox(height: 50)
+            : Column(
+              children: [
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: row.color.withAlpha(150),
+                        borderRadius: const BorderRadius.only(topRight: Radius.circular(10))
                       ),
-                    );
-                  },
-                  child: Text(row.name),
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                              value: editorBloc,
+                              child: EditTierModal(_rowId),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            const SizedBox(width: 100),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(row.name, style: Theme.of(context).textTheme.titleLarge),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ),
-              ),
+              ],
+            ),
         Container(
           height: 180,
           color: row.color,
@@ -3520,7 +3881,6 @@ class AuthenticationRepository {
     } else {
       throw const LogInFailure();
     }
-    // _controller.add(AuthenticationStatus.authenticated);
   }
 
   void logOut() async {
@@ -3544,7 +3904,56 @@ class AuthenticationRepository {
     );
 
     if (response.statusCode >= 400) {
-      throw const RegisterFailure();
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw const RegisterFailure('Failed to register');
+      }
+      throw RegisterFailure(responseMessage);
+    }
+  }
+
+  Future<void> resendVerificationEmail(String email) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/sendCode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email})
+    );
+
+    if (response.statusCode == 500) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Failed to resend verification email');
+      }
+      throw Exception(responseMessage);
+    } else if (response.statusCode >= 400) {
+      throw Exception('Failed to resend verification email');
+    }
+  }
+
+  Future<void> verifyCode({required String email, required String code}) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/verifyCode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'code': code})
+    );
+
+    if (response.statusCode == 400) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Failed to verify code');
+      }
+      throw Exception(responseMessage);
+    } else if (response.statusCode > 400) {
+      throw Exception('Failed to verify code');
     }
   }
 
@@ -3919,7 +4328,14 @@ import 'package:flutter/material.dart';
 
 part 'tag.g.dart';
 
-enum TagType { positive, neutral, negative }
+enum TagType { 
+  @JsonValue('border-green-500')
+  positive, 
+  @JsonValue('border-gray-500')
+  neutral, 
+  @JsonValue('border-red-500')
+  negative 
+}
 
 const Map<TagType, Color> kColorMap = {
     TagType.positive: Colors.green,
@@ -3930,7 +4346,10 @@ const Map<TagType, Color> kColorMap = {
 @immutable
 @JsonSerializable()
 class Tag extends Equatable {
+  @JsonKey(name: 'color')
   final TagType type;
+
+  @JsonKey(name: 'name')
   final String text;
 
   @JsonKey(includeToJson: false)
@@ -3968,20 +4387,20 @@ part of 'tag.dart';
 // **************************************************************************
 
 Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
-  type: $enumDecode(_$TagTypeEnumMap, json['type']),
-  text: json['text'] as String,
+  type: $enumDecode(_$TagTypeEnumMap, json['color']),
+  text: json['name'] as String,
   id: json['id'] as String?,
 );
 
 Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
-  'type': _$TagTypeEnumMap[instance.type]!,
-  'text': instance.text,
+  'color': _$TagTypeEnumMap[instance.type]!,
+  'name': instance.text,
 };
 
 const _$TagTypeEnumMap = {
-  TagType.positive: 'positive',
-  TagType.neutral: 'neutral',
-  TagType.negative: 'negative',
+  TagType.positive: 'border-green-500',
+  TagType.neutral: 'border-gray-500',
+  TagType.negative: 'border-red-500',
 };
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
@@ -4374,16 +4793,9 @@ class TierListsRepository {
   }
 
   Future<List<TierList>> searchTierLists(String query) async {
-    final searchResults = await _remoteTierListsApi.searchTierLists(query: query);
-
-    for (final tierList in searchResults) {
-      await _localTierListsApi.saveTierList(tierList);
-    }
-
-    return searchResults;
+    return await _remoteTierListsApi.searchTierLists(query: query);
   }
 
   void dispose() => _localTierListsApi.close();
-}
-export 'package:tier_lists_api/tier_lists_api.dart';
+}export 'package:tier_lists_api/tier_lists_api.dart';
 export 'src/tier_lists_repository.dart';

@@ -99,12 +99,16 @@ class _EmailInput extends StatelessWidget {
 }
 
 class _PasswordInput extends StatelessWidget {
-  String? getErrorText(PasswordValidationError? displayError) {
-    switch (displayError) {
+  String? getErrorText(PasswordValidationError? error) {
+    switch (error) {
       case PasswordValidationError.empty:
         return 'Password cannot be empty';
+      case PasswordValidationError.includesWhiteSpace:
+        return 'Password cannot contain spaces'; 
       case PasswordValidationError.tooShort:
         return 'Password must be at least 8 characters';
+      case PasswordValidationError.missingNumber:
+        return 'Password must contain at least one number';
       default:
         return null;
     }
