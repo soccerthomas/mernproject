@@ -257,7 +257,7 @@ const Dashboard: React.FC = () => {
                         <div className="w-24 flex items-center justify-center">
                           <div
                             style = {{backgroundColor: category.color}}
-                            className= "text-white font-bold text-xl p-7 rounded-xl text-center w-full"
+                            className= "text-white font-bold text-xl p-7 rounded-xl text-center truncate w-full"
                           >
                             {category.name}
                           </div>
@@ -274,16 +274,6 @@ const Dashboard: React.FC = () => {
                                     <div className="text-xs font-medium text-center truncate">
                                       {item.name}
                                     </div>
-                                  </div>
-                                  <div className="invisible group-hover:visible absolute z-50 bg-gray-900 text-white text-xs rounded-lg p-2 mt-1 shadow-lg max-w-xs">
-                                    <div className="font-semibold">
-                                      {item.name}
-                                    </div>
-                                    {item.description && (
-                                      <div className="text-white mt-1">
-                                        {item.description}
-                                      </div>
-                                    )}
                                   </div>
                                 </div>
                               ))
