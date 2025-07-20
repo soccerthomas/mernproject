@@ -17,7 +17,7 @@ final class TierListsOverviewTierListAdded extends TierListsOverviewEvent {
 
   const TierListsOverviewTierListAdded({
     required this.name,
-    required this.description
+    required this.description,
   });
 }
 
@@ -41,4 +41,14 @@ final class TierListsOverviewQueryUpdated extends TierListsOverviewEvent {
 
   @override
   List<Object> get props => [newQuery];
+}
+
+final class TierListsOverviewTierListPinned extends TierListsOverviewEvent {
+  final String tierListId;
+  final bool pinned;
+
+  const TierListsOverviewTierListPinned(this.tierListId, this.pinned);
+
+  @override
+  List<Object> get props => [tierListId, pinned];
 }

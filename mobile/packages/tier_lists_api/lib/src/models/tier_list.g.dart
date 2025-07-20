@@ -14,6 +14,7 @@ TierList _$TierListFromJson(Map<String, dynamic> json) => TierList(
       .map((e) => Tier.fromJson(e as Map<String, dynamic>))
       .toList(),
   stagingArea: _stagingAreaFromUnassignedItems(json['unassignedItems'] as List),
+  pinned: json['pinned'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$TierListToJson(TierList instance) => <String, dynamic>{
@@ -22,4 +23,5 @@ Map<String, dynamic> _$TierListToJson(TierList instance) => <String, dynamic>{
   'description': instance.description,
   'categories': instance.tiers,
   'unassignedItems': _unassignedItemsFromStagingArea(instance.stagingArea),
+  'pinned': instance.pinned,
 };
