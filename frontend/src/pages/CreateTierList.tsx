@@ -5,7 +5,7 @@ import TierListLogo from "../Images/TierListLogo.png";
 import EditSymbol from "../Images/EditSymbol.png";
 
 interface ItemStructure {
-  id: Number;
+  id: number;
   name: string;
   image: string;
   description: string;
