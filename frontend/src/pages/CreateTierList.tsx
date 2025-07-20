@@ -486,6 +486,30 @@ function CreateTierList() {
         }
       })
     })
+    items.map((item, idx) => {
+      if(current && item.id == current.id)
+      {
+        if(currentView && item.id == currentView.id)
+        {
+          if(direction == "left")
+          {
+            if(idx == 0)
+            {
+              setCurrentView(items[items.length - 1]);
+            } else {
+              setCurrentView(items[idx - 1]);
+            }
+          } else {
+            if(idx == items.length - 1)
+            {
+              setCurrentView(items[0]);
+            } else {
+              setCurrentView(items[idx + 1]);
+            }
+          }
+        }
+      }
+    })
     if(!currentCategory) { return; }
     let size = currentCategory.items.length;
     if(size == 0) { return; }
