@@ -10,13 +10,14 @@ class TierListsOverviewBloc
   final TierListsRepository _tierListsRepository;
 
   TierListsOverviewBloc({required TierListsRepository tierListsRepository})
-    : _tierListsRepository = tierListsRepository,
-      super(const TierListsOverviewState()) {
+      : _tierListsRepository = tierListsRepository,
+        super(const TierListsOverviewState()) {
     on<TierListsOverviewSubscriptionRequested>(_onSubscriptionRequested);
     on<TierListsOverviewTierListAdded>(_onTierListAdded);
     on<TierListsOverviewTierListDeleted>(_onTierListDeleted);
     on<TierListsOverviewUndoDeletionRequested>(_onUndoDeletionRequested);
     on<TierListsOverviewQueryUpdated>(_onQueryUpdated);
+    on<TierListsOverviewTierListPinned>(_onTierListPinned);
   }
 
   Future<void> _onSubscriptionRequested(
@@ -28,12 +29,20 @@ class TierListsOverviewBloc
     _tierListsRepository.refreshTierLists();
 
     await emit.forEach<List<TierList>>(
-      _tierListsRepository.getTierLists(), // subscribe to stream
-      onData: (tierLists) => state.copyWith(
-        status: () => TierListsOverviewStatus.success,
-        tierLists: () => tierLists,
-      ),
-      onError: (_, _) =>
+      _tierListsRepository.getTierLists(),
+      onData: (tierLists) {
+        final sorted = List<TierList>.from(tierLists)
+          ..sort((a, b) {
+            if (a.pinned == b.pinned) return 0;
+            return a.pinned ? -1 : 1;
+          });
+
+        return state.copyWith(
+          status: () => TierListsOverviewStatus.success,
+          tierLists: () => sorted,
+        );
+      },
+      onError: (_, __) =>
           state.copyWith(status: () => TierListsOverviewStatus.failure),
     );
   }
@@ -65,7 +74,6 @@ class TierListsOverviewBloc
     Emitter<TierListsOverviewState> emit,
   ) async {
     final tierList = state.lastDeletedTierList!;
-
     emit(state.copyWith(lastDeletedTierList: () => null));
     await _tierListsRepository.saveTierList(tierList);
   }
@@ -82,10 +90,34 @@ class TierListsOverviewBloc
 
     emit(state.copyWith(status: () => TierListsOverviewStatus.loading));
     try {
-      final searchResults = await _tierListsRepository.searchTierLists(event.newQuery);
-      emit(state.copyWith(searchResults: () => searchResults, status: () => TierListsOverviewStatus.success));
+      final searchResults =
+          await _tierListsRepository.searchTierLists(event.newQuery);
+      emit(state.copyWith(
+        searchResults: () => searchResults,
+        status: () => TierListsOverviewStatus.success,
+      ));
     } catch (_) {
       emit(state.copyWith(status: () => TierListsOverviewStatus.failure));
     }
   }
+
+ Future<void> _onTierListPinned(
+  TierListsOverviewTierListPinned event,
+  Emitter<TierListsOverviewState> emit,
+) async {
+  final updated = state.tierLists.map((t) {
+    if (t.id == event.tierListId) return t.copyWith(pinned: event.pinned);
+    return t;
+  }).toList();
+
+  updated.sort((a, b) {
+    if (a.pinned == b.pinned) return 0;
+    return a.pinned ? -1 : 1;
+  });
+
+  emit(state.copyWith(tierLists: () => updated));
+
+  final changedItem = updated.firstWhere((t) => t.id == event.tierListId);
+  await _tierListsRepository.updateTierList(changedItem);
+}
 }

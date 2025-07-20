@@ -144,9 +144,6 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
                   final t = lists[i];
                   return TierListListTile(
                     tierList: t,
-                    onDelete: () => context
-                        .read<TierListsOverviewBloc>()
-                        .add(TierListsOverviewTierListDeleted(t)),
                     onTap: () => Navigator.of(context)
                         .push(TierListEditorPage.route(t.id)),
                   );

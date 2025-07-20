@@ -11,14 +11,13 @@ class TierListsRepository {
   const TierListsRepository({
     required LocalTierListsApi localTierListsApi,
     required RemoteTierListsApi remoteTierListsApi,
-  }) : _localTierListsApi = localTierListsApi,
-       _remoteTierListsApi = remoteTierListsApi;
+  })  : _localTierListsApi = localTierListsApi,
+        _remoteTierListsApi = remoteTierListsApi;
 
   Stream<List<TierList>> getTierLists() => _localTierListsApi.getTierLists();
 
   Future<void> refreshTierLists() async {
     final remoteTierLists = await _remoteTierListsApi.searchTierLists();
-
     await _localTierListsApi.replaceAllTierLists(remoteTierLists);
   }
 

@@ -37,12 +37,15 @@ class TierList extends Equatable {
   )
   final StagingArea stagingArea;
 
+  final bool pinned;
+
   TierList({
     String? id,
     required this.title,
     this.description = '',
     required this.tiers,
     required this.stagingArea,
+    this.pinned = false,
   }) : id = id ?? const Uuid().v4();
 
   TierList copyWith({
@@ -50,8 +53,8 @@ class TierList extends Equatable {
     String? title,
     String? description,
     List<Tier>? tiers,
-    List<Tag>? tags,
     StagingArea? stagingArea,
+    bool? pinned,
   }) {
     return TierList(
       id: id ?? this.id,
@@ -59,6 +62,7 @@ class TierList extends Equatable {
       description: description ?? this.description,
       tiers: tiers ?? List.from(this.tiers),
       stagingArea: stagingArea ?? this.stagingArea,
+      pinned: pinned ?? this.pinned,
     );
   }
 
@@ -67,7 +71,7 @@ class TierList extends Equatable {
   JsonMap toJson() => _$TierListToJson(this);
 
   @override
-  List<Object> get props => [id, title, description, tiers, stagingArea];
+  List<Object> get props => [id, title, description, tiers, stagingArea, pinned];
 }
 
 StagingArea _stagingAreaFromUnassignedItems(List<dynamic> itemsJson) {
