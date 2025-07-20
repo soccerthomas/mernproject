@@ -15,23 +15,35 @@ class TierListListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      title: Text(
-        tierList.title,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+    return Dismissible(
+      key: ValueKey(tierList.id),
+      direction: DismissDirection.horizontal,
+      background: _buildSwipeBackground(Alignment.centerLeft),
+      secondaryBackground: _buildSwipeBackground(Alignment.centerRight),
+      confirmDismiss: (_) async => true,
+      onDismissed: (_) => onDelete?.call(),
+      child: ListTile(
+        onTap: onTap,
+        title: Text(
+          tierList.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          tierList.description,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
-      subtitle: Text(
-        tierList.description,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-      trailing: IconButton(
-        icon: const Icon(Icons.delete),
-        onPressed: onDelete,
-        color: Theme.of(context).colorScheme.error,
-      ),
+    );
+  }
+
+  Widget _buildSwipeBackground(Alignment alignment) {
+    return Container(
+      alignment: alignment,
+      color: Colors.red,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: const Icon(Icons.delete, color: Colors.white),
     );
   }
 }
