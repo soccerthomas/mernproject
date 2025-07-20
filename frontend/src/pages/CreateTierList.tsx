@@ -636,9 +636,13 @@ function CreateTierList() {
                             viewCardOpen(true);
                             setCurrentView(item);
                           }}
-                          className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
+                          className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
                         >
-                          <div className="text-md truncate">{item.name}</div>
+                          {item.image ? (
+                            <img className = "w-full h-full object-cover rounded-lg" src = {item.image} alt = {item.name}/>
+                          ) : (
+                            <div className="text-md truncate">{item.name}</div>
+                          )}
                         </div>
                       </div>
                     ))
@@ -661,7 +665,7 @@ function CreateTierList() {
             onDragOver={handleDragOver}
             onDrop={handleOnDropItems}
           >
-            {items.length === 0 ? (
+            {items.length == 0 ? (
               <div className="text-gray-400 text-center w-full py-8">
                 No items created yet
               </div>
