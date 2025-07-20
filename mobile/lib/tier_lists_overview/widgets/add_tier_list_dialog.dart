@@ -30,14 +30,27 @@ class AddTierListDialog extends StatelessWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('Title'),
-            TextFormField(
-              onChanged: (v) =>
-                  context.read<AddTierListCubit>().onNameChanged(v),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Title'),
             ),
-            const SizedBox(height: 12),
-            const Text('Description'),
             TextFormField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (v) => context.read<AddTierListCubit>().onNameChanged(v),
+            ),
+            const SizedBox(height: 16),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Description'),
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              minLines: 3,
+              maxLines: 5,
               onChanged: (v) =>
                   context.read<AddTierListCubit>().onDescriptionChanged(v),
             ),
