@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import TierListLogo from "../Images/TierListLogo.png";
-import ColorSymbol from "../Images/ColorSymbol.png";
+import EditSymbol from "../Images/EditSymbol.png";
 
 interface ItemStructure {
   id: number;
@@ -48,6 +48,8 @@ function CreateTierList() {
   const [tierName, setTierName] = useState("");
   const [tierColor, setTierColor] = useState("");
 
+  const [editMode, setEditMode] = useState(false);
+  const [displayOptions, setDisplayOptions] = useState(false);
 
   const openNewCardModal = () => {
     newCardModalOpen(true);
@@ -490,17 +492,46 @@ function CreateTierList() {
             >
               Dashboard
             </button>
+            {displayOptions == false && 
+              <button className="bg-gray-600 ml-3 text-white rounded-md pb-2 px-1 w-[50px] justify-center hover:bg-yellow-500" 
+                      onClick={() => setDisplayOptions(true)}>
+                . . .
+              </button>
+            }
           </div>
         </nav>
       </header>
-      <div className="relative"></div>
-      <button
-        className="bg-gray-400 p-2 px-4 flex justify-self-end rounded-xl text-white mr-[30px] mt-[10px] hover:bg-yellow-500"
-        onClick={() => setShowInfoModal(true)}
-      >
-        Edit Title/Description
-      </button>
-      <div className="flex justify-center text-5xl text-white mt-[20px]">
+      {displayOptions && 
+        <div className="fixed inset-0 bg-black bg-opacity-40">
+          <div className="absolute mr-5 mt-[100px] flex flex-col justify-self-end items-end w-[250px] bg-gray-700 shadow-2xl rounded-xl py-5">
+            <button className="bg-red-500 p-1 px-3 flex justify-self-end rounded-xl text-white -mt-[8px] mr-[10px] hover:bg-red-800" 
+                    onClick={() => {
+                      setDisplayOptions(false);
+                      setEditMode(false);
+                    }}>
+              x
+            </button>
+            <button
+              className= "bg-gray-700 shadow-xl p-2 px-4 w-[180px] justify-center flex justify-self-end rounded-xl text-white mr-[30px] mt-[10px] hover:bg-blue-500"
+              onClick={() => {
+                setShowInfoModal(true);
+                setDisplayOptions(false);
+              }}
+            >
+              Edit Title/Description
+            </button>
+            <button
+              className={`${editMode ? "bg-red-500" : "bg-gray-700"} shadow-xl p-2 px-4 flex w-[180px] justify-center justify-self-end rounded-xl text-white mr-[30px] mt-[10px] hover:bg-blue-500`}
+              onClick={() => {
+                setEditMode(!editMode);
+                setDisplayOptions(false);
+              }}
+            >
+              {editMode ? "Stop Edit" : "Edit Mode"}
+            </button>
+          </div>
+        </div>}
+      <div className="flex justify-center text-5xl text-white mt-[30px]">
         {tierListTitle}
       </div>
       <div className="flex justify-center text-xl text-white mt-[20px]">
@@ -512,15 +543,14 @@ function CreateTierList() {
           <div key={category.id} className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
             <div className="flex items-stretch min-h-[120px] gap-12">
               <div className="w-24 flex items-center justify-center gap-3">
-                <img
-                  src={ColorSymbol}
+                {editMode && <img
+                  src={EditSymbol}
                   onClick={() => {
                     setTierEdit(category);
                     handleEditTierOpen(category);
-                    // setSelectedCategory(category);
                   }}
                   className="h-8 w-auto cursor-pointer"
-                />
+                />}
                 <div
                   className={`${category.color} text-white text-center font-bold text-3xl px-[60px] w-auto h-[120px] rounded-xl flex items-center justify-center w-full`}
                 >
