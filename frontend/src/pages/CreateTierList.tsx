@@ -5,7 +5,7 @@ import TierListLogo from "../Images/TierListLogo.png";
 import EditSymbol from "../Images/EditSymbol.png";
 
 interface ItemStructure {
-  id: number;
+  id: string;
   name: string;
   image: string;
   description: string;
@@ -433,7 +433,7 @@ function CreateTierList() {
 
   const handleItems = () => {
     const newItem = {
-      id: Math.random(),
+      id: uuidv4(),
       name: itemName,
       image: itemImage,
       description: itemDescription,
