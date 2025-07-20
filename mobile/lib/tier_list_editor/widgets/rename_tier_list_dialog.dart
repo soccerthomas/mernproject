@@ -17,16 +17,12 @@ class _RenameTierListDialogState extends State<RenameTierListDialog> {
   void initState() {
     super.initState();
 
-    final initialText = context
-        .read<TierListEditorBloc>()
-        .state
-        .tierList!
-        .title;
+    final initialText = context.read<TierListEditorBloc>().state.tierList!.title;
     _textController = TextEditingController(text: initialText);
 
     _textController.addListener(() {
       setState(() {
-        _isButtonDisabled = _textController.text.isEmpty;
+        _isButtonDisabled = _textController.text.trim().isEmpty;
       });
     });
   }
@@ -40,23 +36,39 @@ class _RenameTierListDialogState extends State<RenameTierListDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Rename Tier List'),
-      content: TextFormField(controller: _textController),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+      title: const Center(
+        child: Text(
+          'Rename Tier List',
+          textAlign: TextAlign.center,
         ),
-        TextButton(
-          onPressed: _isButtonDisabled
-              ? null
-              : () {
-                  context.read<TierListEditorBloc>().add(
-                    TierListEditorTierListRenamed(_textController.text),
-                  );
-                  Navigator.of(context).pop();
-                },
-          child: const Text('Submit'),
+      ),
+      content: TextFormField(
+        controller: _textController,
+        decoration: const InputDecoration(
+          border: OutlineInputBorder(),
+        ),
+      ),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            const SizedBox(width: 16),
+            TextButton(
+              onPressed: _isButtonDisabled
+                  ? null
+                  : () {
+                      context.read<TierListEditorBloc>().add(
+                            TierListEditorTierListRenamed(_textController.text.trim()),
+                          );
+                      Navigator.of(context).pop();
+                    },
+              child: const Text('Submit'),
+            ),
+          ],
         ),
       ],
     );
