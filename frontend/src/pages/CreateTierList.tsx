@@ -73,31 +73,31 @@ function CreateTierList() {
       name: 'S',
       id: Math.random(),
       items: [],
-      color: 'bg-red-500'
+      color: "#EF4444"
     },
     {
       name: 'A',
       id: Math.random(),
       items: [],
-      color: 'bg-orange-500'
+      color: "#F97316"
     },
     {
       name: 'B',
       id: Math.random(),
       items: [],
-      color: 'bg-yellow-500'
+      color: "#EAB308"
     },
     {
       name: 'C',
       id: Math.random(),
       items: [],
-      color: 'bg-green-500'
+      color: "#22C55E"
     },
     {
       name: 'D',
       id: Math.random(),
       items: [],
-      color: 'bg-blue-500',
+      color: "#3B82F6",
     }
   ]);
 
@@ -125,26 +125,26 @@ function CreateTierList() {
   
 
   const colorOptions = [
-    "bg-red-500",
-    "bg-orange-500",
-    "bg-green-500",
-    "bg-blue-500",
-    "bg-purple-500",
-    "bg-pink-500",
-    "bg-yellow-500",
-    "bg-amber-500",
-    "bg-lime-500",
-    "bg-emerald-500",
-    "bg-teal-500",
-    "bg-sky-500",
-    "bg-cyan-500",
-    "bg-black",
-    "bg-violet-500",
-    "bg-fuchsia-500",
-    "bg-rose-500",
-    "bg-indigo-500",
-    "bg-zinc-500",
-    "bg-stone-500",
+    '#EF4444',
+    '#F97316',
+    '#22C55E',
+    '#3B82F6',
+    '#A855F7',
+    '#EC4899',
+    '#EAB308',
+    '#F59E0B',
+    '#84CC16',
+    '#10B981',
+    '#14B8A6',
+    '#0EA5E9',
+    '#06B6D4',
+    '#000000',
+    '#8B5CF6',
+    '#D946EF',
+    '#F43F5E',
+    '#6366F1',
+    '#71717A',
+    '#78716C',
   ];
 
   useEffect(() => {
@@ -178,35 +178,10 @@ function CreateTierList() {
   }
 
   async function saveTierList() {
-    const toHex = {
-      'bg-red-500': '#EF4444',
-      'bg-orange-500': '#F97316',
-      'bg-green-500': '#22C55E',
-      'bg-blue-500': '#3B82F6',
-      'bg-purple-500': '#A855F7',
-      'bg-pink-500': '#EC4899',
-      'bg-yellow-500': '#EAB308',
-      'bg-amber-500': '#F59E0B',
-      'bg-lime-500': '#84CC16',
-      'bg-emerald-500': '#10B981',
-      'bg-teal-500': '#14B8A6',
-      'bg-sky-500': '#0EA5E9',
-      'bg-cyan-500': '#06B6D4',
-      'bg-black': '#000000',
-      'bg-violet-500': '#8B5CF6',
-      'bg-fuchsia-500': '#D946EF',
-      'bg-rose-500': '#F43F5E',
-      'bg-indigo-500': '#6366F1',
-      'bg-zinc-500': '#71717A',
-      'bg-stone-500': '#78716C',
-    }
-    const colorChange = categories.map(category => ({
-        ...category, color: toHex[category.color as keyof typeof toHex] || category.color
-    }));
     const data = {
       title: tierListTitle,
       description: tierListDescription,
-      categories: colorChange,
+      categories: categories,
       unassignedItems: items,
     };
     if (isEditing && editingId) {
@@ -493,7 +468,7 @@ function CreateTierList() {
     const newTier = {
       name: "New Tier",
       id: Math.random(),
-      color: "bg-gray-500",
+      color: "#6B7280",
       items: []
     }
     
@@ -638,13 +613,15 @@ function CreateTierList() {
                   className="h-8 w-auto cursor-pointer"
                 />}
                 <div
-                  className={`${category.color} text-white text-center font-bold text-3xl px-[60px] w-auto h-[120px] rounded-xl flex items-center justify-center w-full`}
+                  style = {{backgroundColor: category.color}}
+                  className="text-white text-center font-bold text-3xl px-[60px] w-auto h-[120px] rounded-xl flex items-center justify-center w-full"
                 >
                   {category.name}
                 </div>
               </div>
               <div
-                className={`${category.color} flex-1 rounded-xl p-4`}
+                style = {{backgroundColor: category.color}}
+                className="flex-1 rounded-xl p-4"
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleOnDropCategory(e, category)}
               >
@@ -1079,7 +1056,8 @@ function CreateTierList() {
                   onClick={() => {
                     setTierColor(color);
                   }}
-                  className={`${color} ${tierColor == color ? "border-white border-[5px]" : "border-gray-600"} w-10 h-10 rounded-full border-2 border-gray-600 hover:scale-110 transition-transform`}
+                  style = {{backgroundColor: color}}
+                  className={`${tierColor == color ? "border-white border-[5px]" : "border-gray-600"} w-10 h-10 rounded-full border-2 border-gray-600 hover:scale-110 transition-transform`}
                 />
               ))}
             </div>
