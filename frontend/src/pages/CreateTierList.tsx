@@ -475,6 +475,43 @@ function CreateTierList() {
     setCategories(prev => [...prev, newTier]);
   }
 
+  function handleChangeView(direction: string, current: ItemStructure | undefined)
+  {
+    let currentCategory : CategoriesStructure | undefined;
+    categories.map(category => {
+      category.items.map(item => {
+        if(current && item.id == current.id)
+        {
+          currentCategory = category;
+        }
+      })
+    })
+    if(!currentCategory) { return; }
+    let size = currentCategory.items.length;
+    if(size == 0) { return; }
+    currentCategory.items.map((item, idx) => {
+      if(currentView && item.id == currentView.id)
+      {
+        if(direction == "left")
+        {
+          if(idx == 0)
+          {
+            setCurrentView(currentCategory?.items[size - 1]);
+          } else {
+            setCurrentView(currentCategory?.items[idx - 1]);
+          }
+        } else {
+          if(idx == size - 1)
+          {
+            setCurrentView(currentCategory?.items[0]);
+          } else {
+            setCurrentView(currentCategory?.items[idx + 1]);
+          }
+        }
+      }
+    })
+  }
+
   return (
     <div className="bg-gray-800 h-auto">
       <header className="p-4">
@@ -1047,14 +1084,12 @@ function CreateTierList() {
         </div>
       )}
       {isViewCardOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <button className="text-white mr-4 p-3 text-5xl"
+                  onClick={() => handleChangeView("left", currentView)}>{"<"}</button>
           <div className="bg-gray-800 max-h-[95vh] w-full max-w-4xl rounded-2xl relative overflow-hidden">
             <div className="flex items-center justify-between p-6 border-b border-gray-700">
               <h2 className="text-2xl font-bold text-white">Item Details</h2>
-              <button
-                onClick={() => viewCardOpen(false)}
-                className="text-gray-400 hover:text-white p-2 hover:bg-gray-700 rounded-lg transition-colors"
-              ></button>
             </div>
             <div className="p-6 max-h-[70vh] overflow-y-auto">
               <div className="space-y-6">
@@ -1139,6 +1174,8 @@ function CreateTierList() {
               </button>
             </div>
           </div>
+          <button className="text-white ml-4 p-3 text-5xl"
+                  onClick={() => handleChangeView("right", currentView)}>{">"}</button>
         </div>
       )}
     </div>
