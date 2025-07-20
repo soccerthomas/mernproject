@@ -253,29 +253,29 @@ const Dashboard: React.FC = () => {
                       key={categoryIdx}
                       className="bg-gray-800 rounded-xl p-4 shadow-lg"
                     >
-                      <div className="flex items-stretch min-h-[120px] gap-4">
+                      <div className="flex items-stretch gap-4">
                         <div className="w-24 flex items-center justify-center">
                           <div
-                            style = {{backgroundColor: category.color}}
-                            className= "text-white font-bold text-xl p-7 rounded-xl text-center truncate w-full"
+                            style={{backgroundColor: category.color}}
+                            className="text-white font-bold text-sm px-2 py-2 rounded-xl text-center w-full h-full flex items-center justify-center"
                           >
-                            {category.name}
+                            <span className="break-words leading-tight hyphens-auto">
+                              {category.name}
+                            </span>
                           </div>
                         </div>
                         <div
-                          style = {{backgroundColor: category.color}}
-                          className= "flex-1 rounded-xl p-4"
+                          style={{backgroundColor: category.color}}
+                          className="flex-1 rounded-xl p-4"
                         >
                           <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
                             {category.items.length > 0 ? (
                               category.items.map((item, itemIdx) => (
                                 <div key={itemIdx} className="group">
-                                  <div className="bg-gray-700 hover:bg-gray-600 text-white rounded-lg p-3 h-20 w-20 flex items-center justify-center shadow-md">
-                                    {item.image ? (
-                                      <img className = "w-full h-full object-cover rounded-lg" src = {item.image} alt = {item.name}/>
-                                    ) : (
-                                      <div className="text-xs font-medium text-center truncate">{item.name}</div>
-                                    )}
+                                  <div className="bg-gray-700 hover:bg-gray-600 text-white rounded-lg p-3 h-20 w-20 flex items-center justify-center shadow-md transition-colors">
+                                    <div className="text-xs font-medium text-center truncate">
+                                      {item.name}
+                                    </div>
                                   </div>
                                 </div>
                               ))
