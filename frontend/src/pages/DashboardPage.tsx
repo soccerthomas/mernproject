@@ -272,7 +272,7 @@ const Dashboard: React.FC = () => {
                             {category.items.length > 0 ? (
                               category.items.map((item, itemIdx) => (
                                 <div key={itemIdx} className="group">
-                                  <div className="bg-gray-700 hover:bg-gray-600 text-white rounded-lg p-3 h-20 w-20 flex items-center justify-center shadow-md transition-colors">
+                                  <div className="bg-gray-700 hover:bg-gray-600 text-white rounded-lg h-20 w-20 flex items-center justify-center shadow-md transition-colors">
                                     {item.image ? (
                                       <img className = "w-full h-full object-cover rounded-lg" src = {item.image} alt = {item.name}/>
                                     ) : (
