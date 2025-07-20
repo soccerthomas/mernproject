@@ -1,11 +1,13 @@
 import { useState } from "react";
 import TierListLogo from "../images/TierListLogo.png";
 import LoginForm from "../components/LoginForm.tsx";
+import ForgotPasswordModal from "../components/ForgotPasswordModal.tsx";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] =
+    useState(false);
   return (
     <>
       <header className="bg-gray-800 p-4">
@@ -19,30 +21,6 @@ function Login() {
               <img className="h-8 w-auto" src={TierListLogo} alt="" />
             </a>
           </div>
-
-          {/*
-          <div className="hidden lg:flex lg:gap-x-12">
-            <a
-              href="./login"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Create Tier List
-            </a>
-            <a
-              href="./login"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Your Tier Lists
-            </a>
-            <a
-              href="/"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Explore
-            </a>
-          </div>
-          */}
-
           <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
             <a
               href="./register"
@@ -70,17 +48,32 @@ function Login() {
             setUsername={setUsername}
             setPassword={setPassword}
           />
-          <p className="mt-6 text-center text-sm text-white">
-            Don't have an account?{" "}
-            <a
-              href="/register"
-              className="text-blue-500 hover:text-white font-medium"
-            >
-              Sign up
-            </a>
-          </p>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-white">
+              Don't have an account?{" "}
+              <a
+                href="/register"
+                className="text-blue-500 hover:text-white font-medium"
+              >
+                Sign up
+              </a>
+            </p>
+            <p className="mt-2 text-sm">
+              <button
+                onClick={() => setIsForgotPasswordModalOpen(true)}
+                className="text-blue-500 hover:text-white font-medium underline"
+              >
+                Forgot your password?
+              </button>
+            </p>
+          </div>
         </div>
       </div>
+
+      <ForgotPasswordModal
+        isOpen={isForgotPasswordModalOpen}
+        onClose={() => setIsForgotPasswordModalOpen(false)}
+      />
     </>
   );
 }

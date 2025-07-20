@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/Users.js'
 import PendingUser from '../models/PendingUsers.js';
-import {sendVerificationEmail, genVerificationCode} from '../utils/emailVerification.js'
+import PasswordReset from '../models/PasswordReset.js';
+import {sendVerificationEmail, sendPasswordResetEmail, genVerificationCode} from '../utils/emailVerification.js'
 
 const router = express.Router();
 
@@ -178,6 +179,174 @@ router.post('/verifyCode', async (req, res) => {
     } catch (error) {
         console.error('Verify code error:', error);
         res.status(500).json({success: false, message: 'Failed to verify code. Please try again.'});
+    }
+});
+
+router.post('/sendPasswordResetCode', async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'Email is required' });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'No account found with this email address' });
+        }
+
+        //gen code
+        const code = genVerificationCode();
+        const expiresAt = new Date();
+        expiresAt.setMinutes(expiresAt.getMinutes() + 10);
+
+        await PasswordReset.deleteOne({ email });
+
+        //for new pwd modal
+        const passwordReset = new PasswordReset({
+            email,
+            code,
+            expiresAt
+        });
+
+        await passwordReset.save();
+
+        //access brevo to send email
+        await sendPasswordResetEmail(email, code, user.username);
+
+        res.status(200).json({
+            success: true,
+            message: `Password reset code has been sent to ${email}`
+        });
+
+    } catch (error) {
+        console.error('Send password reset code error:', error);
+        return res.status(500).json({ success: false, message: 'Failed to send password reset code' });
+    }
+});
+
+router.post('/verifyPasswordResetCode', async (req, res) => {
+    try {
+        const { email, code } = req.body;
+
+        if (!email || !code) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email and verification code are required'
+            });
+        }
+
+        if (code.length !== 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'Verification code must be 6 digits'
+            });
+        }
+
+        const passwordReset = await PasswordReset.findOne({ email });
+        if (!passwordReset) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'No password reset request found for this email' 
+            });
+        }
+
+        if (new Date() > passwordReset.expiresAt) {
+            await PasswordReset.deleteOne({ email });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Verification code has expired. Please request a new one.' 
+            });
+        }
+
+        if (passwordReset.code !== code) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Invalid verification code. Please try again' 
+            });
+        }
+
+        //once code passes checks we move onto resetting pwd
+        passwordReset.verified = true;
+        await passwordReset.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Verification code verified successfully'
+        });
+
+    } catch (error) {
+        console.error('Verify password reset code error:', error);
+        res.status(500).json({ success: false, message: 'Failed to verify code. Please try again.' });
+    }
+});
+
+router.post('/resetPassword', async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+
+        if (!email || !newPassword) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Email and new password are required' 
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Password must be at least 6 characters long' 
+            });
+        }
+
+        if (!/\d/.test(newPassword)) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Password must contain at least one number' 
+            });
+        }
+
+        const passwordReset = await PasswordReset.findOne({ email, verified: true });
+        if (!passwordReset) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'No verified password reset request found. Please verify your code first.' 
+            });
+        }
+
+        if (new Date() > passwordReset.expiresAt) {
+            await PasswordReset.deleteOne({ email });
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Password reset session has expired. Please start over.' 
+            });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'User not found' 
+            });
+        }
+
+        //hashing fr new pwd
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        await PasswordReset.deleteOne({ email });
+
+        res.status(200).json({
+            success: true,
+            message: 'Password reset successfully'
+        });
+
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ success: false, message: 'Failed to reset password. Please try again.' });
     }
 });
 
