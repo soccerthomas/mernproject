@@ -67,7 +67,7 @@ class TierListListTile extends StatelessWidget {
           ),
           subtitle: Text(
             tierList.pinned
-                ? '📌 Pinned • ${tierList.description}'
+                ? '${tierList.description}'
                 : tierList.description,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
