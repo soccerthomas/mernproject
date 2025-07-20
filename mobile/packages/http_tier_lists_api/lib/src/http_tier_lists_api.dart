@@ -21,11 +21,18 @@ class HttpTierListsApi implements RemoteTierListsApi {
       }
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode < 400) {
       final body = jsonDecode(response.body) as List;
       return body.map((json) => TierList.fromJson(json)).toList();
     } else {
-      throw Exception('Failed to search tier lists');
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Search failed');
+      }
+      throw Exception(responseMessage);
     }
   }
 

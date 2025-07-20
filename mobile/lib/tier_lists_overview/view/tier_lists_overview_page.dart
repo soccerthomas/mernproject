@@ -86,7 +86,7 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
-                    const SnackBar(content: Text('Error Loading Tier Lists')),
+                    SnackBar(content: Text(state.errorMessage ?? 'Error Loading Tier Lists')),
                   );
               }
             },

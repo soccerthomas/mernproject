@@ -8,6 +8,7 @@ final class TierListsOverviewState extends Equatable {
   final TierList? lastDeletedTierList;
   final String query;
   final List<TierList>? searchResults;
+  final String? errorMessage;
 
   const TierListsOverviewState({
     this.status = TierListsOverviewStatus.initial,
@@ -15,6 +16,7 @@ final class TierListsOverviewState extends Equatable {
     this.lastDeletedTierList,
     this.query = '',
     this.searchResults,
+    this.errorMessage
   });
 
   // copyWith uses functions as parameters so that state members can be set as null
@@ -24,6 +26,7 @@ final class TierListsOverviewState extends Equatable {
     TierList? Function()? lastDeletedTierList,
     String Function()? query,
     List<TierList>? Function()? searchResults,
+    String Function()? errorMessage,
   }) {
     return TierListsOverviewState(
       status: status == null ? this.status : status(),
@@ -33,9 +36,10 @@ final class TierListsOverviewState extends Equatable {
           : lastDeletedTierList(),
       query: query == null ? this.query : query(),
       searchResults: searchResults == null ? this.searchResults : searchResults(),
+      errorMessage: errorMessage == null ? this.errorMessage : errorMessage()
     );
   }
 
   @override
-  List<Object?> get props => [status, tierLists, lastDeletedTierList, query, searchResults];
+  List<Object?> get props => [status, tierLists, lastDeletedTierList, query, searchResults, errorMessage];
 }
