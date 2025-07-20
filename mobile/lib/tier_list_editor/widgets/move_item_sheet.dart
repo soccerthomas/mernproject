@@ -33,6 +33,7 @@ class _MoveItemSheetState extends State<MoveItemSheet> {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
           Text('Move Item', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 16),
@@ -43,7 +44,7 @@ class _MoveItemSheetState extends State<MoveItemSheet> {
           ),
           const SizedBox(height: 24),
           if (_selectedRow == null)
-            _rowSelection(availableRows)
+            Expanded(child: _rowSelection(availableRows))
           else
             _positionSelection(_selectedRow!, availableRows),
         ],
@@ -52,8 +53,8 @@ class _MoveItemSheetState extends State<MoveItemSheet> {
   }
 
   Widget _rowSelection(List<ListRow> availableRows) {
-    return SizedBox(
-      height: 200,
+    return Material(
+      clipBehavior: Clip.hardEdge,
       child: ListView.builder(
         itemCount: availableRows.length,
         itemBuilder: (_, index) => ListTile(

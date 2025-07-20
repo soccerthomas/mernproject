@@ -22,23 +22,41 @@ class TierRowWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _rowId == 'staging'
-            ? const SizedBox(height: 36)
-            : SizedBox(
-                width: 42,
-                height: 24,
-                child: InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (_) => BlocProvider.value(
-                        value: editorBloc,
-                        child: EditTierModal(_rowId),
+            ? const SizedBox(height: 50)
+            : Column(
+              children: [
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: row.color.withAlpha(150),
+                        borderRadius: const BorderRadius.only(topRight: Radius.circular(10))
                       ),
-                    );
-                  },
-                  child: Text(row.name),
+                      child: InkWell(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (_) => BlocProvider.value(
+                              value: editorBloc,
+                              child: EditTierModal(_rowId),
+                            ),
+                          );
+                        },
+                        child: Column(
+                          children: [
+                            const SizedBox(width: 100),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(row.name, style: Theme.of(context).textTheme.titleLarge),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                 ),
-              ),
+              ],
+            ),
         Container(
           height: 180,
           color: row.color,

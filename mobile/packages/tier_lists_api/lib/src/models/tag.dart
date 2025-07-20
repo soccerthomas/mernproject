@@ -6,7 +6,14 @@ import 'package:flutter/material.dart';
 
 part 'tag.g.dart';
 
-enum TagType { positive, neutral, negative }
+enum TagType { 
+  @JsonValue('border-green-500')
+  positive, 
+  @JsonValue('border-gray-500')
+  neutral, 
+  @JsonValue('border-red-500')
+  negative 
+}
 
 const Map<TagType, Color> kColorMap = {
     TagType.positive: Colors.green,
@@ -17,7 +24,10 @@ const Map<TagType, Color> kColorMap = {
 @immutable
 @JsonSerializable()
 class Tag extends Equatable {
+  @JsonKey(name: 'color')
   final TagType type;
+
+  @JsonKey(name: 'name')
   final String text;
 
   @JsonKey(includeToJson: false)

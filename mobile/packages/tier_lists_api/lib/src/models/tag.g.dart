@@ -7,18 +7,18 @@ part of 'tag.dart';
 // **************************************************************************
 
 Tag _$TagFromJson(Map<String, dynamic> json) => Tag(
-  type: $enumDecode(_$TagTypeEnumMap, json['type']),
-  text: json['text'] as String,
+  type: $enumDecode(_$TagTypeEnumMap, json['color']),
+  text: json['name'] as String,
   id: json['id'] as String?,
 );
 
 Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
-  'type': _$TagTypeEnumMap[instance.type]!,
-  'text': instance.text,
+  'color': _$TagTypeEnumMap[instance.type]!,
+  'name': instance.text,
 };
 
 const _$TagTypeEnumMap = {
-  TagType.positive: 'positive',
-  TagType.neutral: 'neutral',
-  TagType.negative: 'negative',
+  TagType.positive: 'border-green-500',
+  TagType.neutral: 'border-gray-500',
+  TagType.negative: 'border-red-500',
 };

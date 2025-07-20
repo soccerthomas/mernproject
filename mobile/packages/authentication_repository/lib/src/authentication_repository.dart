@@ -85,7 +85,6 @@ class AuthenticationRepository {
     } else {
       throw const LogInFailure();
     }
-    // _controller.add(AuthenticationStatus.authenticated);
   }
 
   void logOut() async {
@@ -109,7 +108,56 @@ class AuthenticationRepository {
     );
 
     if (response.statusCode >= 400) {
-      throw const RegisterFailure();
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw const RegisterFailure('Failed to register');
+      }
+      throw RegisterFailure(responseMessage);
+    }
+  }
+
+  Future<void> resendVerificationEmail(String email) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/sendCode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email})
+    );
+
+    if (response.statusCode == 500) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Failed to resend verification email');
+      }
+      throw Exception(responseMessage);
+    } else if (response.statusCode >= 400) {
+      throw Exception('Failed to resend verification email');
+    }
+  }
+
+  Future<void> verifyCode({required String email, required String code}) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/verifyCode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'code': code})
+    );
+
+    if (response.statusCode == 400) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Failed to verify code');
+      }
+      throw Exception(responseMessage);
+    } else if (response.statusCode > 400) {
+      throw Exception('Failed to verify code');
     }
   }
 

@@ -3,43 +3,34 @@ import 'package:tier_lists_repository/tier_lists_repository.dart';
 
 class TierListListTile extends StatelessWidget {
   final TierList tierList;
-  final DismissDirectionCallback? onDismissed;
+  final VoidCallback? onDelete;
   final VoidCallback? onTap;
 
   const TierListListTile({
     super.key,
     required this.tierList,
-    this.onDismissed,
-    this.onTap
+    this.onDelete,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
-      key: Key('tierListListTile_dismissible_${tierList.id}'),
-      onDismissed: onDismissed,
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        color: Theme.of(context).colorScheme.error,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: const Icon(
-          Icons.delete,
-          color: Colors.black
-        ),
+    return ListTile(
+      onTap: onTap,
+      title: Text(
+        tierList.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
       ),
-      child: ListTile(
-        onTap: onTap,
-        title: Text(
-          tierList.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Text(
-          tierList.description,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
+      subtitle: Text(
+        tierList.description,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: IconButton(
+        icon: const Icon(Icons.delete),
+        onPressed: onDelete,
+        color: Theme.of(context).colorScheme.error,
       ),
     );
   }

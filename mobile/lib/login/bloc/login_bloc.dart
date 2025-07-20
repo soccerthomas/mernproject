@@ -42,8 +42,8 @@ class LoginBloc extends LoginRegisterBloc {
     LoginRegisterSubmitted event,
     Emitter<LoginRegisterState> emit,
   ) async {
+    emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
     if (state.isValid) {
-      emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
       try {
         await authenticationRepository.logIn(
           username: state.username.value,
@@ -60,6 +60,11 @@ class LoginBloc extends LoginRegisterBloc {
       } catch (_) {
         emit(state.copyWith(status: FormzSubmissionStatus.failure));
       }
+    } else {
+      emit(state.copyWith(
+        status: FormzSubmissionStatus.failure,
+        errorMessage: 'Invalid Username or Password'
+      ));
     }
   }
 }

@@ -69,7 +69,8 @@ class TierListEditorView extends StatelessWidget {
               title: Text(state.originalTitle!),
               actions: [const TierListEditorOptionsButton()],
             ),
-            body: Center(
+            body: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
               child: ListView.builder(
                 itemCount: state.tierList!.tiers.length + 1,
                 itemBuilder: (_, index) {

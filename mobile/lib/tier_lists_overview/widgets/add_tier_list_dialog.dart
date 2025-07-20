@@ -8,57 +8,47 @@ class AddTierListDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AddTierListCubit(),
-      child: Builder(
-        builder: (context) {
-          return BlocListener<AddTierListCubit, AddTierListState>(
-            listener: (context, state) {
-              if (state.status == AddTierListStatus.success) {
-                context.read<TierListsOverviewBloc>().add(
-                  TierListsOverviewTierListAdded(
-                    name: state.name,
-                    description: state.description,
-                  ),
-                );
-                Navigator.of(context).pop();
-              }
-            },
-            child: AlertDialog(
-              title: const Text('Add New Tier List'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('Title'),
-                  TextFormField(
-                    onChanged: (title) {
-                      context.read<AddTierListCubit>().onNameChanged(title);
-                    },
-                  ),
-                  const SizedBox(height: 12),
-                  const Text('Description'),
-                  TextFormField(
-                    onChanged: (description) {
-                      context.read<AddTierListCubit>().onDescriptionChanged(
-                        description,
-                      );
-                    },
-                  ),
-                ],
+    return BlocListener<AddTierListCubit, AddTierListState>(
+      listenWhen: (prev, curr) =>
+          prev.status != curr.status &&
+          curr.status == AddTierListStatus.success,
+      listener: (context, state) {
+        context.read<TierListsOverviewBloc>().add(
+              TierListsOverviewTierListAdded(
+                name: state.name,
+                description: state.description,
               ),
-              actions: [
-                BlocBuilder<AddTierListCubit, AddTierListState>(
-                  builder: (context, state) => ElevatedButton(
-                    onPressed: state.isValid
-                        ? () => context.read<AddTierListCubit>().submit()
-                        : null,
-                    child: const Text('Add'),
-                  ),
-                ),
-              ],
+            );
+        Navigator.of(context).pop();
+      },
+      child: AlertDialog(
+        title: const Text('Add New Tier List'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Title'),
+            TextFormField(
+              onChanged: (v) =>
+                  context.read<AddTierListCubit>().onNameChanged(v),
             ),
-          );
-        }
+            const SizedBox(height: 12),
+            const Text('Description'),
+            TextFormField(
+              onChanged: (v) =>
+                  context.read<AddTierListCubit>().onDescriptionChanged(v),
+            ),
+          ],
+        ),
+        actions: [
+          BlocBuilder<AddTierListCubit, AddTierListState>(
+            builder: (context, state) => ElevatedButton(
+              onPressed: state.isValid
+                  ? () => context.read<AddTierListCubit>().submit()
+                  : null,
+              child: const Text('Add'),
+            ),
+          ),
+        ],
       ),
     );
   }
