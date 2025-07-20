@@ -10,8 +10,7 @@ class AddTierListDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<AddTierListCubit, AddTierListState>(
       listenWhen: (prev, curr) =>
-          prev.status != curr.status &&
-          curr.status == AddTierListStatus.success,
+          prev.status != curr.status && curr.status == AddTierListStatus.success,
       listener: (context, state) {
         context.read<TierListsOverviewBloc>().add(
               TierListsOverviewTierListAdded(
@@ -22,7 +21,12 @@ class AddTierListDialog extends StatelessWidget {
         Navigator.of(context).pop();
       },
       child: AlertDialog(
-        title: const Text('Add New Tier List'),
+        title: const Center(
+          child: Text(
+            'Add New Tier List',
+            textAlign: TextAlign.center,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -39,6 +43,7 @@ class AddTierListDialog extends StatelessWidget {
             ),
           ],
         ),
+        actionsAlignment: MainAxisAlignment.center,
         actions: [
           BlocBuilder<AddTierListCubit, AddTierListState>(
             builder: (context, state) => ElevatedButton(
