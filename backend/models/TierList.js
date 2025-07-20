@@ -31,7 +31,7 @@ const itemSchema = new mongoose.Schema({
 
 const categorySchema = new mongoose.Schema({
     id: {
-        type: Number,
+        type: String,
         required: true
     },
     name: {

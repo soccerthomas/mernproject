@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 import TierListLogo from "../Images/TierListLogo.png";
 import EditSymbol from "../Images/EditSymbol.png";
 
 interface ItemStructure {
-  id: number;
+  id: string;
   name: string;
   image: string;
   description: string;
@@ -15,7 +16,7 @@ interface TagStructure {
   color: string;
 }
 interface CategoriesStructure {
-  id: number;
+  id: string;
   name: string;
   color: string;
   items: Array<ItemStructure>;
@@ -71,31 +72,31 @@ function CreateTierList() {
   const [categories, setCategories] = useState<CategoriesStructure[]>([
     {
       name: 'S',
-      id: Math.random(),
+      id: uuidv4(),
       items: [],
       color: "#EF4444"
     },
     {
       name: 'A',
-      id: Math.random(),
+      id: uuidv4(),
       items: [],
       color: "#F97316"
     },
     {
       name: 'B',
-      id: Math.random(),
+      id: uuidv4(),
       items: [],
       color: "#EAB308"
     },
     {
       name: 'C',
-      id: Math.random(),
+      id: uuidv4(),
       items: [],
       color: "#22C55E"
     },
     {
       name: 'D',
-      id: Math.random(),
+      id: uuidv4(),
       items: [],
       color: "#3B82F6",
     }
@@ -432,7 +433,7 @@ function CreateTierList() {
 
   const handleItems = () => {
     const newItem = {
-      id: Math.random(),
+      id: uuidv4(),
       name: itemName,
       image: itemImage,
       description: itemDescription,
@@ -467,7 +468,7 @@ function CreateTierList() {
   {
     const newTier = {
       name: "New Tier",
-      id: Math.random(),
+      id: uuidv4(),
       color: "#6B7280",
       items: []
     }
