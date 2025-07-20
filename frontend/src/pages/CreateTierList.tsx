@@ -15,6 +15,7 @@ interface TagStructure {
   color: string;
 }
 interface CategoriesStructure {
+  id: number;
   name: string;
   color: string;
   items: Array<ItemStructure>;
@@ -33,7 +34,9 @@ function CreateTierList() {
   const [isViewCardOpen, viewCardOpen] = useState(false);
   const [isEditCardModalOpen, setEditCardModalOpen] = useState(false);
   const [isDeleteCardModalOpen, setDeleteCardModalOpen] = useState(false);
+  const [isDeleteTierModalOpen, setDeleteTierModalOpen] = useState(false);
   const [isColorModalOpen, colorModalOpen] = useState(false);
+  const [isEditTierModalOpen, editTierModalOpen] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(true);
   const [tierListTitle, setTierListTitle] = useState("");
   const [tierListDescription, setTierListDescription] = useState("");
@@ -41,6 +44,10 @@ function CreateTierList() {
   const [itemImage, setItemImage] = useState("");
   const [itemDescription, setItemDescription] = useState("");
   const [itemTags, setItemTags] = useState<TagStructure[]>([]);
+
+  const [tierName, setTierName] = useState("");
+  const [tierColor, setTierColor] = useState("");
+
 
   const openNewCardModal = () => {
     newCardModalOpen(true);
@@ -58,19 +65,47 @@ function CreateTierList() {
   };
 
   const [items, setItems] = useState<ItemStructure[]>([]);
-  const [sTierCards, setSTierCards] = useState<ItemStructure[]>([]);
-  const [aTierCards, setATierCards] = useState<ItemStructure[]>([]);
-  const [bTierCards, setBTierCards] = useState<ItemStructure[]>([]);
-  const [cTierCards, setCTierCards] = useState<ItemStructure[]>([]);
-  const [dTierCards, setDTierCards] = useState<ItemStructure[]>([]);
+
+  const [categories, setCategories] = useState<CategoriesStructure[]>([
+    {
+      name: 'S',
+      id: Math.random(),
+      items: [],
+      color: 'bg-red-500'
+    },
+    {
+      name: 'A',
+      id: Math.random(),
+      items: [],
+      color: 'bg-orange-500'
+    },
+    {
+      name: 'B',
+      id: Math.random(),
+      items: [],
+      color: 'bg-yellow-500'
+    },
+    {
+      name: 'C',
+      id: Math.random(),
+      items: [],
+      color: 'bg-green-500'
+    },
+    {
+      name: 'D',
+      id: Math.random(),
+      items: [],
+      color: 'bg-blue-500',
+    }
+  ]);
 
   const [currentView, setCurrentView] = useState<ItemStructure>();
   const [currentEdit, setCurrentEdit] = useState<ItemStructure>();
+  const [tierEdit, setTierEdit] = useState<CategoriesStructure>();
+  const [deleteTier, setDeleteTier] = useState<CategoriesStructure>();
   const [deleteItem, setDeleteItem] = useState<ItemStructure>();
 
-  // const [tags, setTags] = useState<TagStructure[]>([]);
   const [tagName, setTagName] = useState("");
-  //const [tagStatus, setTagStatus] = useState('');
 
   const [isNewTagModalOpen, newTagModalOpen] = useState(false);
   const openNewTagModal = () => {
@@ -85,13 +120,7 @@ function CreateTierList() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState<string>();
-
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedColorS, setSelectedColorS] = useState("bg-red-500");
-  const [selectedColorA, setSelectedColorA] = useState("bg-orange-500");
-  const [selectedColorB, setSelectedColorB] = useState("bg-yellow-500");
-  const [selectedColorC, setSelectedColorC] = useState("bg-green-500");
-  const [selectedColorD, setSelectedColorD] = useState("bg-blue-500");
+  
 
   const colorOptions = [
     "bg-red-500",
@@ -116,24 +145,6 @@ function CreateTierList() {
     "bg-stone-500",
   ];
 
-  function handleColorSelect(color: string) {
-    if (selectedCategory == "S") {
-      setSelectedColorS(color);
-    }
-    if (selectedCategory == "A") {
-      setSelectedColorA(color);
-    }
-    if (selectedCategory == "B") {
-      setSelectedColorB(color);
-    }
-    if (selectedCategory == "C") {
-      setSelectedColorC(color);
-    }
-    if (selectedCategory == "D") {
-      setSelectedColorD(color);
-    }
-  }
-
   useEffect(() => {
     const editId = searchParams.get("edit");
     if (editId) {
@@ -155,13 +166,9 @@ function CreateTierList() {
       if (response.ok) {
         setTierListTitle(tierlist.title || "");
         setTierListDescription(tierlist.description || "");
-        setSTierCards(tierlist.categories[0].items || []);
-        setATierCards(tierlist.categories[1].items || []);
-        setBTierCards(tierlist.categories[2].items || []);
-        setCTierCards(tierlist.categories[3].items || []);
-        setDTierCards(tierlist.categories[4].items || []);
+        setCategories(tierlist.categories);
+
         setItems(tierlist.items || []);
-        // setTags(tierlist.tags || []);
       }
     } catch (error) {
       console.error(error);
@@ -169,19 +176,11 @@ function CreateTierList() {
   }
 
   async function saveTierList() {
-    const categories = [
-      { name: "S", color: selectedColorS, items: sTierCards },
-      { name: "A", color: selectedColorA, items: aTierCards },
-      { name: "B", color: selectedColorB, items: bTierCards },
-      { name: "C", color: selectedColorC, items: cTierCards },
-      { name: "D", color: selectedColorD, items: dTierCards },
-    ];
     const data = {
       title: tierListTitle,
       description: tierListDescription,
       categories: categories,
       unassignedItems: items,
-      // globalTags: tags
     };
     if (isEditing && editingId) {
       const response = await updateTierList(editingId, data);
@@ -200,7 +199,6 @@ function CreateTierList() {
           body: JSON.stringify(data),
         });
         if (response.ok) {
-          // const savedTierList = await response.json();
           navigate("/dashboard");
         }
       } catch (error) {
@@ -268,6 +266,14 @@ function CreateTierList() {
       setItemTags([...item.tags]);
     }
   }
+  function handleEditTierOpen(tier: CategoriesStructure | undefined) {
+    if (tier) {
+      editTierModalOpen(true);
+
+      setTierName(tier.name);
+      setTierColor(tier.color);
+    }
+  }
   function handleEditSave() {
     if (currentEdit) {
       setItems(
@@ -285,82 +291,25 @@ function CreateTierList() {
           }
         })
       );
-      setSTierCards(
-        sTierCards.map((item) => {
-          if (item.id == currentEdit.id) {
-            return {
-              ...item,
-              name: itemName,
-              image: itemImage,
-              description: itemDescription,
-              tags: itemTags,
-            };
-          } else {
-            return item;
-          }
-        })
+      setCategories(
+        categories.map((category) => ({
+          ...category,
+          items: category.items.map((item) => {
+              if (item.id == currentEdit.id) {
+                return {
+                  ...item,
+                  name: itemName,
+                  image: itemImage,
+                  description: itemDescription,
+                  tags: itemTags,
+                };
+              } else {
+                return item;
+              }
+          })
+        }))
       );
-      setATierCards(
-        aTierCards.map((item) => {
-          if (item.id == currentEdit.id) {
-            return {
-              ...item,
-              name: itemName,
-              image: itemImage,
-              description: itemDescription,
-              tags: itemTags,
-            };
-          } else {
-            return item;
-          }
-        })
-      );
-      setBTierCards(
-        bTierCards.map((item) => {
-          if (item.id == currentEdit.id) {
-            return {
-              ...item,
-              name: itemName,
-              image: itemImage,
-              description: itemDescription,
-              tags: itemTags,
-            };
-          } else {
-            return item;
-          }
-        })
-      );
-      setCTierCards(
-        cTierCards.map((item) => {
-          if (item.id == currentEdit.id) {
-            return {
-              ...item,
-              name: itemName,
-              image: itemImage,
-              description: itemDescription,
-              tags: itemTags,
-            };
-          } else {
-            return item;
-          }
-        })
-      );
-      setDTierCards(
-        dTierCards.map((item) => {
-          if (item.id == currentEdit.id) {
-            return {
-              ...item,
-              name: itemName,
-              image: itemImage,
-              description: itemDescription,
-              tags: itemTags,
-            };
-          } else {
-            return item;
-          }
-        })
-      );
-
+    
       setItemName("");
       setItemImage("");
       setItemDescription("");
@@ -372,17 +321,47 @@ function CreateTierList() {
     setEditCardModalOpen(false);
   }
 
+  function handleEditTierSave() {
+    setCategories(
+      categories.map((category) => {
+        if(tierEdit && category.id == tierEdit.id)
+        {
+          return {...category, name: tierName, color: tierColor}
+        }
+        return category;
+      })
+    );
+
+    setTierName("");
+    setTierColor("");
+
+    setTierEdit(undefined);
+    editTierModalOpen(false);
+    
+  }
+
   function handleDelete() {
     if (deleteItem) {
       setItems(items.filter((item) => item.id != deleteItem.id));
-      setSTierCards(sTierCards.filter((item) => item.id != deleteItem.id));
-      setATierCards(aTierCards.filter((item) => item.id != deleteItem.id));
-      setBTierCards(bTierCards.filter((item) => item.id != deleteItem.id));
-      setCTierCards(cTierCards.filter((item) => item.id != deleteItem.id));
-      setDTierCards(dTierCards.filter((item) => item.id != deleteItem.id));
+
+      setCategories(
+        categories.map((category) => ({
+            ...category,
+            items: category.items.filter((item) => item.id != deleteItem.id)
+        }))
+      );
     }
 
     setDeleteCardModalOpen(false);
+  }
+  function handleDeleteTier() {
+    if (deleteTier) {
+      setCategories(prev =>
+        prev.filter(category => category.id != deleteTier.id)
+      );
+    }
+
+    setDeleteTierModalOpen(false);
   }
 
   function handleOnDrag(e: React.DragEvent, item: object) {
@@ -400,87 +379,42 @@ function CreateTierList() {
 
     setItems([...items, card]);
 
-    setSTierCards(sTierCards.filter((item) => item.id != card.id));
-    setATierCards(aTierCards.filter((item) => item.id != card.id));
-    setBTierCards(bTierCards.filter((item) => item.id != card.id));
-    setCTierCards(cTierCards.filter((item) => item.id != card.id));
-    setDTierCards(dTierCards.filter((item) => item.id != card.id));
+    setCategories(
+      categories.map((category) => ({
+          ...category,
+          items: category.items.filter((item) => item.id != card.id)
+      }))
+    );
   }
-  function handleOnDropS(e: React.DragEvent) {
+  function handleOnDropCategory(e: React.DragEvent, target: CategoriesStructure) {
     const card = JSON.parse(e.dataTransfer.getData("item"));
 
-    if (sTierCards.find((item) => item.id == card.id)) {
+    const source = categories.find(category => 
+        category.items.some(item => item.id == card.id)
+    );
+
+    if(source && source.id == target.id)
+    {
       return;
     }
 
-    setSTierCards([...sTierCards, card]);
+    setCategories(prevCategories => 
+      prevCategories.map(category => {
+        if (category.id == target.id) {
+          if (!category.items.find(item => item.id == card.id)) 
+          {
+            return { ...category, items: [...category.items, card] };
+          }
+          return category;
+        } else {
+          return { ...category, items: category.items.filter(item => item.id != card.id) };
+        }
+      })
+    );
 
     setItems(items.filter((item) => item.id != card.id));
-    setATierCards(aTierCards.filter((item) => item.id != card.id));
-    setBTierCards(bTierCards.filter((item) => item.id != card.id));
-    setCTierCards(cTierCards.filter((item) => item.id != card.id));
-    setDTierCards(dTierCards.filter((item) => item.id != card.id));
   }
-  function handleOnDropA(e: React.DragEvent) {
-    const card = JSON.parse(e.dataTransfer.getData("item"));
-
-    if (aTierCards.find((item) => item.id == card.id)) {
-      return;
-    }
-
-    setATierCards([...aTierCards, card]);
-
-    setItems(items.filter((item) => item.id != card.id));
-    setSTierCards(sTierCards.filter((item) => item.id != card.id));
-    setBTierCards(bTierCards.filter((item) => item.id != card.id));
-    setCTierCards(cTierCards.filter((item) => item.id != card.id));
-    setDTierCards(dTierCards.filter((item) => item.id != card.id));
-  }
-  function handleOnDropB(e: React.DragEvent) {
-    const card = JSON.parse(e.dataTransfer.getData("item"));
-
-    if (bTierCards.find((item) => item.id == card.id)) {
-      return;
-    }
-
-    setBTierCards([...bTierCards, card]);
-
-    setItems(items.filter((item) => item.id != card.id));
-    setSTierCards(sTierCards.filter((item) => item.id != card.id));
-    setATierCards(aTierCards.filter((item) => item.id != card.id));
-    setCTierCards(cTierCards.filter((item) => item.id != card.id));
-    setDTierCards(dTierCards.filter((item) => item.id != card.id));
-  }
-  function handleOnDropC(e: React.DragEvent) {
-    const card = JSON.parse(e.dataTransfer.getData("item"));
-
-    if (cTierCards.find((item) => item.id == card.id)) {
-      return;
-    }
-
-    setCTierCards([...cTierCards, card]);
-
-    setItems(items.filter((item) => item.id != card.id));
-    setSTierCards(sTierCards.filter((item) => item.id != card.id));
-    setATierCards(aTierCards.filter((item) => item.id != card.id));
-    setBTierCards(bTierCards.filter((item) => item.id != card.id));
-    setDTierCards(dTierCards.filter((item) => item.id != card.id));
-  }
-  function handleOnDropD(e: React.DragEvent) {
-    const card = JSON.parse(e.dataTransfer.getData("item"));
-
-    if (dTierCards.find((item) => item.id == card.id)) {
-      return;
-    }
-
-    setDTierCards([...dTierCards, card]);
-
-    setItems(items.filter((item) => item.id != card.id));
-    setSTierCards(sTierCards.filter((item) => item.id != card.id));
-    setATierCards(aTierCards.filter((item) => item.id != card.id));
-    setBTierCards(bTierCards.filter((item) => item.id != card.id));
-    setCTierCards(cTierCards.filter((item) => item.id != card.id));
-  }
+  
   function handleTags() {
     const newTag = {
       name: tagName,
@@ -527,6 +461,18 @@ function CreateTierList() {
     setTierListDescription("");
   };
 
+  function addTier()
+  {
+    const newTier = {
+      name: "New Tier",
+      id: Math.random(),
+      color: "bg-gray-500",
+      items: []
+    }
+    
+    setCategories(prev => [...prev, newTier]);
+  }
+
   return (
     <div className="bg-gray-800 h-auto">
       <header className="p-4">
@@ -545,43 +491,6 @@ function CreateTierList() {
               Dashboard
             </button>
           </div>
-
-          {/*
-          <div className="hidden lg:flex lg:gap-x-12">
-            <a
-              href="./createTierList"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Create Tier List
-            </a>
-            <a
-              href="#"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Your Tier Lists
-            </a>
-            <a
-              href="#"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Explore
-            </a>
-          </div>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
-            <a
-              href="./register"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Create Account<span aria-hidden="true"></span>
-            </a>
-            <a
-              href="./login"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
-          </div>
-          */}
         </nav>
       </header>
       <div className="relative"></div>
@@ -599,256 +508,61 @@ function CreateTierList() {
       </div>
 
       <div className="mx-auto h-auto flex flex-col pt-[20px] p-[80px] gap-y-[20px]">
-        <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
-          <div className="flex items-stretch min-h-[120px] gap-12">
-            <div className="w-24 flex items-center justify-center gap-3">
-              <img
-                src={ColorSymbol}
-                onClick={() => {
-                  colorModalOpen(true);
-                  setSelectedCategory("S");
-                }}
-                className="h-8 w-auto cursor-pointer"
-              ></img>
-              <div
-                className={`${selectedColorS} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}
-              >
-                S
+        {categories.map((category) => (
+          <div key={category.id} className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
+            <div className="flex items-stretch min-h-[120px] gap-12">
+              <div className="w-24 flex items-center justify-center gap-3">
+                <img
+                  src={ColorSymbol}
+                  onClick={() => {
+                    setTierEdit(category);
+                    handleEditTierOpen(category);
+                    // setSelectedCategory(category);
+                  }}
+                  className="h-8 w-auto cursor-pointer"
+                />
+                <div
+                  className={`${category.color} text-white text-center font-bold text-3xl px-[60px] w-auto h-[120px] rounded-xl flex items-center justify-center w-full`}
+                >
+                  {category.name}
+                </div>
               </div>
-            </div>
-            <div
-              className={`${selectedColorS} flex-1 rounded-xl p-4`}
-              onDragOver={handleDragOver}
-              onDrop={handleOnDropS}
-            >
-              <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
-                {sTierCards.length > 0 ? (
-                  sTierCards.map((sTierCard, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(e) => handleOnDrag(e, sTierCard)}
-                    >
+              <div
+                className={`${category.color} flex-1 rounded-xl p-4`}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleOnDropCategory(e, category)}
+              >
+                <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
+                  {category.items.length > 0 ? (
+                    category.items.map((item, idx) => (
                       <div
-                        onClick={() => {
-                          viewCardOpen(true);
-                          setCurrentView(sTierCard);
-                        }}
-                        className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
+                        key={idx}
+                        draggable
+                        onDragStart={(e) => handleOnDrag(e, item)}
                       >
-                        <div className="text-md truncate">{sTierCard.name}</div>
+                        <div
+                          onClick={() => {
+                            viewCardOpen(true);
+                            setCurrentView(item);
+                          }}
+                          className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
+                        >
+                          <div className="text-md truncate">{item.name}</div>
+                        </div>
                       </div>
+                    ))
+                  ) : (
+                    <div className="text-white text-center w-full">
+                      No items in this tier
                     </div>
-                  ))
-                ) : (
-                  <div className="text-white text-center w-full">
-                    No items in this tier
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
-          <div className="flex items-stretch min-h-[120px] gap-12">
-            <div className="w-24 flex items-center justify-center gap-3">
-              <img
-                src={ColorSymbol}
-                onClick={() => {
-                  colorModalOpen(true);
-                  setSelectedCategory("A");
-                }}
-                className="h-8 w-auto cursor-pointer"
-              ></img>
-              <div
-                className={`${selectedColorA} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}
-              >
-                A
-              </div>
-            </div>
-            <div
-              className={`${selectedColorA} flex-1 rounded-xl p-4`}
-              onDragOver={handleDragOver}
-              onDrop={handleOnDropA}
-            >
-              <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
-                {aTierCards.length > 0 ? (
-                  aTierCards.map((aTierCard, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(e) => handleOnDrag(e, aTierCard)}
-                    >
-                      <div
-                        onClick={() => {
-                          viewCardOpen(true);
-                          setCurrentView(aTierCard);
-                        }}
-                        className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
-                      >
-                        <div className="text-md truncate">{aTierCard.name}</div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-white text-center w-full">
-                    No items in this tier
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
-          <div className="flex items-stretch min-h-[120px] gap-12">
-            <div className="w-24 flex items-center justify-center gap-3">
-              <img
-                src={ColorSymbol}
-                onClick={() => {
-                  colorModalOpen(true);
-                  setSelectedCategory("B");
-                }}
-                className="h-8 w-auto cursor-pointer"
-              ></img>
-              <div
-                className={`${selectedColorB} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}
-              >
-                B
-              </div>
-            </div>
-            <div
-              className={`${selectedColorB} flex-1 rounded-xl p-4`}
-              onDragOver={handleDragOver}
-              onDrop={handleOnDropB}
-            >
-              <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
-                {bTierCards.length > 0 ? (
-                  bTierCards.map((bTierCard, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(e) => handleOnDrag(e, bTierCard)}
-                    >
-                      <div
-                        onClick={() => {
-                          viewCardOpen(true);
-                          setCurrentView(bTierCard);
-                        }}
-                        className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
-                      >
-                        <div className="text-md truncate">{bTierCard.name}</div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-white text-center w-full">
-                    No items in this tier
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
-          <div className="flex items-stretch min-h-[120px] gap-12">
-            <div className="w-24 flex items-center justify-center gap-3">
-              <img
-                src={ColorSymbol}
-                onClick={() => {
-                  colorModalOpen(true);
-                  setSelectedCategory("C");
-                }}
-                className="h-8 w-auto cursor-pointer"
-              ></img>
-              <div
-                className={`${selectedColorC} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}
-              >
-                C
-              </div>
-            </div>
-            <div
-              className={`${selectedColorC} flex-1 rounded-xl p-4`}
-              onDragOver={handleDragOver}
-              onDrop={handleOnDropC}
-            >
-              <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
-                {cTierCards.length > 0 ? (
-                  cTierCards.map((cTierCard, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(e) => handleOnDrag(e, cTierCard)}
-                    >
-                      <div
-                        onClick={() => {
-                          viewCardOpen(true);
-                          setCurrentView(cTierCard);
-                        }}
-                        className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
-                      >
-                        <div className="text-md truncate">{cTierCard.name}</div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-white text-center w-full">
-                    No items in this tier
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-800 rounded-xl p-4 pl-12 shadow-lg">
-          <div className="flex items-stretch min-h-[120px] gap-12">
-            <div className="w-24 flex items-center justify-center gap-3">
-              <img
-                src={ColorSymbol}
-                onClick={() => {
-                  colorModalOpen(true);
-                  setSelectedCategory("D");
-                }}
-                className="h-8 w-auto cursor-pointer"
-              ></img>
-              <div
-                className={`${selectedColorD} text-white font-bold text-3xl py-[40px] px-[60px] rounded-xl flex items-center justify-center w-full`}
-              >
-                D
-              </div>
-            </div>
-            <div
-              className={`${selectedColorD} flex-1 rounded-xl p-4`}
-              onDragOver={handleDragOver}
-              onDrop={handleOnDropD}
-            >
-              <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
-                {dTierCards.length > 0 ? (
-                  dTierCards.map((dTierCard, idx) => (
-                    <div
-                      key={idx}
-                      draggable
-                      onDragStart={(e) => handleOnDrag(e, dTierCard)}
-                    >
-                      <div
-                        onClick={() => {
-                          viewCardOpen(true);
-                          setCurrentView(dTierCard);
-                        }}
-                        className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
-                      >
-                        <div className="text-md truncate">{dTierCard.name}</div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="text-white text-center w-full">
-                    No items in this tier
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
+        <button className="flex flex-1 text-white bg-gray-600 rounded-xl justify-center ml-5 mr-5 py-2"
+                onClick={addTier}>+</button>
         <div className="bg-gray-800 rounded-xl p-4 shadow-lg">
           <div className="text-2xl text-white mb-4">Items:</div>
           <div
@@ -1149,6 +863,41 @@ function CreateTierList() {
           </div>
         </div>
       )}
+      {isDeleteTierModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
+            <div className="bg-blue-500 p-6 text-center">
+              <h2 className="text-white text-3xl font-bold mb-2">
+                Delete Tier
+              </h2>
+            </div>
+            <div className="p-6 max-h-[70vh] overflow-y-auto">
+              <div className="space-y-6">
+                <div className="text-white text-center">
+                  Are you sure you want to delete this item?
+                </div>
+                <div className="flex justify-center gap-2 mt-4">
+                  <button
+                    onClick={() => {
+                      setDeleteTier(undefined);
+                      setDeleteTierModalOpen(false);
+                    }}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleDeleteTier}
+                    className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       {isNewTagModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
@@ -1186,6 +935,61 @@ function CreateTierList() {
           </div>
         </div>
       )}
+      {isEditTierModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-10 rounded-lg shadow-lg max-w-2xl w-full">
+            <h2 className="text-2xl font-semibold mb-4 text-center text-white">
+              Edit Tier
+            </h2>
+            <div className="flex items-center gap-4 mb-8 mt-8">
+              <div className="text-white text-lg min-w-[90px]">Tier name:</div>
+              <input
+                    type="text"
+                    value={tierName}
+                    onChange={(e) => setTierName(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Enter name"
+                    required
+                  />
+            </div>
+            <div className="grid grid-cols-10 gap-3 gap-x-5 mx-auto w-fit">
+              {colorOptions.map((color, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setTierColor(color);
+                  }}
+                  className={`${color} ${tierColor == color ? "border-white border-[5px]" : "border-gray-600"} w-10 h-10 rounded-full border-2 border-gray-600 hover:scale-110 transition-transform`}
+                />
+              ))}
+            </div>
+            <div className="flex gap-8 mt-8">
+              <button
+                onClick={() => {
+                  editTierModalOpen(false);
+                  setDeleteTier(tierEdit);
+                  setDeleteTierModalOpen(true);
+                }}
+                className="mt-5 w-full py-2 bg-red-600 text-white rounded-md hover:bg-gray-700"
+              >
+                Delete Tier
+              </button>
+              <button
+                onClick={() => editTierModalOpen(false)}
+                className="mt-5 w-full py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleEditTierSave}
+                className="mt-5 w-full py-2 bg-green-600 text-white rounded-md hover:bg-gray-700"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {isColorModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
           <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full">
@@ -1197,7 +1001,6 @@ function CreateTierList() {
                 <button
                   key={idx}
                   onClick={() => {
-                    handleColorSelect(color);
                     colorModalOpen(false);
                   }}
                   className={`${color} w-10 h-10 rounded-full border-2 border-gray-600 hover:scale-110 transition-transform`}
