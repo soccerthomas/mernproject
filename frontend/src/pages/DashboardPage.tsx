@@ -149,30 +149,6 @@ const Dashboard: React.FC = () => {
               />
             </a>
           </div>
-
-          {/*
-          <div className="hidden lg:flex lg:gap-x-12">
-            <a
-              href="./createTierList"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Create Tier List
-            </a>
-            <a
-              href="#"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Your Tier Lists
-            </a>
-            <a
-              href="#"
-              className="text-sm/6 font-semibold text-white hover:text-blue-200"
-            >
-              Explore
-            </a>
-          </div>
-          */}
-
           <div className="flex items-center">
             <button
               onClick={handleLogout}
@@ -280,13 +256,15 @@ const Dashboard: React.FC = () => {
                       <div className="flex items-stretch min-h-[120px] gap-4">
                         <div className="w-24 flex items-center justify-center">
                           <div
-                            className={`${category.color} text-white font-bold text-xl p-7 rounded-xl text-center w-full`}
+                            style = {{backgroundColor: category.color}}
+                            className= "text-white font-bold text-xl p-7 rounded-xl text-center w-full"
                           >
                             {category.name}
                           </div>
                         </div>
                         <div
-                          className={`${category.color} flex-1 rounded-xl p-4`}
+                          style = {{backgroundColor: category.color}}
+                          className= "flex-1 rounded-xl p-4"
                         >
                           <div className="flex flex-wrap gap-3 items-center min-h-[88px]">
                             {category.items.length > 0 ? (
