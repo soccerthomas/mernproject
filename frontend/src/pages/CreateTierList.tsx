@@ -178,10 +178,35 @@ function CreateTierList() {
   }
 
   async function saveTierList() {
+    const toHex = {
+      'bg-red-500': '#EF4444',
+      'bg-orange-500': '#F97316',
+      'bg-green-500': '#22C55E',
+      'bg-blue-500': '#3B82F6',
+      'bg-purple-500': '#A855F7',
+      'bg-pink-500': '#EC4899',
+      'bg-yellow-500': '#EAB308',
+      'bg-amber-500': '#F59E0B',
+      'bg-lime-500': '#84CC16',
+      'bg-emerald-500': '#10B981',
+      'bg-teal-500': '#14B8A6',
+      'bg-sky-500': '#0EA5E9',
+      'bg-cyan-500': '#06B6D4',
+      'bg-black': '#000000',
+      'bg-violet-500': '#8B5CF6',
+      'bg-fuchsia-500': '#D946EF',
+      'bg-rose-500': '#F43F5E',
+      'bg-indigo-500': '#6366F1',
+      'bg-zinc-500': '#71717A',
+      'bg-stone-500': '#78716C',
+    }
+    const colorChange = categories.map(category => ({
+        ...category, color: toHex[category.color as keyof typeof toHex] || category.color
+    }));
     const data = {
       title: tierListTitle,
       description: tierListDescription,
-      categories: categories,
+      categories: colorChange,
       unassignedItems: items,
     };
     if (isEditing && editingId) {
