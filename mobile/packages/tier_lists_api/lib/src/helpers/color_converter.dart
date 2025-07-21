@@ -13,9 +13,9 @@ class ColorConverter implements JsonConverter<Color, String> {
 
   @override
   String toJson(Color color) {
-    final String hexR = color.r.round().toRadixString(16);
-    final String hexG = color.g.round().toRadixString(16);
-    final String hexB = color.b.round().toRadixString(16);
+    final String hexR = (color.r * 255).round().toRadixString(16).padLeft(2, '0');
+    final String hexG = (color.g * 255).round().toRadixString(16).padLeft(2, '0');
+    final String hexB = (color.b * 255).round().toRadixString(16).padLeft(2, '0');
     return '#$hexR$hexG$hexB';
   }
 }
