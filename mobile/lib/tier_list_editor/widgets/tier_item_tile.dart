@@ -45,7 +45,7 @@ class TierItemTile extends StatelessWidget {
     } else {
       child = CachedNetworkImage(
         imageUrl: item.imageUrl!,
-        fit: BoxFit.contain,
+        fit: BoxFit.fitHeight,
         placeholder: (context, url) =>
             const Center(child: CircularProgressIndicator()),
         errorWidget: (context, url, error) => const Icon(Icons.error),
@@ -77,7 +77,7 @@ class TierItemTile extends StatelessWidget {
             ),
           );
         },
-        child: Card(child: child),
+        child: Card(clipBehavior: Clip.antiAlias, child: child),
       ),
     );
   }
