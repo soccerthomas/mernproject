@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:mobile/login_register/models/confirm_password.dart';
+import 'package:mobile/authentication/models/confirm_password.dart';
 
 void main() {
   group('ConfirmPassword Model', () {

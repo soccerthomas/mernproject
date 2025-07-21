@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:mobile/email_verification/view/email_verification_page.dart';
 import 'package:mobile/login_register/bloc/login_register_bloc.dart';
-import 'package:mobile/login_register/models/confirm_password.dart';
-import 'package:mobile/login_register/models/password.dart';
+import 'package:mobile/authentication/models/confirm_password.dart';
+import 'package:mobile/authentication/models/password.dart';
 import 'package:mobile/register/bloc/register_bloc.dart';
 
 class RegisterForm extends StatelessWidget {

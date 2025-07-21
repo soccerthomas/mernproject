@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mobile/forgot_password/view/forgot_password_page.dart';
 import 'package:mobile/login/bloc/login_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:mobile/login_register/bloc/login_register_bloc.dart';
@@ -34,7 +35,8 @@ class LoginForm extends StatelessWidget {
             const Padding(padding: EdgeInsets.all(12)),
             _LoginButton(),
             const Padding(padding: EdgeInsets.all(12)),
-            _registerButton(context)
+            _registerButton(context),
+            _forgotPasswordButton(context)
           ],
         ),
       ),
@@ -45,10 +47,6 @@ class LoginForm extends StatelessWidget {
 class _UsernameInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final displayError = context.select(
-      (LoginBloc bloc) => bloc.state.username.displayError,
-    );
-
     return TextField(
       key: const Key('loginForm_usernameInput_textField'),
       onChanged: (username) {
@@ -64,10 +62,6 @@ class _UsernameInput extends StatelessWidget {
 class _PasswordInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final displayError = context.select(
-      (LoginBloc bloc) => bloc.state.password.displayError,
-    );
-
     return TextField(
       key: const Key('registerForm_passwordInput_textField'),
       onChanged: (password) {
@@ -103,4 +97,11 @@ Widget _registerButton(BuildContext context) => TextButton(
     Navigator.of(context).push(RegisterPage.route());
   }, 
   child: const Text('Create an account')
+);
+
+Widget _forgotPasswordButton(BuildContext context) => TextButton(
+  onPressed: () {
+    Navigator.of(context).push(ForgotPasswordPage.route());
+  },
+  child: const Text('Forgot Password?'),
 );

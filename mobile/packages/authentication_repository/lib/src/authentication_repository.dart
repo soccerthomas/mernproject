@@ -123,7 +123,7 @@ class AuthenticationRepository {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/auth/sendCode'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email})
+      body: jsonEncode({'email': email}),
     );
 
     if (response.statusCode == 500) {
@@ -144,7 +144,7 @@ class AuthenticationRepository {
     final response = await http.post(
       Uri.parse('$_baseUrl/api/auth/verifyCode'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'email': email, 'code': code})
+      body: jsonEncode({'email': email, 'code': code}),
     );
 
     if (response.statusCode == 400) {
@@ -158,6 +158,69 @@ class AuthenticationRepository {
       throw Exception(responseMessage);
     } else if (response.statusCode > 400) {
       throw Exception('Failed to verify code');
+    }
+  }
+
+  Future<void> sendPasswordResetCode(String email) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/sendPasswordResetCode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email}),
+    );
+
+    if (response.statusCode >= 400) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Error sending password reset code');
+      }
+      throw Exception(responseMessage);
+    }
+  }
+
+  Future<void> verifyPasswordResetCode({
+    required String email,
+    required String code,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/verifyPasswordResetCode'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'code': code}),
+    );
+
+    if (response.statusCode >= 400) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Error verifying password reset code');
+      }
+      throw Exception(responseMessage);
+    }
+  }
+
+  Future<void> resetPassword({
+    required String email,
+    required String newPassword,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/api/auth/resetPassword'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'newPassword': newPassword}),
+    );
+
+    if (response.statusCode >= 400) {
+      String responseMessage;
+      try {
+        final Map<String, dynamic> responseJson = jsonDecode(response.body);
+        responseMessage = responseJson['message'];
+      } catch (_) {
+        throw Exception('Error resetting password');
+      }
+      throw Exception(responseMessage);
     }
   }
 

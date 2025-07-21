@@ -3,7 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 import 'package:meta/meta.dart';
-import '../models/code.dart';
+import '../../authentication/models/code.dart';
 
 part 'email_verification_event.dart';
 part 'email_verification_state.dart';

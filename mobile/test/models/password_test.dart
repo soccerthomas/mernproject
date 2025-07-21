@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:mobile/login_register/models/password.dart';
+import 'package:mobile/authentication/models/password.dart';
 
 void main() {
   group('Password Model', () {

@@ -1,10 +1,10 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:mobile/login_register/bloc/login_register_bloc.dart';
-import 'package:mobile/login_register/models/confirm_password.dart';
-import 'package:mobile/login_register/models/username.dart';
-import 'package:mobile/login_register/models/password.dart';
-import 'package:mobile/login_register/models/email.dart';
+import 'package:mobile/authentication/models/confirm_password.dart';
+import 'package:mobile/authentication/models/username.dart';
+import 'package:mobile/authentication/models/password.dart';
+import 'package:mobile/authentication/models/email.dart';
 import 'package:formz/formz.dart';
 
 class RegisterBloc extends LoginRegisterBloc {
