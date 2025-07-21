@@ -99,7 +99,7 @@ class ItemDetailsPage extends StatelessWidget {
                           )
                         : Text(state.title),
                     const SizedBox(height: 24),
-                    if (! state.isEditing && state.imageUrl != null)
+                    if (! state.isEditing && state.imageUrl != null && state.imageUrl!.isNotEmpty)
                       Column(
                         children: [
                           CachedNetworkImage(imageUrl: state.imageUrl!),

@@ -10,7 +10,6 @@ part 'tier_item.g.dart';
 @immutable
 @JsonSerializable()
 class TierItem extends Equatable {
-  @JsonKey(includeToJson: false)
   final String id;
 
   @JsonKey(name: 'image')

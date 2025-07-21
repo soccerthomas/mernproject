@@ -3,18 +3,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 /// A custom converter for the Color class.
 /// This tells json_serializable how to convert a Color object to and from an integer.
-class ColorConverter implements JsonConverter<Color, int> {
+class ColorConverter implements JsonConverter<Color, String> {
   const ColorConverter();
 
-  // Converts an integer from JSON to a Color object.
   @override
-  Color fromJson(int json) {
-    return Color(json);
+  Color fromJson(String hexString) {
+    return Color(int.parse('FF${hexString.substring(1)}', radix: 16));
   }
 
-  // Converts a Color object to an integer for JSON.
   @override
-  int toJson(Color object) {
-    return object.toARGB32();
+  String toJson(Color color) {
+    final String hexR = color.r.round().toRadixString(16);
+    final String hexG = color.g.round().toRadixString(16);
+    final String hexB = color.b.round().toRadixString(16);
+    return '#$hexR$hexG$hexB';
   }
 }

@@ -17,6 +17,7 @@ TierItem _$TierItemFromJson(Map<String, dynamic> json) => TierItem(
 );
 
 Map<String, dynamic> _$TierItemToJson(TierItem instance) => <String, dynamic>{
+  'id': instance.id,
   'image': instance.imageUrl,
   'name': instance.name,
   'description': instance.description,

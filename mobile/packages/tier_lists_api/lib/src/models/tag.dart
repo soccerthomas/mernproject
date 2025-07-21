@@ -7,11 +7,11 @@ import 'package:flutter/material.dart';
 part 'tag.g.dart';
 
 enum TagType { 
-  @JsonValue('border-green-500')
+  @JsonValue('border-green-500 text-lg')
   positive, 
   @JsonValue('border-gray-500')
   neutral, 
-  @JsonValue('border-red-500')
+  @JsonValue('border-red-500 text-lg')
   negative 
 }
 

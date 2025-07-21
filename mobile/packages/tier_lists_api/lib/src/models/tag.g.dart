@@ -18,7 +18,7 @@ Map<String, dynamic> _$TagToJson(Tag instance) => <String, dynamic>{
 };
 
 const _$TagTypeEnumMap = {
-  TagType.positive: 'border-green-500',
+  TagType.positive: 'border-green-500 text-lg',
   TagType.neutral: 'border-gray-500',
-  TagType.negative: 'border-red-500',
+  TagType.negative: 'border-red-500 text-lg',
 };

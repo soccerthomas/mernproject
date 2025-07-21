@@ -9,9 +9,7 @@ import 'staging_area.dart';
 
 @JsonSerializable()
 abstract class ListRow extends Equatable {
-  @JsonKey(name: '_id')
   final String id;
-
   final String name;
 
   @ColorConverter()
