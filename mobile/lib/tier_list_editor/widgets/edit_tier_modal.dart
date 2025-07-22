@@ -21,10 +21,24 @@ class EditTierModal extends StatelessWidget {
 
     return Container(
       height: 250,
-      color: tier.color,
+      color: Colors.grey[850],
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(tier.name),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            alignment: Alignment.center,
+            color: tier.color,
+            child: Text(
+              tier.name,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
           ListTile(
             leading: const Icon(Icons.edit),
             title: const Text('Rename Tier'),
