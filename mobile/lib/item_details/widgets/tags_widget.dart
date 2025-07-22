@@ -75,7 +75,7 @@ class TagsWidget extends StatelessWidget {
                 ),
               );
             },
-            child: const Text('Add Tag'),
+            child: const Center(child: Text('Add Tag')),
           ),
       ],
     );

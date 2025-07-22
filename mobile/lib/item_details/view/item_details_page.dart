@@ -92,13 +92,19 @@ class ItemDetailsPage extends StatelessWidget {
                       state.isEditing
                           ? TextFormField(
                               initialValue: state.title,
+                              decoration: const InputDecoration(
+                                labelText: 'Title',
+                              ),
                               onChanged: (value) {
                                 context.read<ItemDetailsBloc>().add(
                                   ItemDetailsTitleChanged(value),
                                 );
                               },
                             )
-                          : Text(state.title),
+                          : Text(
+                              state.title,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                       const SizedBox(height: 24),
                       if (!state.isEditing &&
                           state.imageUrl != null &&
@@ -121,6 +127,9 @@ class ItemDetailsPage extends StatelessWidget {
                           children: [
                             TextFormField(
                               initialValue: state.imageUrl,
+                              decoration: const InputDecoration(
+                                labelText: 'Image URL',
+                              ),
                               onChanged: (value) {
                                 context.read<ItemDetailsBloc>().add(
                                   ItemDetailsImageUrlChanged(value),
@@ -135,6 +144,11 @@ class ItemDetailsPage extends StatelessWidget {
                       if (state.isEditing)
                         TextFormField(
                           initialValue: state.description,
+                          maxLines: null,
+                          keyboardType: TextInputType.multiline,
+                          decoration: const InputDecoration(
+                            labelText: 'Description',
+                          ),
                           onChanged: (value) {
                             context.read<ItemDetailsBloc>().add(
                               ItemDetailsDescriptionChanged(value),
@@ -162,14 +176,11 @@ class ItemDetailsPage extends StatelessWidget {
                                 );
                                 Navigator.of(context).pop();
                               },
-                              child: Text(
-                                'Delete Item',
-                                style: Theme.of(context).textTheme.bodyMedium
-                                    ?.copyWith(color: Colors.red),
-                              ),
+                              child: const Text('Delete Item'),
                             ),
                           ],
                         ),
+                      const SizedBox(height: 72),
                     ],
                   ),
                 ),

@@ -59,7 +59,17 @@ class _EditTagDialogState extends State<EditTagDialog> {
               ],
             ),
             const SizedBox(height: 16),
-            TextFormField(controller: _textController),
+            TextFormField(
+              controller: _textController,
+              decoration: const InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+                ),
+              ),
+            ),
           ],
         ),
       ),
