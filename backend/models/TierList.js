@@ -26,6 +26,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    imageFit: {
+        type: String,
+        required: false
+    },
     description: {
         type: String,
         required: false,
