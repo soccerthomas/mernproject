@@ -8,6 +8,7 @@ interface ItemStructure {
   id: string;
   name: string;
   image: string;
+  imageFit: string;
   description: string;
   tags: Array<TagStructure>;
 }
@@ -43,6 +44,7 @@ function CreateTierList() {
   const [tierListDescription, setTierListDescription] = useState("");
   const [itemName, setItemName] = useState("");
   const [itemImage, setItemImage] = useState("");
+  const [itemImageFit, setItemImageFit] = useState("object-cover");
   const [itemDescription, setItemDescription] = useState("");
   const [itemTags, setItemTags] = useState<TagStructure[]>([]);
 
@@ -51,6 +53,7 @@ function CreateTierList() {
 
   const [editMode, setEditMode] = useState(false);
   const [displayOptions, setDisplayOptions] = useState(false);
+
 
   const openNewCardModal = () => {
     newCardModalOpen(true);
@@ -265,6 +268,7 @@ function CreateTierList() {
 
       setItemName(item.name);
       setItemImage(item.image);
+      setItemImageFit(item.imageFit);
       setItemDescription(item.description);
       setItemTags([...item.tags]);
     }
@@ -286,6 +290,7 @@ function CreateTierList() {
               ...item,
               name: itemName,
               image: itemImage,
+              imageFit: itemImageFit,
               description: itemDescription,
               tags: itemTags,
             };
@@ -303,6 +308,7 @@ function CreateTierList() {
                   ...item,
                   name: itemName,
                   image: itemImage,
+                  imageFit: itemImageFit,
                   description: itemDescription,
                   tags: itemTags,
                 };
@@ -315,6 +321,7 @@ function CreateTierList() {
     
       setItemName("");
       setItemImage("");
+      setItemImageFit("object-cover");
       setItemDescription("");
       setItemTags([]);
 
@@ -436,6 +443,7 @@ function CreateTierList() {
       id: uuidv4(),
       name: itemName,
       image: itemImage,
+      imageFit: itemImageFit,
       description: itemDescription,
       tags: itemTags,
     };
@@ -444,6 +452,7 @@ function CreateTierList() {
 
     setItemName("");
     setItemImage("");
+    setItemImageFit("object-cover");
     setItemDescription("");
     setItemTags([]);
 
@@ -453,6 +462,7 @@ function CreateTierList() {
   const cleanup = () => {
     setItemName("");
     setItemImage("");
+    setItemImageFit("object-cover");
     setItemDescription("");
     setItemTags([]);
 
@@ -536,7 +546,30 @@ function CreateTierList() {
       }
     })
   }
+  function changeImageFit(id: string | undefined)
+  {
+    setCategories(
+        categories.map((category) => ({
+          ...category,
+          items: category.items.map((item) => 
+            item.id === id 
+            ? {...item, imageFit: item.imageFit === "object-cover" ? "object-contain" : "object-cover"}
+            : item
+        )
+      }))
+    );
+      
+    setItems(items.map(item => 
+      item.id === id 
+        ? {...item, imageFit: item.imageFit === "object-cover" ? "object-contain" : "object-cover"}
+        : item
+    ));
 
+    setCurrentView(item => item ? {
+      ...item, 
+      imageFit: item.imageFit === "object-cover" ? "object-contain" : "object-cover"
+    } : item);
+  }
   return (
     <div className="bg-gray-800 h-auto">
       <header className="p-4">
@@ -639,10 +672,10 @@ function CreateTierList() {
                             viewCardOpen(true);
                             setCurrentView(item);
                           }}
-                          className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
+                          className={`${item.image ? (""):("bg-gray-700 hover:bg-gray-600 shadow-md")} cursor-pointer text-white rounded-lg h-[100px] w-[100px] flex items-center justify-center relative`}
                         >
                           {item.image ? (
-                            <img className = "w-full h-full object-cover rounded-lg" src = {item.image} alt = {item.name}/>
+                            <img className = {`w-full h-full ${item.imageFit} rounded-lg`} src = {item.image} alt = {item.name}/>
                           ) : (
                             <div className="text-md truncate">{item.name}</div>
                           )}
@@ -684,9 +717,13 @@ function CreateTierList() {
                       viewCardOpen(true);
                       setCurrentView(item);
                     }}
-                    className="bg-gray-700 hover:bg-gray-600 cursor-pointer text-white rounded-lg p-3 h-[100px] w-[100px] flex items-center justify-center shadow-md relative"
+                    className={`${item.image ? (""):("bg-gray-700 hover:bg-gray-600 shadow-md")} cursor-pointer text-white rounded-lg h-[100px] w-[100px] flex items-center justify-center relative`}
                   >
-                    <div className="text-md truncate">{item.name}</div>
+                    {item.image ? (
+                      <img className = {`w-full h-full ${item.imageFit} rounded-lg`} src = {item.image} alt = {item.name}/>
+                    ) : (
+                      <div className="text-md truncate">{item.name}</div>
+                    )}
                   </div>
                 </div>
               ))
@@ -707,7 +744,7 @@ function CreateTierList() {
           Save Tier List
         </button>
       </div>
-      {showInfoModal && (
+      {showInfoModal && !isEditing && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
           <div className="bg-gray-700 max-h-[95vh] w-full max-w-6xl rounded-2xl relative overflow-hidden">
             <div className="bg-blue-500 p-6 text-center">
@@ -1128,11 +1165,12 @@ function CreateTierList() {
                 <div className="bg-gray-700 rounded-xl p-6 shadow-lg">
                   <div className="flex flex-col lg:flex-row gap-6">
                     <div className="flex-shrink-0">
-                      <div className="w-48 h-48 bg-gray-600 rounded-xl flex items-center justify-center overflow-hidden">
+                      <div className={`${currentView?.image ? (""):("bg-gray-600 overflow-hidden")} cursor-pointer rounded-xl h-48 w-48 flex items-center justify-center relative`}>
                         <img
                           src={currentView?.image}
-                          alt={currentView?.name}
-                          className="w-full h-full object-cover"
+                          alt={currentView?.name}                        
+                          onClick={() => changeImageFit(currentView?.id)}
+                          className={`w-full h-full ${currentView?.imageFit}`}
                         />
                       </div>
                     </div>
