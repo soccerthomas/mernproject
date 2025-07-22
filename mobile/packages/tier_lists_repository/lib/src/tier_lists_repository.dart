@@ -21,6 +21,10 @@ class TierListsRepository {
     await _localTierListsApi.replaceAllTierLists(remoteTierLists);
   }
 
+  Future<void> clearLocalTierLists() async {
+    await _localTierListsApi.replaceAllTierLists([]);
+  }
+
   Stream<TierList> getTierList(String id) => _localTierListsApi.getTierList(id);
 
   Future<void> saveTierList(TierList tierList) async {

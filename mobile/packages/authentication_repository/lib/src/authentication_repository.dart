@@ -46,7 +46,6 @@ class AuthenticationRepository {
         }
       }
     } catch (e) {
-      print(e);
       yield AuthenticationStatus.unauthenticated;
     }
     yield* _controller.stream;

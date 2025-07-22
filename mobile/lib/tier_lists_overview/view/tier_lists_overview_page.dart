@@ -49,13 +49,11 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
             _debounce?.cancel();
             _debounce = Timer(const Duration(milliseconds: 500), () {
               context.read<TierListsOverviewBloc>().add(
-                    TierListsOverviewQueryUpdated(query),
-                  );
+                TierListsOverviewQueryUpdated(query),
+              );
             });
           },
-          decoration: const InputDecoration(
-            hintText: 'Search Tier Lists...',
-          ),
+          decoration: const InputDecoration(hintText: 'Search Tier Lists...'),
         ),
         actions: [
           IconButton(
@@ -86,7 +84,11 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(
-                    SnackBar(content: Text(state.errorMessage ?? 'Error Loading Tier Lists')),
+                    SnackBar(
+                      content: Text(
+                        state.errorMessage ?? 'Error Loading Tier Lists',
+                      ),
+                    ),
                   );
               }
             },
@@ -107,9 +109,9 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
                       label: 'Undo',
                       onPressed: () {
                         messenger.hideCurrentSnackBar();
-                        context
-                            .read<TierListsOverviewBloc>()
-                            .add(const TierListsOverviewUndoDeletionRequested());
+                        context.read<TierListsOverviewBloc>().add(
+                          const TierListsOverviewUndoDeletionRequested(),
+                        );
                       },
                     ),
                   ),
@@ -119,19 +121,24 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
         ],
         child: BlocBuilder<TierListsOverviewBloc, TierListsOverviewState>(
           builder: (context, state) {
+            if (state.status == TierListsOverviewStatus.loading) {
+              return const Center(child: CupertinoActivityIndicator());
+            }
+
             final searching = state.query.trim().isNotEmpty;
-            final lists = searching ? (state.searchResults ?? []) : state.tierLists;
+            final lists = searching
+                ? (state.searchResults ?? [])
+                : state.tierLists;
 
             if (lists.isEmpty) {
-              if (state.status == TierListsOverviewStatus.loading) {
-                return const Center(child: CupertinoActivityIndicator());
-              }
               if (state.status != TierListsOverviewStatus.success) {
                 return const SizedBox();
               }
               return Center(
                 child: Text(
-                  searching ? 'No results found' : 'Create your first tier list',
+                  searching
+                      ? 'No results found'
+                      : 'Create your first tier list',
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
               );
@@ -144,8 +151,9 @@ class _TierListsOverviewViewState extends State<TierListsOverviewView> {
                   final t = lists[i];
                   return TierListListTile(
                     tierList: t,
-                    onTap: () => Navigator.of(context)
-                        .push(TierListEditorPage.route(t.id)),
+                    onTap: () => Navigator.of(
+                      context,
+                    ).push(TierListEditorPage.route(t.id)),
                   );
                 },
               ),

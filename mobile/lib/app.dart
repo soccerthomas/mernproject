@@ -38,6 +38,7 @@ class App extends StatelessWidget {
         lazy: false,
         create: (context) =>
             AuthenticationBloc(
+              tierListsRepository: context.read<TierListsRepository>(),
               authenticationRepository: context
                   .read<AuthenticationRepository>(),
             )..add(
